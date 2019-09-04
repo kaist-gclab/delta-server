@@ -1,7 +1,6 @@
 namespace Delta.AppServer.Processors
 {
-    public class ProcessorInputCapability
+    public class ProcessorVersion
     {
-        
     }
 }

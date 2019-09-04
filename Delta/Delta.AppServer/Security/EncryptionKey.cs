@@ -1,4 +1,4 @@
-namespace Delta.AppServer.Assets
+namespace Delta.AppServer.Security
 {
     public class EncryptionKey
     {

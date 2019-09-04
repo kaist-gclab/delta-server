@@ -16,8 +16,6 @@
           <e p="AssetFormat.cs" t="Include" />
           <e p="AssetTag.cs" t="Include" />
           <e p="AssetType.cs" t="Include" />
-          <e p="EncryptionKey.cs" t="Include" />
-          <e p="EncryptionService.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
@@ -38,14 +36,19 @@
           </e>
         </e>
         <e p="Processors" t="Include">
-          <e p="ProcessorInputCapability.cs" t="Include" />
           <e p="ProcessorNode.cs" t="Include" />
           <e p="ProcessorNodeStatus.cs" t="Include" />
           <e p="ProcessorType.cs" t="Include" />
+          <e p="ProcessorVersion.cs" t="Include" />
+          <e p="ProcessorVersionInputCapability.cs" t="Include" />
         </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Security" t="Include">
+          <e p="EncryptionKey.cs" t="Include" />
+          <e p="EncryptionService.cs" t="Include" />
         </e>
         <e p="Startup.cs" t="Include" />
       </e>
