@@ -35,7 +35,7 @@ namespace Delta.AppServer.Test.Infrastructure
             builder.ConfigureAppConfiguration((context, configurationBuilder) =>
             {
                 configurationBuilder.Add(new JsonConfigurationSource {Path = "Delta.AppServer/appsettings.json"});
-                configurationBuilder.Add(new JsonConfigurationSource {Path = "Delta.AppServer.Tests/appsettings.Test.json"});
+                configurationBuilder.Add(new JsonConfigurationSource {Path = "Delta.AppServer.Test/appsettings.Test.json"});
             });
             builder.ConfigureServices((context, collection) =>
             {

@@ -63,6 +63,9 @@
           <e p="MemoryObjectStorageServiceTest.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
+        <e p="Core" t="Include">
+          <e p="HomeControllerTest.cs" t="Include" />
+        </e>
         <e p="Delta.AppServer.Test.csproj" t="IncludeRecursive" />
         <e p="Infrastructure" t="Include">
           <e p="ControllerTest.cs" t="Include" />
