@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Delta.AppServer.Assets;
+using Delta.AppServer.Processors;
 using NodaTime;
 
 namespace Delta.AppServer.Jobs
@@ -9,5 +12,9 @@ namespace Delta.AppServer.Jobs
         public long InputAssetId { get; set; }
         public string JobArguments { get; set; }
         public Instant CreatedAt { get; set; }
+
+        public ProcessorType ProcessorType { get; set; }
+        public Asset InputAsset { get; set; }
+        public ICollection<JobExecution> JobExecutions { get; set; }
     }
 }

@@ -6,5 +6,7 @@ namespace Delta.AppServer.Assets
         public long AssetId { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
+
+        public Asset Asset { get; set; }
     }
 }

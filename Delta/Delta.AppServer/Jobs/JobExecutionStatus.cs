@@ -8,5 +8,7 @@ namespace Delta.AppServer.Jobs
         public long JobExecutionId { get; set; }
         public Instant Timestamp { get; set; }
         public string Status { get; set; }
+
+        public JobExecution JobExecution { get; set; }
     }
 }
