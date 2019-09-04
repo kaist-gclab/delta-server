@@ -11,18 +11,37 @@
       <e p="Delta.AppServer" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
+        <e p="Assets" t="Include">
+          <e p="Asset.cs" t="Include" />
+          <e p="AssetFormat.cs" t="Include" />
+          <e p="AssetTag.cs" t="Include" />
+          <e p="AssetType.cs" t="Include" />
+          <e p="EncryptionKey.cs" t="Include" />
+          <e p="EncryptionService.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
           <e p="HomeController.cs" t="Include" />
           <e p="ValuesController.cs" t="Include" />
         </e>
         <e p="Delta.AppServer.csproj" t="IncludeRecursive" />
+        <e p="Jobs" t="Include">
+          <e p="Job.cs" t="Include" />
+          <e p="JobExecution.cs" t="Include" />
+          <e p="JobExecutionStatus.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.2" t="Include">
               <e p="Delta.AppServer.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
+        </e>
+        <e p="Processors" t="Include">
+          <e p="ProcessorInputCapability.cs" t="Include" />
+          <e p="ProcessorNode.cs" t="Include" />
+          <e p="ProcessorNodeStatus.cs" t="Include" />
+          <e p="ProcessorType.cs" t="Include" />
         </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
