@@ -9,7 +9,7 @@ namespace Delta.AppServer.Test.Assets
         [Fact]
         public async void Write()
         {
-            var service = new MemoryObjectStorageService();
+            IObjectStorageService service = new MemoryObjectStorageService();
             await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write(null, null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write("", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write(null, new byte[] { }));
@@ -24,7 +24,7 @@ namespace Delta.AppServer.Test.Assets
         [Fact]
         public async void Read()
         {
-            var service = new MemoryObjectStorageService();
+            IObjectStorageService service = new MemoryObjectStorageService();
             await service.Write("a", new byte[] { });
             Assert.Empty(await service.Read("a"));
             await service.Write("a", new byte[] {1});
