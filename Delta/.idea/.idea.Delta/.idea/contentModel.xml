@@ -16,6 +16,7 @@
           <e p="AssetFormat.cs" t="Include" />
           <e p="AssetTag.cs" t="Include" />
           <e p="AssetType.cs" t="Include" />
+          <e p="IObjectStorageService.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
