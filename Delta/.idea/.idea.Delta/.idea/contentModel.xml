@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.0.1/build/netcoreapp1.0" t="Include">
+    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.2.0/build/netcoreapp1.0" t="Include">
       <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
     </e>
-    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.1/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.1/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.1/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="Delta.AppServer" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
@@ -58,11 +58,21 @@
         </e>
       </e>
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
+        <e p="appsettings.Test.json" t="Include" />
         <e p="Assets" t="Include">
           <e p="MemoryObjectStorageServiceTest.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Delta.AppServer.Test.csproj" t="IncludeRecursive" />
+        <e p="Infrastructure" t="Include">
+          <e p="ControllerTest.cs" t="Include" />
+          <e p="ServiceTest.cs" t="Include" />
+          <e p="TestDeltaDbContextOptionsBuilder.cs" t="Include" />
+          <e p="TestDeltaDbContextOptionsBuilderTest.cs" t="Include" />
+          <e p="TestOutputHelperProxy.cs" t="Include" />
+          <e p="TestStartup.cs" t="Include" />
+          <e p="TestWebApplicationFactory.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.2" t="Include">
