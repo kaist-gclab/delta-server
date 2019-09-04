@@ -53,7 +53,9 @@
           <e p="EncryptionKey.cs" t="Include" />
           <e p="EncryptionService.cs" t="Include" />
         </e>
-        <e p="Startup.cs" t="Include" />
+        <e p="Startup" t="Include">
+          <e p="Startup.cs" t="Include" />
+        </e>
       </e>
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
         <e p="Assets" t="Include">
