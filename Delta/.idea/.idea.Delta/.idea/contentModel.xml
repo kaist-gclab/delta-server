@@ -17,6 +17,7 @@
           <e p="AssetTag.cs" t="Include" />
           <e p="AssetType.cs" t="Include" />
           <e p="IObjectStorageService.cs" t="Include" />
+          <e p="MemoryObjectStorageService.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
@@ -55,6 +56,9 @@
         <e p="Startup.cs" t="Include" />
       </e>
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
+        <e p="Assets" t="Include">
+          <e p="MemoryObjectStorageServiceTest.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Delta.AppServer.Test.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
