@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using NodaTime;
 
 namespace Delta.AppServer.Jobs
@@ -7,8 +8,8 @@ namespace Delta.AppServer.Jobs
         public long Id { get; set; }
         public long JobExecutionId { get; set; }
         public Instant Timestamp { get; set; }
-        public string Status { get; set; }
+        [Required] public string Status { get; set; }
 
-        public JobExecution JobExecution { get; set; }
+        [Required] public JobExecution JobExecution { get; set; }
     }
 }

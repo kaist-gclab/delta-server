@@ -1,12 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Delta.AppServer.Assets
 {
     public class AssetTag
     {
         public long Id { get; set; }
         public long AssetId { get; set; }
-        public string Key { get; set; }
-        public string Value { get; set; }
+        [Required] public string Key { get; set; }
+        [Required] public string Value { get; set; }
 
-        public Asset Asset { get; set; }
+        [Required] public Asset Asset { get; set; }
     }
 }
