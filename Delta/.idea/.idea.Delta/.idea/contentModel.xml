@@ -34,6 +34,12 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">
           <e p="HomeController.cs" t="Include" />
+          <e p="Schedule" t="Include">
+            <e p="HostedService.cs" t="Include" />
+            <e p="IScheduledTask.cs" t="Include" />
+            <e p="ScheduleHelper.cs" t="Include" />
+            <e p="ScopedScheduledHostedService.cs" t="Include" />
+          </e>
           <e p="Security" t="Include">
             <e p="Account.cs" t="Include" />
             <e p="AuthConfig.cs" t="Include" />
@@ -97,10 +103,12 @@
       </e>
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
         <e p="appsettings.Test.json" t="Include" />
+        <e p="Assets" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">
           <e p="AuthControllerTest.cs" t="Include" />
           <e p="HomeControllerTest.cs" t="Include" />
+          <e p="ScheduleHelperTest.cs" t="Include" />
         </e>
         <e p="Delta.AppServer.Test.csproj" t="IncludeRecursive" />
         <e p="Infrastructure" t="Include">

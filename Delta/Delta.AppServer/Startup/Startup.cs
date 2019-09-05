@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using Delta.AppServer.Assets;
+using Delta.AppServer.Core.Schedule;
 using Delta.AppServer.Core.Security;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
@@ -100,6 +101,7 @@ namespace Delta.AppServer.Startup
             services.AddScoped<AssetService>();
             services.AddScoped<IObjectStorageService, S3CompatibleObjectStorageService>();
 
+            services.AddSingleton<ScheduleHelper>();
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
         }
 
