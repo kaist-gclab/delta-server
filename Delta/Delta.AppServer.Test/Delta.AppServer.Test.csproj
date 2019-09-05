@@ -20,8 +20,4 @@
       <ProjectReference Include="..\Delta.AppServer\Delta.AppServer.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Assets" />
-    </ItemGroup>
-
 </Project>
