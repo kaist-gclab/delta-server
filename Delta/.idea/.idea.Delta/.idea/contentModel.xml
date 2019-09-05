@@ -49,7 +49,6 @@
             <e p="SecurityHelper.cs" t="Include" />
             <e p="TokenService.cs" t="Include" />
           </e>
-          <e p="ValuesController.cs" t="Include" />
         </e>
         <e p="Delta.AppServer.csproj" t="IncludeRecursive" />
         <e p="DeltaContext.cs" t="Include" />
