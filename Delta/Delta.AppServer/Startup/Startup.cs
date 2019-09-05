@@ -91,6 +91,7 @@ namespace Delta.AppServer.Startup
 
             services.AddScoped<AuthConfig>();
             services.AddScoped<ObjectStorageConfig>();
+            services.AddScoped<JobExecutionConfig>();
 
             services.AddScoped<AuthService>();
             services.AddScoped<TokenService>();

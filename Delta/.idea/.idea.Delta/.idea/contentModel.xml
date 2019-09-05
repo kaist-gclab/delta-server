@@ -50,6 +50,7 @@
         <e p="Jobs" t="Include">
           <e p="Job.cs" t="Include" />
           <e p="JobExecution.cs" t="Include" />
+          <e p="JobExecutionConfig.cs" t="Include" />
           <e p="JobExecutionStatus.cs" t="Include" />
           <e p="JobsController.cs" t="Include" />
           <e p="JobService.cs" t="Include" />
