@@ -34,6 +34,7 @@ namespace Delta.AppServer.Startup
                 .AddApplicationPart(Assembly.GetAssembly(typeof(Startup)));
             services.AddScoped<EncryptionService>();
             services.AddSingleton<IClock>(SystemClock.Instance);
+            services.AddLogging(builder => builder.AddConsole());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
