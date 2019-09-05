@@ -1,6 +1,7 @@
 using System.Net;
+using Delta.AppServer.Controllers;
 using Delta.AppServer.Test.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,6 +18,27 @@ namespace Delta.AppServer.Test.Core
         {
             var client = Factory.CreateClient();
             Assert.Equal("Delta", await client.GetStringAsync("/"));
+        }
+
+        [Fact]
+        public async void ApiHomeUnauthorized()
+        {
+            var client = Factory.CreateClient();
+            var response = await client.GetAsync("/api/1");
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            Assert.Empty(await response.Content.ReadAsByteArrayAsync());
+        }
+
+        [Fact]
+        public async void ApiHomeAuth()
+        {
+            var client = Factory.CreateAdminClient();
+            var response = await client.GetAsync("/api/1");
+            response.EnsureSuccessStatusCode();
+            var text = await response.Content.ReadAsStringAsync();
+            var actual = JsonConvert.DeserializeObject<HomeController.ApiHomeResponse>(text);
+            Assert.Equal(Delta.ServiceName, actual.ServiceName);
+            Assert.Equal(Delta.ApiVersion, actual.ApiVersion);
         }
     }
 }

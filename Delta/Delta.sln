@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.AppServer", "Delta.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.AppServer.Test", "Delta.AppServer.Test\Delta.AppServer.Test.csproj", "{0529D901-7770-4FC8-9947-DA9A867B2FED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta", "Delta\Delta.csproj", "{BF6ECE57-8C5B-42EC-BD11-EAD03267F3EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{0529D901-7770-4FC8-9947-DA9A867B2FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0529D901-7770-4FC8-9947-DA9A867B2FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0529D901-7770-4FC8-9947-DA9A867B2FED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6ECE57-8C5B-42EC-BD11-EAD03267F3EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6ECE57-8C5B-42EC-BD11-EAD03267F3EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6ECE57-8C5B-42EC-BD11-EAD03267F3EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6ECE57-8C5B-42EC-BD11-EAD03267F3EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -17,8 +17,9 @@ namespace Delta.AppServer.Test.Infrastructure
         public HttpClient CreateAdminClient()
         {
             var client = CreateClient();
+            // 테스트용으로만 사용되는 토큰이므로 소스 코드에 포함하여도 안전합니다.
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
-                "MY_JWT_TOKEN");
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSW5mbyI6IntcImFjY291bnRcIjp7XCJpZFwiOjEsXCJ1c2VybmFtZVwiOlwiVEVTVF9BRE1JTl9VU0VSTkFNRVwifSxcInJvbGVcIjpcIkFkbWluXCJ9IiwianRpIjoiZjFiOWQ2OGMyMWUzMGFlZTkzZTBlZGU4NTJkNjEzZTNlNGJkNWFlMTAzZjc2NzRmYWNmMmFiY2MxYzQ4OGIwMiIsImlzcyI6IkRlbHRhLkFwcFNlcnZlci5UZXN0IiwiYXVkIjoiRGVsdGEuQXBwU2VydmVyLlRlc3QifQ.0fOQXnrtQph-QrLMMzZXx8EFJJ-frhif5Cysdfwcyog");
             return client;
         }
 
