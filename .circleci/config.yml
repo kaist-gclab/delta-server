@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    steps:
+      - checkout
+      - run:
+          working_directory: Delta
+          command: dotnet build
+  test:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    steps:
+      - checkout
+      - run:
+          working_directory: Delta/Delta.AppServer.Test
+          command: dotnet test
+  docker:
+    docker:
+      - image: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          working_directory: Delta
+          command: ./build.sh
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      - test
+      - docker
