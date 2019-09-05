@@ -1,5 +1,5 @@
 using System.Net;
-using Delta.AppServer.Controllers;
+using Delta.AppServer.Core;
 using Delta.AppServer.Test.Infrastructure;
 using Newtonsoft.Json;
 using Xunit;

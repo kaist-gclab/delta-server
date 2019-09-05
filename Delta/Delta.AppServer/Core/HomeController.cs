@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Delta.AppServer.Controllers
+namespace Delta.AppServer.Core
 {
     [Route("/")]
     [ApiController]
