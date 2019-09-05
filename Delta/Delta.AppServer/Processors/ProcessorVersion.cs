@@ -12,8 +12,8 @@ namespace Delta.AppServer.Processors
         [Required] public string Description { get; set; }
         public Instant CreatedAt { get; set; }
 
-        [Required] public ProcessorType ProcessorType { get; set; }
+        [Required] public virtual ProcessorType ProcessorType { get; set; }
         public virtual ICollection<ProcessorNode> ProcessorNodes { get; set; }
-        public ICollection<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; }
+        public virtual ICollection<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; }
     }
 }

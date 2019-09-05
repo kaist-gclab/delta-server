@@ -10,6 +10,6 @@ namespace Delta.AppServer.Processors
         public Instant Timestamp { get; set; }
         [Required] public string Status { get; set; }
 
-        [Required] public ProcessorNode ProcessorNode { get; set; }
+        [Required] public virtual ProcessorNode ProcessorNode { get; set; }
     }
 }

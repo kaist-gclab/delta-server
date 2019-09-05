@@ -15,11 +15,11 @@ namespace Delta.AppServer.Assets
         public long? ParentJobExecutionId { get; set; }
         public Instant CreatedAt { get; set; }
 
-        public AssetFormat AssetFormat { get; set; }
-        public AssetType AssetType { get; set; }
-        public JobExecution ParentJobExecution { get; set; }
-        public EncryptionKey EncryptionKey { get; set; }
+        public virtual AssetFormat AssetFormat { get; set; }
+        public virtual AssetType AssetType { get; set; }
+        public virtual JobExecution ParentJobExecution { get; set; }
+        public virtual EncryptionKey EncryptionKey { get; set; }
         public virtual ICollection<Job> InputJobs { get; set; }
-        public ICollection<AssetTag> AssetTags { get; set; }
+        public virtual ICollection<AssetTag> AssetTags { get; set; }
     }
 }

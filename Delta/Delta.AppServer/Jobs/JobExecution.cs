@@ -11,9 +11,9 @@ namespace Delta.AppServer.Jobs
         public long JobId { get; set; }
         public long ProcessorNodeId { get; set; }
 
-        [Required] public Job Job { get; set; }
-        [Required] public ProcessorNode ProcessorNode { get; set; }
+        [Required] public virtual Job Job { get; set; }
+        [Required] public virtual ProcessorNode ProcessorNode { get; set; }
         public virtual ICollection<Asset> ChildAssets { get; set; }
-        public ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; }
+        public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; }
     }
 }

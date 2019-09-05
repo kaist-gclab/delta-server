@@ -10,7 +10,7 @@ namespace Delta.AppServer.Processors
         [Required] public string Key { get; set; }
         public string Name { get; set; }
 
-        public ICollection<ProcessorVersion> ProcessorVersions { get; set; }
+        public virtual ICollection<ProcessorVersion> ProcessorVersions { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
     }
 }

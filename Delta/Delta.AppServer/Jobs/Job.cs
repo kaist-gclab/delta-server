@@ -14,8 +14,8 @@ namespace Delta.AppServer.Jobs
         [Required] public string JobArguments { get; set; }
         public Instant CreatedAt { get; set; }
 
-        [Required] public ProcessorType ProcessorType { get; set; }
-        public Asset InputAsset { get; set; }
-        public ICollection<JobExecution> JobExecutions { get; set; }
+        [Required] public virtual ProcessorType ProcessorType { get; set; }
+        public virtual Asset InputAsset { get; set; }
+        public virtual ICollection<JobExecution> JobExecutions { get; set; }
     }
 }

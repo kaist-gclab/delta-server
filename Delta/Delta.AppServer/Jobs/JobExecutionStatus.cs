@@ -10,6 +10,6 @@ namespace Delta.AppServer.Jobs
         public Instant Timestamp { get; set; }
         [Required] public string Status { get; set; }
 
-        [Required] public JobExecution JobExecution { get; set; }
+        [Required] public virtual JobExecution JobExecution { get; set; }
     }
 }

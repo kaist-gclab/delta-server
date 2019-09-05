@@ -9,6 +9,6 @@ namespace Delta.AppServer.Assets
         [Required] public string Key { get; set; }
         [Required] public string Value { get; set; }
 
-        [Required] public Asset Asset { get; set; }
+        [Required] public virtual Asset Asset { get; set; }
     }
 }

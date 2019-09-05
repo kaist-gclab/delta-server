@@ -10,8 +10,8 @@ namespace Delta.AppServer.Processors
         public long AssetFormatId { get; set; }
         public long? AssetTypeId { get; set; }
 
-        [Required] public ProcessorVersion ProcessorVersion { get; set; }
-        [Required] public AssetFormat AssertFormat { get; set; }
-        public AssetType AssertType { get; set; }
+        [Required] public virtual ProcessorVersion ProcessorVersion { get; set; }
+        [Required] public virtual AssetFormat AssertFormat { get; set; }
+        public virtual AssetType AssertType { get; set; }
     }
 }
