@@ -92,7 +92,6 @@
       </e>
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
         <e p="appsettings.Test.json" t="Include" />
-        <e p="Assets" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">
           <e p="AuthControllerTest.cs" t="Include" />
