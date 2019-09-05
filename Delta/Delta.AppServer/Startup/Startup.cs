@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Text;
+using Delta.AppServer.Assets;
 using Delta.AppServer.Core.Security;
+using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
+using Delta.AppServer.Processors;
 using Delta.AppServer.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -85,12 +88,15 @@ namespace Delta.AppServer.Startup
                 options.UseLazyLoadingProxies();
                 ConfigureDbContext(options);
             });
-            
+
             services.AddScoped<AuthConfig>();
             services.AddScoped<ObjectStorageConfig>();
 
             services.AddScoped<AuthService>();
             services.AddScoped<TokenService>();
+            services.AddScoped<JobService>();
+            services.AddScoped<ProcessorService>();
+            services.AddScoped<AssetService>();
             services.AddScoped<IObjectStorageService, S3CompatibleObjectStorageService>();
 
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
@@ -118,7 +124,7 @@ namespace Delta.AppServer.Startup
                 .AllowCredentials());
 
             app.UseAuthentication();
-            
+
             app.UseMvc();
         }
     }
