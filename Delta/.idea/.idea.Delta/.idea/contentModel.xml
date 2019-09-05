@@ -26,6 +26,8 @@
         <e p="Assets" t="Include">
           <e p="Asset.cs" t="Include" />
           <e p="AssetFormat.cs" t="Include" />
+          <e p="AssetsController.cs" t="Include" />
+          <e p="AssetService.cs" t="Include" />
           <e p="AssetTag.cs" t="Include" />
           <e p="AssetType.cs" t="Include" />
         </e>
@@ -49,6 +51,8 @@
           <e p="Job.cs" t="Include" />
           <e p="JobExecution.cs" t="Include" />
           <e p="JobExecutionStatus.cs" t="Include" />
+          <e p="JobsController.cs" t="Include" />
+          <e p="JobService.cs" t="Include" />
         </e>
         <e p="Migrations" t="Include">
           <e p="20190905092948_InitialCreate.cs" t="Include" />
@@ -71,6 +75,8 @@
         <e p="Processors" t="Include">
           <e p="ProcessorNode.cs" t="Include" />
           <e p="ProcessorNodeStatus.cs" t="Include" />
+          <e p="ProcessorsController.cs" t="Include" />
+          <e p="ProcessorService.cs" t="Include" />
           <e p="ProcessorType.cs" t="Include" />
           <e p="ProcessorVersion.cs" t="Include" />
           <e p="ProcessorVersionInputCapability.cs" t="Include" />
