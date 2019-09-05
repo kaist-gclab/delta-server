@@ -1,8 +1,10 @@
+using System.Linq;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.Processors;
 using Delta.AppServer.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Delta.AppServer
 {
@@ -26,5 +28,25 @@ namespace Delta.AppServer
         public DbSet<ProcessorVersion> ProcessorVersions { get; set; }
         public DbSet<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; }
         public DbSet<EncryptionKey> EncryptionKeys { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                entityType.Relational().TableName = entityType.DisplayName().ToUnderscoreCase();
+                foreach (var property in entityType.GetProperties())
+                {
+                    property.Relational().ColumnName = property.Name.ToUnderscoreCase();
+                }
+            }
+        }
+    }
+
+    internal static class IdentifierNameHelper
+    {
+        public static string ToUnderscoreCase(this string str)
+        {
+            return string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x : x.ToString())).ToLower();
+        }
     }
 }

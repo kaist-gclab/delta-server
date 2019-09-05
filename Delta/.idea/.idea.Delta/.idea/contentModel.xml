@@ -31,6 +31,11 @@
           <e p="JobExecution.cs" t="Include" />
           <e p="JobExecutionStatus.cs" t="Include" />
         </e>
+        <e p="Migrations" t="Include">
+          <e p="20190905092948_InitialCreate.cs" t="Include" />
+          <e p="20190905092948_InitialCreate.Designer.cs" t="Include" />
+          <e p="DeltaContextModelSnapshot.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.2" t="Include">
