@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using Delta.AppServer.Core.Security;
+using Delta.AppServer.ObjectStorage;
 using Delta.AppServer.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -86,9 +87,11 @@ namespace Delta.AppServer.Startup
             });
             
             services.AddScoped<AuthConfig>();
+            services.AddScoped<ObjectStorageConfig>();
 
             services.AddScoped<AuthService>();
             services.AddScoped<TokenService>();
+            services.AddScoped<IObjectStorageService, S3CompatibleObjectStorageService>();
 
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
         }

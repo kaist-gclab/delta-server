@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Delta.AppServer.Assets
+namespace Delta.AppServer.ObjectStorage
 {
     public class MemoryObjectStorageService : IObjectStorageService
     {

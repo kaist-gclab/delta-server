@@ -1,7 +1,6 @@
-using System;
 using System.Threading.Tasks;
 
-namespace Delta.AppServer.Assets
+namespace Delta.AppServer.ObjectStorage
 {
     public interface IObjectStorageService
     {
