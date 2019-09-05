@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NodaTime;
 
 namespace Delta.AppServer.Startup
 {
@@ -32,6 +33,7 @@ namespace Delta.AppServer.Startup
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(Assembly.GetAssembly(typeof(Startup)));
             services.AddScoped<EncryptionService>();
+            services.AddSingleton<IClock>(SystemClock.Instance);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
