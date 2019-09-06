@@ -79,6 +79,7 @@
           <e p="S3CompatibleObjectStorageService.cs" t="Include" />
         </e>
         <e p="Processors" t="Include">
+          <e p="PredefinedProcessorNodeStatuses.cs" t="Include" />
           <e p="ProcessorNode.cs" t="Include" />
           <e p="ProcessorNodeStatus.cs" t="Include" />
           <e p="ProcessorsController.cs" t="Include" />
@@ -128,6 +129,9 @@
         </e>
         <e p="ObjectStorage" t="Include">
           <e p="MemoryObjectStorageServiceTest.cs" t="Include" />
+        </e>
+        <e p="Processors" t="Include">
+          <e p="ProcessorServiceTest.cs" t="Include" />
         </e>
         <e p="UnitTest1.cs" t="Include" />
       </e>

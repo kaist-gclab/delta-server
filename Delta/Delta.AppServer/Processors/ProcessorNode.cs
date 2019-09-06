@@ -12,7 +12,9 @@ namespace Delta.AppServer.Processors
         public string Name { get; set; }
 
         [Required] public virtual ProcessorVersion ProcessorVersion { get; set; }
-        public virtual ICollection<JobExecution> JobExecutions { get; set; }
-        public virtual ICollection<ProcessorNodeStatus> ProcessorNodeStatuses { get; set; }
+        public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
+
+        public virtual ICollection<ProcessorNodeStatus> ProcessorNodeStatuses { get; set; } =
+            new HashSet<ProcessorNodeStatus>();
     }
 }
