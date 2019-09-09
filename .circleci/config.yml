@@ -14,8 +14,22 @@ jobs:
     steps:
       - checkout
       - run:
+          working_directory: Delta
+          command: dotnet build
+      - run:
           working_directory: Delta/Delta.AppServer.Test
-          command: dotnet test
+          command: dotnet test --no-build --logger "trx"
+      - run:
+          working_directory: Delta/Delta.AppServer.Test
+          command: |
+            dotnet tool install -g trx2junit
+            export PATH="$PATH:/root/.dotnet/tools"
+            trx2junit TestResults/*.trx
+      - store_test_results:
+          path: Delta/Delta.AppServer.Test/tests/TestResults
+      - store_artifacts:
+          path: Delta/Delta.AppServer.Test/tests/TestResults
+          destination: TestResults
   docker:
     docker:
       - image: docker
