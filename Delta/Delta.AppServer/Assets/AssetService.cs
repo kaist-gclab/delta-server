@@ -12,5 +12,9 @@ namespace Delta.AppServer.Assets
             _context = context;
             _clock = clock;
         }
+        public Asset GetAsset(long id)
+        {
+            return _context.Assets.Find(id);
+        }
     }
 }

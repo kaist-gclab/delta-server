@@ -12,5 +12,9 @@ namespace Delta.AppServer.Jobs
             _context = context;
             _clock = clock;
         }
+        public Job GetJob(long id)
+        {
+            return _context.Jobs.Find(id);
+        }
     }
 }
