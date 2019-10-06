@@ -4,7 +4,6 @@ using Delta.AppServer.Jobs;
 using Delta.AppServer.Processors;
 using Delta.AppServer.Security;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Delta.AppServer
 {
@@ -33,10 +32,10 @@ namespace Delta.AppServer
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                entityType.Relational().TableName = entityType.DisplayName().ToUnderscoreCase();
+                entityType.SetTableName(entityType.DisplayName().ToUnderscoreCase());
                 foreach (var property in entityType.GetProperties())
                 {
-                    property.Relational().ColumnName = property.Name.ToUnderscoreCase();
+                    property.SetColumnName(property.Name.ToUnderscoreCase());
                 }
             }
         }
