@@ -1,5 +1,4 @@
 using System;
-using Delta.AppServer.Assets;
 using Delta.AppServer.ObjectStorage;
 using Xunit;
 
