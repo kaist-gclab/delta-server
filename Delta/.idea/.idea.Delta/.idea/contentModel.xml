@@ -103,6 +103,9 @@
       </e>
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
         <e p="appsettings.Test.json" t="Include" />
+        <e p="Assets" t="Include">
+          <e p="AssetServiceTest.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">
           <e p="AuthControllerTest.cs" t="Include" />
@@ -118,6 +121,9 @@
           <e p="TestOutputHelperProxy.cs" t="Include" />
           <e p="TestStartup.cs" t="Include" />
           <e p="TestWebApplicationFactory.cs" t="Include" />
+        </e>
+        <e p="Jobs" t="Include">
+          <e p="JobServiceTest.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
