@@ -87,6 +87,7 @@
           <e p="ProcessorType.cs" t="Include" />
           <e p="ProcessorVersion.cs" t="Include" />
           <e p="ProcessorVersionInputCapability.cs" t="Include" />
+          <e p="RegisterProcessorNodeRequest.cs" t="Include" />
         </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
