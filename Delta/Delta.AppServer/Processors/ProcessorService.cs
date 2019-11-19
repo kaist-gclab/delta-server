@@ -78,5 +78,29 @@ namespace Delta.AppServer.Processors
             trx.Commit();
             return processorVersion;
         }
+        public ProcessorVersionInputCapability RegisterProcessorVersionInputCapability(
+            ProcessorVersion processorVersion, AssetFormat assetFormat, AssetType assetType)
+        {
+            using var trx = _context.Database.BeginTransaction();
+            var q = from c in _context.ProcessorVersionInputCapabilities
+                    where c.ProcessorVersion == processorVersion &&
+                          c.AssertFormat == assetFormat && c.AssertType == assetType
+                    select c;
+            if (q.Any())
+            {
+                return q.First();
+            }
+
+            var processorVersionInputCapability = new ProcessorVersionInputCapability
+            {
+                ProcessorVersion = processorVersion,
+                AssertFormat = assetFormat,
+                AssertType = assetType
+            };
+            processorVersionInputCapability = _context.Add(processorVersionInputCapability).Entity;
+            _context.SaveChanges();
+            trx.Commit();
+            return processorVersionInputCapability;
+        }
     }
 }

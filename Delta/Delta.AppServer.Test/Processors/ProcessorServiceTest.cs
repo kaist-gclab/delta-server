@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Delta.AppServer.Assets;
@@ -131,6 +130,76 @@ namespace Delta.AppServer.Test.Processors
             service.RegisterProcessorVersion(processorType, "version-key-2", "version-desc");
             Assert.Single(context.ProcessorTypes);
             Assert.Equal(2, context.ProcessorVersions.Count());
+        }
+
+        [Fact]
+        public void RegisterProcessorVersionInputCapability()
+        {
+            var context = CreateDbContext();
+            var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
+            var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var service = new ProcessorService(context, clock, assetService);
+
+            var processorType = context.Add(new ProcessorType
+            {
+                Key = "type-a",
+                Name = "Type a"
+            }).Entity;
+            context.SaveChanges();
+
+            var processorVersion = service.RegisterProcessorVersion(processorType, "version-key", "version-desc");
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            Assert.Empty(context.ProcessorVersionInputCapabilities);
+
+            var assetFormat = new AssetFormat
+            {
+                Key = "format-a",
+                Name = "",
+                Description = ""
+            };
+            var assetType = new AssetType
+            {
+                Key = "type-a",
+                Name = ""
+            };
+
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            Assert.Empty(context.ProcessorVersionInputCapabilities);
+            Assert.Empty(context.AssetFormats);
+            Assert.Empty(context.AssetTypes);
+
+            service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
+
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            Assert.Single(context.ProcessorVersionInputCapabilities);
+            Assert.Single(context.AssetFormats);
+            Assert.Single(context.AssetTypes);
+
+            service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
+            service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
+
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            Assert.Single(context.ProcessorVersionInputCapabilities);
+            Assert.Single(context.AssetFormats);
+            Assert.Single(context.AssetTypes);
+            
+            service.RegisterProcessorVersionInputCapability(processorVersion, null, null);
+            service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, null);
+            service.RegisterProcessorVersionInputCapability(processorVersion, null, assetType);
+            service.RegisterProcessorVersionInputCapability(processorVersion, null, null);
+            service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, null);
+            service.RegisterProcessorVersionInputCapability(processorVersion, null, assetType);
+            
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            Assert.Equal(4, context.ProcessorVersionInputCapabilities.Count());
+            Assert.Single(context.AssetFormats);
+            Assert.Single(context.AssetTypes);
         }
     }
 }
