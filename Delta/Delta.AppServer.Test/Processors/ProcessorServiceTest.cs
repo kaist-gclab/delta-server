@@ -1,5 +1,9 @@
+using System;
 using System.Linq;
+using Delta.AppServer.Assets;
+using Delta.AppServer.ObjectStorage;
 using Delta.AppServer.Processors;
+using Delta.AppServer.Security;
 using Delta.AppServer.Test.Infrastructure;
 using NodaTime;
 using NodaTime.Testing;
@@ -19,7 +23,9 @@ namespace Delta.AppServer.Test.Processors
         {
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
-            var service = new ProcessorService(context, clock);
+            var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var service = new ProcessorService(context, clock, assetService);
             var a = context.Add(new ProcessorNode()).Entity;
             var b = context.Add(new ProcessorNode()).Entity;
             context.SaveChanges();
