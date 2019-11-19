@@ -1,5 +1,9 @@
 using System;
+using Delta.AppServer.Jobs;
+using Delta.AppServer.Processors;
 using Delta.AppServer.Test.Infrastructure;
+using NodaTime;
+using NodaTime.Testing;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,7 +18,20 @@ namespace Delta.AppServer.Test.Jobs
         [Fact]
         public void AddJob()
         {
-            throw new NotImplementedException();
+            var context = CreateDbContext();
+            var clock = new FakeClock(Instant.FromUtc(2010, 5, 15, 23, 30));
+            var service = new JobService(context, clock);
+
+            var processorType = context.Add(new ProcessorType {Key = "type-key", Name = "type-name",}).Entity;
+            context.SaveChanges();
+            var processorService = new ProcessorService(context, clock, null);
+            var processorVersion = processorService.RegisterProcessorVersion(processorType, "key", "");
+
+            Assert.Throws<Exception>(() => service.AddJob(null, null, null));
+            Assert.Throws<Exception>(() => service.AddJob(null, processorVersion, null));
+            service.AddJob(null, processorVersion, "");
+            
+            // TODO asset
         }
 
         [Fact]
