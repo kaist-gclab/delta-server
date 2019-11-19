@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Delta.AppServer.Assets;
 using Delta.AppServer.ObjectStorage;
@@ -51,6 +52,57 @@ namespace Delta.AppServer.Test.Processors
             service.AddNodeStatus(service.GetNode(b.Id), PredefinedProcessorNodeStatuses.Down);
             Assert.Single(b.ProcessorNodeStatuses);
             Assert.Equal("Down", b.ProcessorNodeStatuses.First().Status);
+        }
+
+        [Fact]
+        public void AddNode()
+        {
+            var context = CreateDbContext();
+            var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
+            var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var service = new ProcessorService(context, clock, assetService);
+
+            var assetFormat = context.Add(new AssetFormat
+            {
+                Key = "format-a",
+                Name = "",
+                Description = ""
+            }).Entity;
+            var assetType = context.Add(new AssetType
+            {
+                Key = "type-a",
+                Name = ""
+            }).Entity;
+            var processorType = context.Add(new ProcessorType
+            {
+                Key = "type-a",
+                Name = "Type a"
+            }).Entity;
+
+            context.SaveChanges();
+
+            var request = new RegisterProcessorNodeRequest
+            {
+                ProcessorTypeKey = processorType.Key,
+                ProcessorVersionKey = "version-a",
+                ProcessorVersionDescription = "Version a.",
+                ProcessorNodeKey = "node-a",
+                ProcessorNodeName = null,
+                InputCapabilities =
+                    new List<RegisterProcessorNodeRequest.InputCapability>
+                    {
+                        new RegisterProcessorNodeRequest.InputCapability
+                        {
+                            AssetFormatKey = assetFormat.Key,
+                            AssetTypeKey = assetType.Key
+                        }
+                    },
+            };
+            service.AddNode(request);
+            Assert.Single(context.ProcessorNodeStatuses);
+            Assert.Equal(PredefinedProcessorNodeStatuses.Available, context.ProcessorNodeStatuses.First().Status);
+            Assert.Equal(clock.GetCurrentInstant(), context.ProcessorNodeStatuses.First().Timestamp);
         }
     }
 }
