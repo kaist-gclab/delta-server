@@ -107,6 +107,27 @@ namespace Delta.AppServer.Test.Processors
         }
 
         [Fact]
+        public void GetProcessorType()
+        {
+            var context = CreateDbContext();
+            var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
+            var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var service = new ProcessorService(context, clock, assetService);
+
+            var processorType = context.Add(new ProcessorType
+            {
+                Key = "type-a",
+                Name = "Type a"
+            }).Entity;
+            context.SaveChanges();
+
+            Assert.Equal("type-a", processorType.Key);
+            Assert.Equal(processorType.Key, service.GetProcessorType(processorType.Id).Key);
+            Assert.Equal(processorType.Id, service.GetProcessorType(processorType.Key).Id);
+        }
+
+        [Fact]
         public void RegisterProcessorVersion()
         {
             var context = CreateDbContext();

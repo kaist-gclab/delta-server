@@ -78,6 +78,16 @@ namespace Delta.AppServer.Processors
             trx.Commit();
             return processorVersion;
         }
+
+        public ProcessorType GetProcessorType(long id) => _context.ProcessorTypes.Find(id);
+
+        public ProcessorType GetProcessorType(string key)
+        {
+            return (from t in _context.ProcessorTypes
+                    where t.Key == key
+                    select t).First();
+        }
+
         public ProcessorVersionInputCapability RegisterProcessorVersionInputCapability(
             ProcessorVersion processorVersion, AssetFormat assetFormat, AssetType assetType)
         {
