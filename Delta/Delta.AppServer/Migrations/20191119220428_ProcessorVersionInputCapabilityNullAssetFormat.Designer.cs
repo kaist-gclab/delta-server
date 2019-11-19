@@ -3,6 +3,7 @@ using System;
 using Delta.AppServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Delta.AppServer.Migrations
 {
     [DbContext(typeof(DeltaContext))]
-    partial class DeltaContextModelSnapshot : ModelSnapshot
+    [Migration("20191119220428_ProcessorVersionInputCapabilityNullAssetFormat")]
+    partial class ProcessorVersionInputCapabilityNullAssetFormat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
