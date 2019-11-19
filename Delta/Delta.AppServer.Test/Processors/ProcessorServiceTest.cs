@@ -79,7 +79,6 @@ namespace Delta.AppServer.Test.Processors
                 Key = "type-a",
                 Name = "Type a"
             }).Entity;
-
             context.SaveChanges();
 
             var request = new RegisterProcessorNodeRequest
@@ -103,6 +102,35 @@ namespace Delta.AppServer.Test.Processors
             Assert.Single(context.ProcessorNodeStatuses);
             Assert.Equal(PredefinedProcessorNodeStatuses.Available, context.ProcessorNodeStatuses.First().Status);
             Assert.Equal(clock.GetCurrentInstant(), context.ProcessorNodeStatuses.First().Timestamp);
+        }
+
+        [Fact]
+        public void RegisterProcessorVersion()
+        {
+            var context = CreateDbContext();
+            var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
+            var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var service = new ProcessorService(context, clock, assetService);
+
+            var processorType = context.Add(new ProcessorType
+            {
+                Key = "type-a",
+                Name = "Type a"
+            }).Entity;
+            context.SaveChanges();
+
+            Assert.Single(context.ProcessorTypes);
+            Assert.Empty(context.ProcessorVersions);
+            service.RegisterProcessorVersion(processorType, "version-key", "version-desc");
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            service.RegisterProcessorVersion(processorType, "version-key", "version-desc");
+            Assert.Single(context.ProcessorTypes);
+            Assert.Single(context.ProcessorVersions);
+            service.RegisterProcessorVersion(processorType, "version-key-2", "version-desc");
+            Assert.Single(context.ProcessorTypes);
+            Assert.Equal(2, context.ProcessorVersions.Count());
         }
     }
 }

@@ -47,11 +47,36 @@ namespace Delta.AppServer.Processors
             var nodeStatus = new ProcessorNodeStatus
             {
                 Timestamp = _clock.GetCurrentInstant(),
-                Status = status,
+                Status = status
             };
             processorNode.ProcessorNodeStatuses.Add(nodeStatus);
             _context.SaveChanges();
             return nodeStatus;
+        }
+
+        public ProcessorVersion RegisterProcessorVersion(
+            ProcessorType processorType, string key, string description)
+        {
+            using var trx = _context.Database.BeginTransaction();
+            var q = from v in _context.ProcessorVersions
+                    where v.ProcessorType == processorType && v.Key == key
+                    select v;
+            if (q.Any())
+            {
+                return q.First();
+            }
+
+            var processorVersion = new ProcessorVersion
+            {
+                ProcessorType = processorType,
+                Key = key,
+                Description = description,
+                CreatedAt = _clock.GetCurrentInstant()
+            };
+            processorVersion = _context.Add(processorVersion).Entity;
+            _context.SaveChanges();
+            trx.Commit();
+            return processorVersion;
         }
     }
 }
