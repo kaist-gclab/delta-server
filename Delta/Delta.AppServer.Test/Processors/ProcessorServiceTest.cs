@@ -48,9 +48,10 @@ namespace Delta.AppServer.Test.Processors
             Assert.Empty(b.ProcessorNodeStatuses);
 
             Assert.NotEqual(a.Id, b.Id);
-            service.AddNodeStatus(service.GetNode(b.Id), PredefinedProcessorNodeStatuses.Down);
+            var status = service.AddNodeStatus(service.GetNode(b.Id), PredefinedProcessorNodeStatuses.Down);
             Assert.Single(b.ProcessorNodeStatuses);
             Assert.Equal("Down", b.ProcessorNodeStatuses.First().Status);
+            Assert.Equal("Down", status.Status);
         }
 
         [Fact]
@@ -97,10 +98,12 @@ namespace Delta.AppServer.Test.Processors
                         }
                     },
             };
-            service.AddNode(request);
+            var node = service.AddNode(request);
             Assert.Single(context.ProcessorNodeStatuses);
             Assert.Equal(PredefinedProcessorNodeStatuses.Available, context.ProcessorNodeStatuses.First().Status);
             Assert.Equal(clock.GetCurrentInstant(), context.ProcessorNodeStatuses.First().Timestamp);
+            Assert.Null(node.Name);
+            Assert.Equal("node-a", node.Key);
         }
 
         [Fact]
@@ -171,7 +174,8 @@ namespace Delta.AppServer.Test.Processors
             Assert.Empty(context.AssetFormats);
             Assert.Empty(context.AssetTypes);
 
-            service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
+            var cap = service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
+            Assert.Equal("version-key", cap.ProcessorVersion.Key);
 
             Assert.Single(context.ProcessorTypes);
             Assert.Single(context.ProcessorVersions);
@@ -187,14 +191,14 @@ namespace Delta.AppServer.Test.Processors
             Assert.Single(context.ProcessorVersionInputCapabilities);
             Assert.Single(context.AssetFormats);
             Assert.Single(context.AssetTypes);
-            
+
             service.RegisterProcessorVersionInputCapability(processorVersion, null, null);
             service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, null);
             service.RegisterProcessorVersionInputCapability(processorVersion, null, assetType);
             service.RegisterProcessorVersionInputCapability(processorVersion, null, null);
             service.RegisterProcessorVersionInputCapability(processorVersion, assetFormat, null);
             service.RegisterProcessorVersionInputCapability(processorVersion, null, assetType);
-            
+
             Assert.Single(context.ProcessorTypes);
             Assert.Single(context.ProcessorVersions);
             Assert.Equal(4, context.ProcessorVersionInputCapabilities.Count());
