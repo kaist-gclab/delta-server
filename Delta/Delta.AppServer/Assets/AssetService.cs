@@ -57,6 +57,16 @@ namespace Delta.AppServer.Assets
         public AssetFormat GetAssetFormat(long id) => _context.AssetFormats.Find(id);
         public AssetType GetAssetType(long id) => _context.AssetTypes.Find(id);
 
+        public async Task<byte[]> ReadAssetContent(Asset asset)
+        {
+            var content = await _objectStorageService.Read(asset.StoreKey);
+            if (asset.EncryptionKey != null)
+            {
+                content = _encryptionService.Decrypt(asset.EncryptionKey, content);
+            }
+
+            return content;
+        }
 
         public AssetFormat GetAssetFormat(string key)
         {
