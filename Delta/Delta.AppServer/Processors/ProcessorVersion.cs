@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Delta.AppServer.Jobs;
 using NodaTime;
 
 namespace Delta.AppServer.Processors
@@ -15,5 +16,6 @@ namespace Delta.AppServer.Processors
         [Required] public virtual ProcessorType ProcessorType { get; set; }
         public virtual ICollection<ProcessorNode> ProcessorNodes { get; set; }
         public virtual ICollection<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; }
+        public virtual ICollection<Job> Jobs { get; set; }
     }
 }

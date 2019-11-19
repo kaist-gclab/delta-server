@@ -9,12 +9,12 @@ namespace Delta.AppServer.Jobs
     public class Job
     {
         public long Id { get; set; }
-        public long ProcessorTypeId { get; set; }
+        public long ProcessorVersionId { get; set; }
         public long? InputAssetId { get; set; }
         [Required] public string JobArguments { get; set; }
         public Instant CreatedAt { get; set; }
 
-        [Required] public virtual ProcessorType ProcessorType { get; set; }
+        [Required] public virtual ProcessorVersion ProcessorVersion { get; set; }
         public virtual Asset InputAsset { get; set; }
         public virtual ICollection<JobExecution> JobExecutions { get; set; }
     }
