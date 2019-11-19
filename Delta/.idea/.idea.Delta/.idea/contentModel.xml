@@ -65,6 +65,8 @@
           <e p="20190905092948_InitialCreate.Designer.cs" t="Include" />
           <e p="20191119220428_ProcessorVersionInputCapabilityNullAssetFormat.cs" t="Include" />
           <e p="20191119220428_ProcessorVersionInputCapabilityNullAssetFormat.Designer.cs" t="Include" />
+          <e p="20191119225211_JobProcessorVersion.cs" t="Include" />
+          <e p="20191119225211_JobProcessorVersion.Designer.cs" t="Include" />
           <e p="DeltaContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
