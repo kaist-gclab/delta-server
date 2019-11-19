@@ -60,6 +60,11 @@ namespace Delta.AppServer.Assets
 
         public AssetFormat GetAssetFormat(string key)
         {
+            if (key == null)
+            {
+                return null;
+            }
+
             return (from f in _context.AssetFormats
                     where f.Key == key
                     select f).First();
@@ -67,6 +72,11 @@ namespace Delta.AppServer.Assets
 
         public AssetType GetAssetType(string key)
         {
+            if (key == null)
+            {
+                return null;
+            }
+
             return (from t in _context.AssetTypes
                     where t.Key == key
                     select t).First();
