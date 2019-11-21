@@ -31,7 +31,7 @@ namespace Delta.AppServer.Test.Jobs
             Assert.Throws<Exception>(() => service.AddJob(null, processorVersion, null));
             service.AddJob(null, processorVersion, "");
             
-            // TODO asset
+            // TODO 에셋 호환성 검증 동작 시험
         }
 
         [Fact]
