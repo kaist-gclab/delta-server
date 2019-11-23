@@ -30,6 +30,7 @@
           <e p="AssetService.cs" t="Include" />
           <e p="AssetTag.cs" t="Include" />
           <e p="AssetType.cs" t="Include" />
+          <e p="CompressionService.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">
@@ -112,6 +113,7 @@
         <e p="appsettings.Test.json" t="Include" />
         <e p="Assets" t="Include">
           <e p="AssetServiceTest.cs" t="Include" />
+          <e p="CompressionServiceTest.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">

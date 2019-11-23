@@ -3,7 +3,7 @@ using System.IO.Compression;
 
 namespace Delta.AppServer.Assets
 {
-    public class AssetCompressionService
+    public class CompressionService
     {
         public byte[] Compress(byte[] data)
         {

@@ -6,16 +6,16 @@ using Xunit.Abstractions;
 
 namespace Delta.AppServer.Test.Assets
 {
-    public class AssetCompressionServiceTest: ServiceTest
+    public class CompressionServiceTest: ServiceTest
     {
-        public AssetCompressionServiceTest(ITestOutputHelper output) : base(output)
+        public CompressionServiceTest(ITestOutputHelper output) : base(output)
         {
         }
         
         [Fact]
         public void CompressAndDecompress()
         {
-            var service = new AssetCompressionService();
+            var service = new CompressionService();
             var a = Enumerable.Range(0, 12345).Select(i => (byte) i).ToArray();
             var compressed = service.Compress(a);
             Assert.True(a.Length > compressed.Length);
