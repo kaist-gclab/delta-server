@@ -28,6 +28,11 @@ namespace Delta.AppServer.Jobs
                 throw new Exception();
             }
 
+            if (ValidateCompatibility(inputAsset, processorVersion) == false)
+            {
+                throw new Exception();
+            }
+
             var job = new Job
             {
                 InputAsset = inputAsset,
@@ -43,6 +48,18 @@ namespace Delta.AppServer.Jobs
         public Job GetJob(long id)
         {
             return _context.Jobs.Find(id);
+        }
+        public bool ValidateCompatibility(Asset asset, ProcessorVersion processorVersion)
+        {
+            if (asset == null)
+            {
+                return true;
+            }
+
+            return (from c in processorVersion.ProcessorVersionInputCapabilities
+                    where (c.AssertFormat == null || c.AssertFormat == asset.AssetFormat) &&
+                          (c.AssertType == null || c.AssertType == asset.AssetType)
+                    select c).Any();
         }
     }
 }
