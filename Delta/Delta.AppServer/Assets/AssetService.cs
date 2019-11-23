@@ -14,15 +14,18 @@ namespace Delta.AppServer.Assets
         private readonly IClock _clock;
         private readonly IObjectStorageService _objectStorageService;
         private readonly EncryptionService _encryptionService;
+        private readonly CompressionService _compressionService;
 
         public AssetService(DeltaContext context, IClock clock,
             IObjectStorageService objectStorageService,
-            EncryptionService encryptionService)
+            EncryptionService encryptionService,
+            CompressionService compressionService)
         {
             _context = context;
             _clock = clock;
             _objectStorageService = objectStorageService;
             _encryptionService = encryptionService;
+            _compressionService = compressionService;
         }
 
         public async Task<Asset> AddAsset(
@@ -32,6 +35,7 @@ namespace Delta.AppServer.Assets
             EncryptionKey encryptionKey,
             JobExecution parentJobExecution)
         {
+            content = _compressionService.Compress(content);
             if (encryptionKey != null)
             {
                 content = _encryptionService.Encrypt(encryptionKey, content);
@@ -64,6 +68,8 @@ namespace Delta.AppServer.Assets
             {
                 content = _encryptionService.Decrypt(asset.EncryptionKey, content);
             }
+
+            content = _compressionService.Decompress(content);
 
             return content;
         }

@@ -23,7 +23,7 @@ namespace Delta.AppServer.Test.Assets
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
             var objectStorage = new MemoryObjectStorageService();
-            var service = new AssetService(context, clock, objectStorage, encryptionService);
+            var service = new AssetService(context, clock, objectStorage, encryptionService, new CompressionService());
 
             var assetFormat = new AssetFormat
             {
@@ -64,7 +64,7 @@ namespace Delta.AppServer.Test.Assets
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
             var objectStorage = new MemoryObjectStorageService();
-            var service = new AssetService(context, clock, objectStorage, encryptionService);
+            var service = new AssetService(context, clock, objectStorage, encryptionService, new CompressionService());
 
             var assetFormat = new AssetFormat
             {

@@ -24,7 +24,7 @@ namespace Delta.AppServer.Test.Processors
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
-            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService, new CompressionService());
             var service = new ProcessorService(context, clock, assetService);
             var a = context.Add(new ProcessorNode()).Entity;
             var b = context.Add(new ProcessorNode()).Entity;
@@ -61,7 +61,8 @@ namespace Delta.AppServer.Test.Processors
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
-            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService,
+                new CompressionService());
             var service = new ProcessorService(context, clock, assetService);
 
             var assetFormat = context.Add(new AssetFormat
@@ -105,7 +106,7 @@ namespace Delta.AppServer.Test.Processors
             Assert.Equal(clock.GetCurrentInstant(), context.ProcessorNodeStatuses.First().Timestamp);
             Assert.Null(node.Name);
             Assert.Equal("node-a", node.Key);
-            Assert.Equal(node.Id,  service.GetNode(node.Id).Id);
+            Assert.Equal(node.Id, service.GetNode(node.Id).Id);
         }
 
         [Fact]
@@ -114,7 +115,7 @@ namespace Delta.AppServer.Test.Processors
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
-            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService, new CompressionService());
             var service = new ProcessorService(context, clock, assetService);
 
             var processorType = context.Add(new ProcessorType
@@ -135,7 +136,7 @@ namespace Delta.AppServer.Test.Processors
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
-            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService, new CompressionService());
             var service = new ProcessorService(context, clock, assetService);
 
             var processorType = context.Add(new ProcessorType
@@ -167,7 +168,7 @@ namespace Delta.AppServer.Test.Processors
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 8, 15, 23, 30));
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
-            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService);
+            var assetService = new AssetService(context, clock, new MemoryObjectStorageService(), encryptionService, new CompressionService());
             var service = new ProcessorService(context, clock, assetService);
 
             var processorType = context.Add(new ProcessorType
