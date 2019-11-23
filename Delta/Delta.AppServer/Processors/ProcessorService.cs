@@ -19,6 +19,20 @@ namespace Delta.AppServer.Processors
 
         public ProcessorNode GetNode(long id) => _context.ProcessorNodes.Find(id);
 
+        public ProcessorNode AddNode(ProcessorVersion processorVersion,
+            string processorNodeKey, string processorNodeName)
+        {
+            var node = new ProcessorNode
+            {
+                Key = processorNodeKey,
+                Name = processorNodeName,
+                ProcessorVersion = processorVersion
+            };
+            node = _context.Add(node).Entity;
+            AddNodeStatus(node, PredefinedProcessorNodeStatuses.Available);
+            return node;
+        }
+
         public ProcessorNode AddNode(RegisterProcessorNodeRequest request)
         {
             var processorType = GetProcessorType(request.ProcessorTypeKey);
@@ -31,15 +45,7 @@ namespace Delta.AppServer.Processors
                 RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
             }
 
-            var node = new ProcessorNode
-            {
-                Key = request.ProcessorNodeKey,
-                Name = request.ProcessorNodeName,
-                ProcessorVersion = processorVersion
-            };
-            node = _context.Add(node).Entity;
-            AddNodeStatus(node, PredefinedProcessorNodeStatuses.Available);
-            return node;
+            return AddNode(processorVersion, request.ProcessorNodeKey, request.ProcessorNodeName);
         }
 
         public ProcessorNodeStatus AddNodeStatus(ProcessorNode processorNode, string status)
