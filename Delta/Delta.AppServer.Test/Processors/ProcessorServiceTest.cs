@@ -40,7 +40,7 @@ namespace Delta.AppServer.Test.Processors
             clock.AdvanceDays(1);
             Assert.Empty(b.ProcessorNodeStatuses);
 
-            service.AddNodeStatus(a, PredefinedProcessorNodeStatuses.Busy);
+            var s0 = service.AddNodeStatus(a, PredefinedProcessorNodeStatuses.Busy);
             statuses = a.ProcessorNodeStatuses.OrderBy(s => s.Id).ToList();
             Assert.Equal(2, statuses.Count);
             Assert.Equal("Busy", statuses[1].Status);
@@ -49,6 +49,7 @@ namespace Delta.AppServer.Test.Processors
 
             Assert.NotEqual(a.Id, b.Id);
             var status = service.AddNodeStatus(service.GetNode(b.Id), PredefinedProcessorNodeStatuses.Down);
+            Assert.NotEqual(s0.Id, status.Id);
             Assert.Single(b.ProcessorNodeStatuses);
             Assert.Equal("Down", b.ProcessorNodeStatuses.First().Status);
             Assert.Equal("Down", status.Status);
@@ -96,7 +97,7 @@ namespace Delta.AppServer.Test.Processors
                             AssetFormatKey = assetFormat.Key,
                             AssetTypeKey = assetType.Key
                         }
-                    },
+                    }
             };
             var node = service.AddNode(request);
             Assert.Single(context.ProcessorNodeStatuses);
@@ -104,6 +105,7 @@ namespace Delta.AppServer.Test.Processors
             Assert.Equal(clock.GetCurrentInstant(), context.ProcessorNodeStatuses.First().Timestamp);
             Assert.Null(node.Name);
             Assert.Equal("node-a", node.Key);
+            Assert.Equal(node.Id,  service.GetNode(node.Id).Id);
         }
 
         [Fact]
@@ -145,7 +147,10 @@ namespace Delta.AppServer.Test.Processors
 
             Assert.Single(context.ProcessorTypes);
             Assert.Empty(context.ProcessorVersions);
-            service.RegisterProcessorVersion(processorType, "version-key", "version-desc");
+            var processorVersion = service.RegisterProcessorVersion(processorType, "version-key", "version-desc");
+            Assert.Equal("version-key", processorVersion.Key);
+            Assert.Equal("version-desc", processorVersion.Description);
+            Assert.Equal("Type a", processorVersion.ProcessorType.Name);
             Assert.Single(context.ProcessorTypes);
             Assert.Single(context.ProcessorVersions);
             service.RegisterProcessorVersion(processorType, "version-key", "version-desc");

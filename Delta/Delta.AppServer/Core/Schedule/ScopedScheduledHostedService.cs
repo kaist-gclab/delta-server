@@ -32,21 +32,19 @@ namespace Delta.AppServer.Core.Schedule
             {
                 if (next <= _clock.GetCurrentInstant())
                 {
-                    using (var scope = _serviceProvider.CreateScope())
+                    using var scope = _serviceProvider.CreateScope();
+                    var service = scope.ServiceProvider.GetRequiredService<T>();
+
+                    try
                     {
-                        var service = scope.ServiceProvider.GetRequiredService<T>();
-
-                        try
-                        {
-                            await service.DoWorkAsync();
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.LogError(e, e.Message);
-                        }
-
-                        next = _scheduleHelper.ComputeNext(service.Interval);
+                        await service.DoWorkAsync();
                     }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, e.Message);
+                    }
+
+                    next = _scheduleHelper.ComputeNext(service.Interval);
                 }
 
                 if (next == Instant.MaxValue)

@@ -46,12 +46,10 @@ namespace Delta.AppServer.ObjectStorage
                 throw new ArgumentOutOfRangeException();
             }
 
-            using (var memoryStream = new MemoryStream())
-            {
-                await _client.GetObjectAsync(_objectStorageConfig.Bucket, key,
-                    stream => { stream.CopyTo(memoryStream); });
-                return memoryStream.ToArray();
-            }
+            await using var memoryStream = new MemoryStream();
+            await _client.GetObjectAsync(_objectStorageConfig.Bucket, key,
+                stream => { stream.CopyTo(memoryStream); });
+            return memoryStream.ToArray();
         }
     }
 }

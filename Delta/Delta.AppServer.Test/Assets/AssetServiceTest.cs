@@ -48,8 +48,13 @@ namespace Delta.AppServer.Test.Assets
             encryptionKey.Enabled = true;
             await service.AddAsset(assetFormat, assetType, content, encryptionKey, null);
             Assert.Single(objectStorage.Storage);
-            await service.AddAsset(assetFormat, assetType, content, null, null);
+            var asset = await service.AddAsset(assetFormat, assetType, content, null, null);
             Assert.Equal(2, objectStorage.Storage.Count);
+            Assert.Equal("Format A", asset.AssetFormat.Name);
+            Assert.Equal("Format A.", asset.AssetFormat.Description);
+            Assert.Equal("Type A", asset.AssetType.Name);
+            Assert.Equal(clock.GetCurrentInstant(), asset.CreatedAt);
+            Assert.Null(asset.ParentJobExecution);
         }
 
         [Fact]

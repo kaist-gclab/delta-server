@@ -2,7 +2,7 @@ using System;
 using Delta.AppServer.ObjectStorage;
 using Xunit;
 
-namespace Delta.AppServer.Test.Assets
+namespace Delta.AppServer.Test.ObjectStorage
 {
     public class MemoryObjectStorageServiceTest
     {

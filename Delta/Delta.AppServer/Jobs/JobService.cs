@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
 using NodaTime;
@@ -11,11 +12,13 @@ namespace Delta.AppServer.Jobs
     {
         private readonly DeltaContext _context;
         private readonly IClock _clock;
+        private readonly AssetService _assetService;
 
-        public JobService(DeltaContext context, IClock clock)
+        public JobService(DeltaContext context, IClock clock, AssetService assetService)
         {
             _context = context;
             _clock = clock;
+            _assetService = assetService;
         }
 
         public Job AddJob(Asset inputAsset, ProcessorVersion processorVersion, string jobArguments)
@@ -76,7 +79,7 @@ namespace Delta.AppServer.Jobs
             var jobExecutionStatus = new JobExecutionStatus
             {
                 Status = status,
-                Timestamp = _clock.GetCurrentInstant(),
+                Timestamp = _clock.GetCurrentInstant()
             };
             jobExecution.JobExecutionStatuses.Add(jobExecutionStatus);
             _context.SaveChanges();
@@ -110,6 +113,20 @@ namespace Delta.AppServer.Jobs
                    where !statuses.Any()
                    orderby j.CreatedAt
                    select j;
+        }
+
+        public async Task<JobExecutionStatus> AddJobResult(JobExecution jobExecution,
+            IEnumerable<ResultAsset> resultAssets)
+        {
+            foreach (var r in resultAssets)
+            {
+                var encryptionKey = jobExecution.Job.InputAsset?.EncryptionKey;
+                await _assetService.AddAsset(r.AssetFormat, r.AssetType, r.Content, encryptionKey, jobExecution);
+            }
+
+            var status = AddJobExecutionStatus(jobExecution, PredefinedJobExecutionStatuses.Complete);
+            _context.SaveChanges();
+            return status;
         }
     }
 }
