@@ -48,7 +48,8 @@ namespace Delta.AppServer.Test.Infrastructure
                 .UseLazyLoadingProxies()
                 .EnableDetailedErrors()
                 .EnableSensitiveDataLogging()
-                .ConfigureWarnings(w => w.Log(InMemoryEventId.TransactionIgnoredWarning));
+                .ConfigureWarnings(w => w.Log(InMemoryEventId.TransactionIgnoredWarning))
+                .ConfigureWarnings(w => w.Log(CoreEventId.ManyServiceProvidersCreatedWarning));
         }
     }
 }
