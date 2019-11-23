@@ -59,6 +59,8 @@
           <e p="JobExecutionStatus.cs" t="Include" />
           <e p="JobsController.cs" t="Include" />
           <e p="JobService.cs" t="Include" />
+          <e p="PredefinedJobExecutionStatuses.cs" t="Include" />
+          <e p="ResultAsset.cs" t="Include" />
         </e>
         <e p="Migrations" t="Include">
           <e p="20190905092948_InitialCreate.cs" t="Include" />
