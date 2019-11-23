@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
 using NodaTime;
@@ -49,6 +51,38 @@ namespace Delta.AppServer.Jobs
         {
             return _context.Jobs.Find(id);
         }
+
+        public JobExecution ScheduleNextJob(ProcessorNode processorNode)
+        {
+            var job = GetAvailableJobs(processorNode).FirstOrDefault();
+            if (job == null)
+            {
+                return null;
+            }
+
+            var jobExecution = new JobExecution
+            {
+                Job = job,
+                ProcessorNode = processorNode
+            };
+            jobExecution = _context.Add(jobExecution).Entity;
+            _context.SaveChanges();
+            AddJobExecutionStatus(jobExecution, PredefinedJobExecutionStatuses.Assigned);
+            return jobExecution;
+        }
+
+        private JobExecutionStatus AddJobExecutionStatus(JobExecution jobExecution, string status)
+        {
+            var jobExecutionStatus = new JobExecutionStatus
+            {
+                Status = status,
+                Timestamp = _clock.GetCurrentInstant(),
+            };
+            jobExecution.JobExecutionStatuses.Add(jobExecutionStatus);
+            _context.SaveChanges();
+            return jobExecutionStatus;
+        }
+
         public bool ValidateCompatibility(Asset asset, ProcessorVersion processorVersion)
         {
             if (asset == null)
@@ -60,6 +94,22 @@ namespace Delta.AppServer.Jobs
                     where (c.AssertFormat == null || c.AssertFormat == asset.AssetFormat) &&
                           (c.AssertType == null || c.AssertType == asset.AssetType)
                     select c).Any();
+        }
+
+        private IQueryable<Job> GetAvailableJobs(ProcessorNode node)
+        {
+            return from j in _context.Jobs
+                   where node.ProcessorVersion == j.ProcessorVersion
+                   let statuses =
+                       from e in j.JobExecutions
+                       let latestStatus = (from s in e.JobExecutionStatuses
+                                           orderby s.Timestamp descending
+                                           select s).First()
+                       where latestStatus.Status == PredefinedJobExecutionStatuses.Complete
+                       select latestStatus
+                   where !statuses.Any()
+                   orderby j.CreatedAt
+                   select j;
         }
     }
 }
