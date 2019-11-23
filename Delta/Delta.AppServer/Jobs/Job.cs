@@ -16,6 +16,6 @@ namespace Delta.AppServer.Jobs
 
         [Required] public virtual ProcessorVersion ProcessorVersion { get; set; }
         public virtual Asset InputAsset { get; set; }
-        public virtual ICollection<JobExecution> JobExecutions { get; set; }
+        public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
     }
 }
