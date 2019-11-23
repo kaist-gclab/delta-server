@@ -51,7 +51,7 @@ namespace Delta.AppServer.Test.Assets
             var asset = await service.AddAsset(assetFormat, assetType, content, null, null);
             Assert.Equal(2, objectStorage.Storage.Count);
             Assert.Equal("Format A", asset.AssetFormat.Name);
-            Assert.Equal("Format A.", asset.AssetFormat.Description);
+            Assert.Equal("Format a.", asset.AssetFormat.Description);
             Assert.Equal("Type A", asset.AssetType.Name);
             Assert.Equal(clock.GetCurrentInstant(), asset.CreatedAt);
             Assert.Null(asset.ParentJobExecution);

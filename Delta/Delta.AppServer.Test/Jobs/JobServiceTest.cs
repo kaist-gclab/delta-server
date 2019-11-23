@@ -54,9 +54,9 @@ namespace Delta.AppServer.Test.Jobs
 
             var node = processorService.AddNode(processorVersion, "a", "");
             var job = service.AddJob(null, processorVersion, "JOB_ARGUMENTS");
-            Assert.Single(job.JobExecutions);
+            Assert.Empty(job.JobExecutions);
             var execution = service.ScheduleNextJob(node);
-            Assert.Equal(2, job.JobExecutions.Count);
+            Assert.Single(job.JobExecutions);
             Assert.Equal(job, execution.Job);
             Assert.Equal(node, execution.ProcessorNode);
             Assert.Equal("JOB_ARGUMENTS", job.JobArguments);
