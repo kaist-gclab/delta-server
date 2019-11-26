@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 sudo docker load --input docker-image.tar && \
 (sudo docker stop delta-app-server || true) && \
 (sudo docker rm delta-app-server || true) && \

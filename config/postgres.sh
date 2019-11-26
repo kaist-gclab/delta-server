@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 docker run -d \
 -p 17361:5432 \
 -e "POSTGRES_PASSWORD=PASSWORD_HERE" \
