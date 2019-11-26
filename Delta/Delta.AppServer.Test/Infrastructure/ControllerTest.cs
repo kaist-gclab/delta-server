@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,7 +18,10 @@ namespace Delta.AppServer.Test.Infrastructure
 
         protected DeltaContext CreateDbContext()
         {
-            return Factory.GetService<DeltaContext>();
+            var context = Factory.GetService<DeltaContext>();
+            Assert.True(context.Database.IsInMemory());
+            context.Database.EnsureDeleted();
+            return context;
         }
     }
 }
