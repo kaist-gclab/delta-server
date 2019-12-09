@@ -6,10 +6,17 @@
 : "${DELTA_OBJECT_STORAGE_ACCESS_KEY?DELTA_OBJECT_STORAGE_ACCESS_KEY}"
 : "${DELTA_OBJECT_STORAGE_SECRET_KEY?DELTA_OBJECT_STORAGE_SECRET_KEY}"
 
+PORT=""
+if [ "$DELTA_SERVER_PORT" ]
+then
+PORT="-p $DELTA_SERVER_PORT:80"
+fi
+
 sudo docker load --input docker-image.tar && \
 (sudo docker stop delta-app-server || true) && \
 (sudo docker rm delta-app-server || true) && \
 sudo docker run -d --restart=unless-stopped \
+$PORT \
 -e "Jwt__Secret=$DELTA_JWT_SECRET" \
 -e "Auth__AdminPassword=$DELTA_AUTH_ADMIN_PASSWORD" \
 -e "ConnectionStrings__DeltaDatabase=$DELTA_CONNECTION_STRING_DATABASE" \
