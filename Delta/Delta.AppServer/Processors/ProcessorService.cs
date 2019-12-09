@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Delta.AppServer.Assets;
 using NodaTime;
@@ -118,5 +119,7 @@ namespace Delta.AppServer.Processors
             trx.Commit();
             return processorVersionInputCapability;
         }
+
+        public IEnumerable<ProcessorNode> GetProcessorNodes() => _context.ProcessorNodes.ToList();
     }
 }

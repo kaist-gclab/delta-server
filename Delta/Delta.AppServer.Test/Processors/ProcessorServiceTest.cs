@@ -95,7 +95,9 @@ namespace Delta.AppServer.Test.Processors
                         }
                     }
             };
+            Assert.Empty(service.GetProcessorNodes());
             var node = service.AddNode(request);
+            Assert.Single(service.GetProcessorNodes());
             Assert.Single(context.ProcessorNodeStatuses);
             Assert.Equal(PredefinedProcessorNodeStatuses.Available, context.ProcessorNodeStatuses.First().Status);
             Assert.Equal(clock.GetCurrentInstant(), context.ProcessorNodeStatuses.First().Timestamp);
