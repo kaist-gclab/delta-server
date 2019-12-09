@@ -5,6 +5,12 @@
 : "${DELTA_POSTGRES_DB?DELTA_POSTGRES_DB}"
 : "${DELTA_POSTGRES_DATA_DIRECTORY?DELTA_POSTGRES_DATA_DIRECTORY}"
 
+INITDB=""
+if [ "$DELTA_POSTGRES_INITDB" ]
+then
+INITDB="-v $DELTA_POSTGRES_INITDB:/docker-entrypoint-initdb.d/ "
+fi
+
 sudo docker run -d \
 -p $DELTA_POSTGRES_PORT:5432 \
 -e "POSTGRES_PASSWORD=$DELTA_POSTGRES_PASSWORD" \
@@ -14,4 +20,5 @@ sudo docker run -d \
 --name delta-postgres \
 --restart=unless-stopped \
 -v "$DELTA_POSTGRES_DATA_DIRECTORY:/var/lib/postgresql/data" \
+$INITDB \
 postgres:11
