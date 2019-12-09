@@ -3,8 +3,9 @@
 : "${DELTA_POSTGRES_PASSWORD?DELTA_POSTGRES_PASSWORD}"
 : "${DELTA_POSTGRES_USER?DELTA_POSTGRES_USER}"
 : "${DELTA_POSTGRES_DB?DELTA_POSTGRES_DB}"
+: "${DELTA_POSTGRES_DATA_DIRECTORY?DELTA_POSTGRES_DATA_DIRECTORY}"
 
-docker run -d \
+sudo docker run -d \
 -p $DELTA_POSTGRES_PORT:5432 \
 -e "POSTGRES_PASSWORD=$DELTA_POSTGRES_PASSWORD" \
 -e "POSTGRES_USER=$DELTA_POSTGRES_USER" \
@@ -12,5 +13,5 @@ docker run -d \
 -e "POSTGRES_INITDB_ARGS=--encoding=UTF-8 --no-locale" \
 --name delta-postgres \
 --restart=unless-stopped \
--v /var/delta/postgres:/var/lib/postgresql/data \
+-v "$DELTA_POSTGRES_DATA_DIRECTORY:/var/lib/postgresql/data" \
 postgres:11
