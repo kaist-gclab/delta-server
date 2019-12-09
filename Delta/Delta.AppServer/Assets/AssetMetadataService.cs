@@ -12,10 +12,7 @@ namespace Delta.AppServer.Assets
             _context = context;
         }
         
-        public IEnumerable<Asset> GetAssets()
-        {
-            return _context.Assets.ToList();
-        }
+        public IEnumerable<Asset> GetAssets() => _context.Assets.ToList();
         public Asset GetAsset(long id) => _context.Assets.Find(id);
         public AssetFormat GetAssetFormat(long id) => _context.AssetFormats.Find(id);
         public AssetType GetAssetType(long id) => _context.AssetTypes.Find(id);
