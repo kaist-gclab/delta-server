@@ -28,6 +28,7 @@ namespace Delta.AppServer.Assets
         }
 
         [HttpPost]
+        [RequestSizeLimit(200 * 1024 * 1024)]
         public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
         {
             if (createAssetRequest.Content == null)
