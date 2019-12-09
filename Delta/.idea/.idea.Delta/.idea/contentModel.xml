@@ -114,6 +114,7 @@
       <e p="Delta.AppServer.Test" t="IncludeRecursive">
         <e p="appsettings.Test.json" t="Include" />
         <e p="Assets" t="Include">
+          <e p="AssetMetadataServiceTest.cs" t="Include" />
           <e p="AssetServiceTest.cs" t="Include" />
           <e p="CompressionServiceTest.cs" t="Include" />
         </e>
