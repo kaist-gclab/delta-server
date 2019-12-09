@@ -27,6 +27,42 @@ namespace Delta.AppServer.Assets
             return Ok(_assetMetadataService.GetAssets());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
+        {
+            if (createAssetRequest.Content == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var assetFormat = GetAssetFormat(createAssetRequest.AssetFormatKey);
+                var assetType = GetAssetType(createAssetRequest.AssetTypeKey);
+                var encryptionKey = GetEncryptionKey(createAssetRequest.EncryptionKeyName);
+                var asset = await _assetService.AddAsset(assetFormat, assetType, createAssetRequest.Content,
+                    encryptionKey, null);
+                return Ok(asset);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("{assetId:long}/download")]
+        public async Task<IActionResult> DownloadAsset(long assetId)
+        {
+            var asset = _assetMetadataService.GetAsset(assetId);
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            var bytes = await _assetService.ReadAssetContent(asset);
+            return Ok(bytes);
+        }
+
         private AssetFormat GetAssetFormat(string assetFormatKey)
         {
             if (assetFormatKey == null)
@@ -73,40 +109,6 @@ namespace Delta.AppServer.Assets
             }
 
             return encryptionKey;
-        }
-
-        public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
-        {
-            if (createAssetRequest.Content == null)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                var assetFormat = GetAssetFormat(createAssetRequest.AssetFormatKey);
-                var assetType = GetAssetType(createAssetRequest.AssetTypeKey);
-                var encryptionKey = GetEncryptionKey(createAssetRequest.EncryptionKeyName);
-                var asset = await _assetService.AddAsset(assetFormat, assetType, createAssetRequest.Content,
-                    encryptionKey, null);
-                return Ok(asset);
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest();
-            }
-        }
-
-        public async Task<IActionResult> DownloadAsset(long assetId)
-        {
-            var asset = _assetMetadataService.GetAsset(assetId);
-            if (asset == null)
-            {
-                return NotFound();
-            }
-
-            var bytes = await _assetService.ReadAssetContent(asset);
-            return Ok(bytes);
         }
     }
 }

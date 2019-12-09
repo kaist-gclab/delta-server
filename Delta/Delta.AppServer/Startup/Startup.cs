@@ -100,7 +100,10 @@ namespace Delta.AppServer.Startup
             services.AddScoped<JobService>();
             services.AddScoped<ProcessorService>();
             services.AddScoped<AssetService>();
+            services.AddScoped<AssetMetadataService>();
             services.AddScoped<IObjectStorageService, S3CompatibleObjectStorageService>();
+            services.AddScoped<CompressionService>();
+            services.AddScoped<EncryptionService>();
 
             services.AddSingleton<ScheduleHelper>();
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
