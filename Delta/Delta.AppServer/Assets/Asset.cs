@@ -20,6 +20,6 @@ namespace Delta.AppServer.Assets
         public virtual JobExecution ParentJobExecution { get; set; }
         public virtual EncryptionKey EncryptionKey { get; set; }
         public virtual ICollection<Job> InputJobs { get; set; }
-        public virtual ICollection<AssetTag> AssetTags { get; set; }
+        public virtual ICollection<AssetTag> AssetTags { get; set; } = new HashSet<AssetTag>();
     }
 }
