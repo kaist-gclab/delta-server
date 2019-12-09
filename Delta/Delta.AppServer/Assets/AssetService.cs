@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
@@ -57,10 +56,6 @@ namespace Delta.AppServer.Assets
             return asset;
         }
 
-        public Asset GetAsset(long id) => _context.Assets.Find(id);
-        public AssetFormat GetAssetFormat(long id) => _context.AssetFormats.Find(id);
-        public AssetType GetAssetType(long id) => _context.AssetTypes.Find(id);
-
         public async Task<byte[]> ReadAssetContent(Asset asset)
         {
             var content = await _objectStorageService.Read(asset.StoreKey);
@@ -72,30 +67,6 @@ namespace Delta.AppServer.Assets
             content = _compressionService.Decompress(content);
 
             return content;
-        }
-
-        public AssetFormat GetAssetFormat(string key)
-        {
-            if (key == null)
-            {
-                return null;
-            }
-
-            return (from f in _context.AssetFormats
-                    where f.Key == key
-                    select f).First();
-        }
-
-        public AssetType GetAssetType(string key)
-        {
-            if (key == null)
-            {
-                return null;
-            }
-
-            return (from t in _context.AssetTypes
-                    where t.Key == key
-                    select t).First();
         }
     }
 }

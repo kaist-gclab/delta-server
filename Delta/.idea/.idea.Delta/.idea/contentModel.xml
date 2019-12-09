@@ -26,6 +26,7 @@
         <e p="Assets" t="Include">
           <e p="Asset.cs" t="Include" />
           <e p="AssetFormat.cs" t="Include" />
+          <e p="AssetMetadataService.cs" t="Include" />
           <e p="AssetsController.cs" t="Include" />
           <e p="AssetService.cs" t="Include" />
           <e p="AssetTag.cs" t="Include" />

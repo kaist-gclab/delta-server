@@ -8,13 +8,13 @@ namespace Delta.AppServer.Processors
     {
         private readonly DeltaContext _context;
         private readonly IClock _clock;
-        private readonly AssetService _assetService;
+        private readonly AssetMetadataService _assetMetadataService;
 
-        public ProcessorService(DeltaContext context, IClock clock, AssetService assetService)
+        public ProcessorService(DeltaContext context, IClock clock, AssetMetadataService assetMetadataService)
         {
             _context = context;
             _clock = clock;
-            _assetService = assetService;
+            _assetMetadataService = assetMetadataService;
         }
 
         public ProcessorNode GetNode(long id) => _context.ProcessorNodes.Find(id);
@@ -40,8 +40,8 @@ namespace Delta.AppServer.Processors
                 request.ProcessorVersionDescription);
             foreach (var c in request.InputCapabilities)
             {
-                var assetFormat = _assetService.GetAssetFormat(c.AssetFormatKey);
-                var assetType = _assetService.GetAssetType(c.AssetTypeKey);
+                var assetFormat = _assetMetadataService.GetAssetFormat(c.AssetFormatKey);
+                var assetType = _assetMetadataService.GetAssetType(c.AssetTypeKey);
                 RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
             }
 
@@ -100,7 +100,7 @@ namespace Delta.AppServer.Processors
             using var trx = _context.Database.BeginTransaction();
             var q = from c in _context.ProcessorVersionInputCapabilities
                     where c.ProcessorVersion == processorVersion &&
-                          c.AssertFormat == assetFormat && c.AssertType == assetType
+                          c.AssetFormat == assetFormat && c.AssetType == assetType
                     select c;
             if (q.Any())
             {
@@ -110,8 +110,8 @@ namespace Delta.AppServer.Processors
             var processorVersionInputCapability = new ProcessorVersionInputCapability
             {
                 ProcessorVersion = processorVersion,
-                AssertFormat = assetFormat,
-                AssertType = assetType
+                AssetFormat = assetFormat,
+                AssetType = assetType
             };
             processorVersionInputCapability = _context.Add(processorVersionInputCapability).Entity;
             _context.SaveChanges();

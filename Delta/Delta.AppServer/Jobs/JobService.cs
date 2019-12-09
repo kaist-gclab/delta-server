@@ -90,12 +90,14 @@ namespace Delta.AppServer.Jobs
         {
             if (asset == null)
             {
-                return true;
+                return (from c in processorVersion.ProcessorVersionInputCapabilities
+                        where c.AssetFormat == null && c.AssetType == null
+                        select c).Any();
             }
 
             return (from c in processorVersion.ProcessorVersionInputCapabilities
-                    where (c.AssertFormat == null || c.AssertFormat == asset.AssetFormat) &&
-                          (c.AssertType == null || c.AssertType == asset.AssetType)
+                    where (c.AssetFormat == null || c.AssetFormat == asset.AssetFormat) &&
+                          (c.AssetType == null || c.AssetType == asset.AssetType)
                     select c).Any();
         }
 
