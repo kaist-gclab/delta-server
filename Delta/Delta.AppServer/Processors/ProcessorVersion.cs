@@ -14,8 +14,11 @@ namespace Delta.AppServer.Processors
         public Instant CreatedAt { get; set; }
 
         [Required] public virtual ProcessorType ProcessorType { get; set; }
-        public virtual ICollection<ProcessorNode> ProcessorNodes { get; set; }
-        public virtual ICollection<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; }
-        public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<ProcessorNode> ProcessorNodes { get; set; } = new HashSet<ProcessorNode>();
+
+        public virtual ICollection<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; } =
+            new HashSet<ProcessorVersionInputCapability>();
+
+        public virtual ICollection<Job> Jobs { get; set; } = new HashSet<Job>();
     }
 }

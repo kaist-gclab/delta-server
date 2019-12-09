@@ -32,12 +32,110 @@ namespace Delta.AppServer.Test.Jobs
             context.SaveChanges();
             var processorService = new ProcessorService(context, clock, null);
             var processorVersion = processorService.RegisterProcessorVersion(processorType, "key", "");
+            processorVersion.ProcessorVersionInputCapabilities.Add(new ProcessorVersionInputCapability());
 
             Assert.Throws<Exception>(() => service.AddJob(null, null, null));
             Assert.Throws<Exception>(() => service.AddJob(null, processorVersion, null));
             service.AddJob(null, processorVersion, "");
             Assert.Single(context.Jobs);
-            // TODO 에셋 호환성 검증 동작 시험
+        }
+
+        [Theory]
+        [InlineData("nn", "null", true)]
+        [InlineData("nn", "ab", true)]
+        [InlineData("nn", "ax", true)]
+        [InlineData("nn", "xb", true)]
+        [InlineData("nn", "xx", true)]
+        [InlineData("nb", "null", false)]
+        [InlineData("nb", "ab", true)]
+        [InlineData("nb", "ax", false)]
+        [InlineData("nb", "xb", true)]
+        [InlineData("nb", "xx", false)]
+        [InlineData("an", "null", false)]
+        [InlineData("an", "ab", true)]
+        [InlineData("an", "ax", true)]
+        [InlineData("an", "xb", false)]
+        [InlineData("an", "xx", false)]
+        [InlineData("ab", "null", false)]
+        [InlineData("ab", "ab", true)]
+        [InlineData("ab", "ax", false)]
+        [InlineData("ab", "xb", false)]
+        [InlineData("ab", "xx", false)]
+        public void ValidateCompatibility(string versionFormatType, string assetFormatType, bool expect)
+        {
+            var versionFormat = versionFormatType.Substring(0, 1);
+            var versionType = versionFormatType.Substring(1, 1);
+
+            var isAssetNull = assetFormatType == "null";
+            var assetFormat = assetFormatType.Substring(0, 1);
+            var assetType = assetFormatType.Substring(1, 1);
+
+            var context = CreateDbContext();
+            var clock = new FakeClock(Instant.FromUtc(2010, 5, 15, 23, 30));
+            var service = new JobService(context, clock, null);
+            var assetMetadataService = new AssetMetadataService(context);
+
+            AssetFormat CreateAssetFormatIfNotExists(string key)
+            {
+                if (key == "n")
+                {
+                    return null;
+                }
+
+                var f = assetMetadataService.GetAssetFormat(key);
+                if (f != null)
+                {
+                    return f;
+                }
+
+                context.Add(new AssetFormat {Key = key});
+                context.SaveChanges();
+                return assetMetadataService.GetAssetFormat(key);
+            }
+
+            AssetType CreateAssetTypeIfNotExists(string key)
+            {
+                if (key == "n")
+                {
+                    return null;
+                }
+
+                var t = assetMetadataService.GetAssetType(key);
+                if (t != null)
+                {
+                    return t;
+                }
+
+                context.Add(new AssetType {Key = key});
+                context.SaveChanges();
+                return assetMetadataService.GetAssetType(key);
+            }
+
+            var version = new ProcessorVersion
+            {
+                ProcessorType = null,
+                ProcessorVersionInputCapabilities = new[]
+                {
+                    new ProcessorVersionInputCapability
+                    {
+                        AssetFormat = CreateAssetFormatIfNotExists(versionFormat),
+                        AssetType = CreateAssetTypeIfNotExists(versionType)
+                    }
+                }
+            };
+            if (isAssetNull)
+            {
+                Assert.Equal(expect, service.ValidateCompatibility(null, version));
+            }
+            else
+            {
+                var asset = new Asset
+                {
+                    AssetFormat = CreateAssetFormatIfNotExists(assetFormat),
+                    AssetType = CreateAssetTypeIfNotExists(assetType)
+                };
+                Assert.Equal(expect, service.ValidateCompatibility(asset, version));
+            }
         }
 
         [Fact]
@@ -53,6 +151,7 @@ namespace Delta.AppServer.Test.Jobs
             var processorVersion = processorService.RegisterProcessorVersion(processorType, "key", "");
 
             var node = processorService.AddNode(processorVersion, "a", "");
+            processorVersion.ProcessorVersionInputCapabilities.Add(new ProcessorVersionInputCapability());
             var job = service.AddJob(null, processorVersion, "JOB_ARGUMENTS");
             Assert.Empty(job.JobExecutions);
             var execution = service.ScheduleNextJob(node);
@@ -71,12 +170,14 @@ namespace Delta.AppServer.Test.Jobs
             var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
             var assetService = new AssetService(context, clock, objectStorageService, encryptionService,
                 new CompressionService());
+            var assetMetadataService = new AssetMetadataService(context);
             var service = new JobService(context, clock, assetService);
 
             var processorType = context.Add(new ProcessorType {Key = "type-key", Name = "type-name"}).Entity;
             context.SaveChanges();
             var processorService = new ProcessorService(context, clock, null);
             var processorVersion = processorService.RegisterProcessorVersion(processorType, "key", "");
+            processorVersion.ProcessorVersionInputCapabilities.Add(new ProcessorVersionInputCapability());
 
             var node = processorService.AddNode(processorVersion, "a", "");
             service.AddJob(null, processorVersion, "");
@@ -118,8 +219,8 @@ namespace Delta.AppServer.Test.Jobs
                 }
             });
             Assert.Equal(PredefinedJobExecutionStatuses.Complete, status.Status);
-            Assert.NotNull(assetService.GetAsset(1));
-            Assert.NotNull(assetService.GetAsset(2));
+            Assert.NotNull(assetMetadataService.GetAsset(1));
+            Assert.NotNull(assetMetadataService.GetAsset(2));
             Assert.Equal(2, context.Assets.Count());
 
             // TODO type, format 조합
