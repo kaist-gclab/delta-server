@@ -20,6 +20,12 @@ namespace Delta.AppServer.ObjectStorage
 
         public async Task Write(string key, byte[] content)
         {
+            // TODO
+            if (!await _client.BucketExistsAsync(_objectStorageConfig.Bucket))
+            {
+                await _client.MakeBucketAsync(_objectStorageConfig.Bucket);
+            }
+
             if (key == null || content == null)
             {
                 throw new ArgumentNullException();
