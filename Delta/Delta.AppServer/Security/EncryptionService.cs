@@ -68,5 +68,17 @@ namespace Delta.AppServer.Security
             str = str.Substring(0, str.Length - encryptionKey.Value.Length);
             return Convert.FromBase64String(str);
         }
+
+        public EncryptionKey GetEncryptionKey(string name)
+        {
+            if (name == null)
+            {
+                return null;
+            }
+
+            return (from e in _context.EncryptionKeys
+                    where e.Name == name
+                    select e).FirstOrDefault();
+        }
     }
 }
