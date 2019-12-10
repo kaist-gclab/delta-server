@@ -1,19 +1,32 @@
 using System;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Logging;
+using RestSharp.Extensions;
 
 namespace Delta.AppServer.Encryption
 {
     public class EncryptionService
     {
         private readonly DeltaContext _context;
-        private readonly ILogger<EncryptionService> _logger;
+
+        private readonly byte[] _salt =
+        {
+            0x30, 0x04, 0xa3, 0x66, 0x44, 0x6f, 0x7d, 0xd2,
+            0x6d, 0xf0, 0x99, 0x8e, 0x01, 0x3a, 0x92, 0xc5,
+            0x41, 0xe6, 0xd0, 0x18, 0x4f, 0x52, 0xe8, 0xe9,
+            0xe2, 0x08, 0xe8, 0x8a, 0x31, 0xd3, 0x32, 0x46,
+            0xb7, 0xed, 0x8e, 0x43, 0x3a, 0x1a, 0xd7, 0x72,
+            0x45, 0x39, 0xdf, 0xee, 0xa8, 0x8e, 0xbc, 0x78,
+            0x24, 0xd8, 0x65, 0xfc, 0xf3, 0x1d, 0x05, 0x5f,
+            0xa4, 0xa1, 0x5a, 0xec, 0x70, 0x9d, 0x14, 0x0e
+        };
 
         public EncryptionService(DeltaContext context, ILogger<EncryptionService> logger)
         {
             _context = context;
-            _logger = logger;
         }
 
         public EncryptionKey AddEncryptionKey(string name)
@@ -51,9 +64,23 @@ namespace Delta.AppServer.Encryption
                 throw new Exception();
             }
 
-            _logger.LogWarning("EncryptionService.Encrypt is not secure.");
-            var str = Convert.ToBase64String(plainData) + encryptionKey.Value;
-            return Encoding.UTF8.GetBytes(str);
+            using var aes = new AesCryptoServiceProvider
+            {
+                Mode = CipherMode.CBC,
+                KeySize = 256,
+                Key = GetKey(encryptionKey),
+                BlockSize = 128,
+                Padding = PaddingMode.PKCS7
+            };
+            using var msEncrypt = new MemoryStream();
+            msEncrypt.Write(aes.IV);
+            using (var csEncrypt =
+                new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
+            {
+                csEncrypt.Write(plainData);
+            }
+
+            return msEncrypt.ToArray();
         }
 
         public byte[] Decrypt(EncryptionKey encryptionKey, byte[] cipherData)
@@ -63,11 +90,24 @@ namespace Delta.AppServer.Encryption
                 throw new Exception();
             }
 
-            _logger.LogWarning("EncryptionService.Decrypt is not secure.");
-            var str = Encoding.UTF8.GetString(cipherData);
-            str = str.Substring(0, str.Length - encryptionKey.Value.Length);
-            return Convert.FromBase64String(str);
+            using var msDecrypt = new MemoryStream(cipherData);
+            var iv = new byte[128 / 8];
+            msDecrypt.Read(iv);
+
+            using var aes = new AesCryptoServiceProvider
+            {
+                Mode = CipherMode.CBC,
+                KeySize = 256,
+                Key = GetKey(encryptionKey),
+                BlockSize = 128,
+                Padding = PaddingMode.PKCS7,
+                IV = iv
+            };
+            using var csDecrypt =
+                new CryptoStream(msDecrypt, aes.CreateDecryptor(), CryptoStreamMode.Read);
+            return csDecrypt.ReadAsBytes();
         }
+
 
         public EncryptionKey GetEncryptionKey(string name)
         {
@@ -80,11 +120,21 @@ namespace Delta.AppServer.Encryption
                     where e.Name == name
                     select e).FirstOrDefault();
         }
-        
+
         public void EnableKey(EncryptionKey key)
         {
             key.Enabled = true;
             _context.SaveChanges();
+        }
+
+        private byte[] GetKey(EncryptionKey key)
+        {
+            return KeyDerivation.Pbkdf2(
+                password: key.Value,
+                salt: _salt,
+                prf: KeyDerivationPrf.HMACSHA512,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8);
         }
     }
 }
