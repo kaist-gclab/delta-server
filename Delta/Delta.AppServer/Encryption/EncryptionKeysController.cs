@@ -25,10 +25,4 @@ namespace Delta.AppServer.Encryption
             return key;
         }
     }
-
-    public class EncryptionKeyCreateRequest
-    {
-        public string Name { get; set; }
-        public bool Enabled { get; set; }
-    }
 }

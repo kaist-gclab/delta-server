@@ -57,6 +57,7 @@
         <e p="DeltaContext.cs" t="Include" />
         <e p="Encryption" t="Include">
           <e p="EncryptionKey.cs" t="Include" />
+          <e p="EncryptionKeyCreateRequest.cs" t="Include" />
           <e p="EncryptionKeysController.cs" t="Include" />
           <e p="EncryptionService.cs" t="Include" />
         </e>
