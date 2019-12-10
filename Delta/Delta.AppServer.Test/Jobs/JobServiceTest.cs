@@ -6,7 +6,7 @@ using Delta.AppServer.Assets;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
 using Delta.AppServer.Processors;
-using Delta.AppServer.Security;
+using Delta.AppServer.Encryption;
 using Delta.AppServer.Test.Infrastructure;
 using NodaTime;
 using NodaTime.Testing;

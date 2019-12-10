@@ -2,7 +2,7 @@ using System.Linq;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.Processors;
-using Delta.AppServer.Security;
+using Delta.AppServer.Encryption;
 using Microsoft.EntityFrameworkCore;
 
 namespace Delta.AppServer

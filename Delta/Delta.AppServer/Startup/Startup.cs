@@ -7,7 +7,7 @@ using Delta.AppServer.Core.Security;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
 using Delta.AppServer.Processors;
-using Delta.AppServer.Security;
+using Delta.AppServer.Encryption;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Delta.AppServer.Jobs;
-using Delta.AppServer.Security;
+using Delta.AppServer.Encryption;
 using NodaTime;
 
 namespace Delta.AppServer.Assets

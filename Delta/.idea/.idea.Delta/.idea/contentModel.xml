@@ -55,6 +55,11 @@
         </e>
         <e p="Delta.AppServer.csproj" t="IncludeRecursive" />
         <e p="DeltaContext.cs" t="Include" />
+        <e p="Encryption" t="Include">
+          <e p="EncryptionKey.cs" t="Include" />
+          <e p="EncryptionKeysController.cs" t="Include" />
+          <e p="EncryptionService.cs" t="Include" />
+        </e>
         <e p="Jobs" t="Include">
           <e p="Job.cs" t="Include" />
           <e p="JobExecution.cs" t="Include" />
@@ -101,10 +106,6 @@
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
-        </e>
-        <e p="Security" t="Include">
-          <e p="EncryptionKey.cs" t="Include" />
-          <e p="EncryptionService.cs" t="Include" />
         </e>
         <e p="Startup" t="Include">
           <e p="ConfigurationHelper.cs" t="Include" />

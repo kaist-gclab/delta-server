@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
-using Delta.AppServer.Security;
+using Delta.AppServer.Encryption;
 using Delta.AppServer.Test.Infrastructure;
 using Xunit;
 using Xunit.Abstractions;

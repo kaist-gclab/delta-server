@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Delta.AppServer.Assets;
 
-namespace Delta.AppServer.Security
+namespace Delta.AppServer.Encryption
 {
     public class EncryptionKey
     {

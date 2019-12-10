@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
-namespace Delta.AppServer.Security
+namespace Delta.AppServer.Encryption
 {
     public class EncryptionService
     {
@@ -79,6 +79,12 @@ namespace Delta.AppServer.Security
             return (from e in _context.EncryptionKeys
                     where e.Name == name
                     select e).FirstOrDefault();
+        }
+        
+        public void EnableKey(EncryptionKey key)
+        {
+            key.Enabled = true;
+            _context.SaveChanges();
         }
     }
 }
