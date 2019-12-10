@@ -22,9 +22,14 @@ namespace Delta.AppServer.Assets
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAssets([FromQuery] string assetTagKey, [FromQuery] string assetTagValue)
         {
-            return Ok(_assetMetadataService.GetAssets());
+            if (assetTagKey == null && assetTagValue == null)
+            {
+                return Ok(_assetMetadataService.GetAssets());
+            }
+
+            return Ok(_assetMetadataService.FindByAssetTag(assetTagKey, assetTagValue));
         }
 
         [HttpPost]
@@ -49,6 +54,14 @@ namespace Delta.AppServer.Assets
             {
                 return BadRequest();
             }
+        }
+
+
+        [HttpPost("{assetId:long}/tags")]
+        public IActionResult CreateAssetTag(long assetId, [FromBody] CreateAssetTagRequest createAssetTagRequest)
+        {
+            var asset = _assetMetadataService.GetAsset(assetId);
+            return Ok(_assetMetadataService.AddAssetTag(asset, createAssetTagRequest.Key, createAssetTagRequest.Value));
         }
 
         [HttpGet("{assetId:long}/download")]
@@ -111,5 +124,11 @@ namespace Delta.AppServer.Assets
 
             return encryptionKey;
         }
+    }
+
+    public class CreateAssetTagRequest
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
     }
 }
