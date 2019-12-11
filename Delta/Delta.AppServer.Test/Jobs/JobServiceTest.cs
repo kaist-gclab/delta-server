@@ -180,7 +180,9 @@ namespace Delta.AppServer.Test.Jobs
             processorVersion.ProcessorVersionInputCapabilities.Add(new ProcessorVersionInputCapability());
 
             var node = processorService.AddNode(processorVersion, "a", "");
-            service.AddJob(null, processorVersion, "");
+            var job = service.AddJob(null, processorVersion, "");
+            Assert.Equal(job.Id, service.GetJob(job.Id).Id);
+
             var execution = service.ScheduleNextJob(node);
             Assert.Equal("a", execution.ProcessorNode.Key);
 
