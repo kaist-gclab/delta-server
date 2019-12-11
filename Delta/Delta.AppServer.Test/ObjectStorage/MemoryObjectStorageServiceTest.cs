@@ -34,6 +34,9 @@ namespace Delta.AppServer.Test.ObjectStorage
             bytes[0] = 5;
             Assert.Equal(5, bytes[0]);
             Assert.Equal(3, (await service.Read("a"))[0]);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await service.Read(null));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await service.Read(""));
         }
     }
 }
