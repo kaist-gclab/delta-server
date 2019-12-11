@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.Extensions.Logging;
 using RestSharp.Extensions;
 
 namespace Delta.AppServer.Encryption
@@ -24,7 +23,7 @@ namespace Delta.AppServer.Encryption
             0xa4, 0xa1, 0x5a, 0xec, 0x70, 0x9d, 0x14, 0x0e
         };
 
-        public EncryptionService(DeltaContext context, ILogger<EncryptionService> logger)
+        public EncryptionService(DeltaContext context)
         {
             _context = context;
         }

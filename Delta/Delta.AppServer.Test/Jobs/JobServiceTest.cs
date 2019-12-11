@@ -167,7 +167,7 @@ namespace Delta.AppServer.Test.Jobs
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 5, 15, 23, 30));
             var objectStorageService = new MemoryObjectStorageService();
-            var encryptionService = new EncryptionService(context, Output.ToLogger<EncryptionService>());
+            var encryptionService = new EncryptionService(context);
             var assetService = new AssetService(context, clock, objectStorageService, encryptionService,
                 new CompressionService());
             var assetMetadataService = new AssetMetadataService(context);

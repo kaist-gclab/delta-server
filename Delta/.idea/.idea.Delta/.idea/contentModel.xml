@@ -127,6 +127,9 @@
           <e p="ScheduleHelperTest.cs" t="Include" />
         </e>
         <e p="Delta.AppServer.Test.csproj" t="IncludeRecursive" />
+        <e p="Encryption" t="Include">
+          <e p="EncryptionServiceTest.cs" t="Include" />
+        </e>
         <e p="Infrastructure" t="Include">
           <e p="ControllerTest.cs" t="Include" />
           <e p="ServiceTest.cs" t="Include" />
@@ -151,9 +154,6 @@
         </e>
         <e p="Processors" t="Include">
           <e p="ProcessorServiceTest.cs" t="Include" />
-        </e>
-        <e p="Security" t="Include">
-          <e p="EncryptionServiceTest.cs" t="Include" />
         </e>
         <e p="UnitTest1.cs" t="Include" />
       </e>
