@@ -67,7 +67,7 @@ namespace Delta.AppServer.Encryption
             {
                 Mode = CipherMode.CBC,
                 KeySize = 256,
-                Key = GetKey(encryptionKey),
+                Key = GetKey(encryptionKey, _salt),
                 BlockSize = 128,
                 Padding = PaddingMode.PKCS7
             };
@@ -97,7 +97,7 @@ namespace Delta.AppServer.Encryption
             {
                 Mode = CipherMode.CBC,
                 KeySize = 256,
-                Key = GetKey(encryptionKey),
+                Key = GetKey(encryptionKey, _salt),
                 BlockSize = 128,
                 Padding = PaddingMode.PKCS7,
                 IV = iv
@@ -126,11 +126,11 @@ namespace Delta.AppServer.Encryption
             _context.SaveChanges();
         }
 
-        private byte[] GetKey(EncryptionKey key)
+        private static byte[] GetKey(EncryptionKey key, byte[] salt)
         {
             return KeyDerivation.Pbkdf2(
                 password: key.Value,
-                salt: _salt,
+                salt: salt,
                 prf: KeyDerivationPrf.HMACSHA512,
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8);
