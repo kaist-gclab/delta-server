@@ -62,13 +62,18 @@
           <e p="EncryptionService.cs" t="Include" />
         </e>
         <e p="Jobs" t="Include">
+          <e p="AddJobRequest.cs" t="Include" />
+          <e p="AddJobResultRequest.cs" t="Include" />
           <e p="Job.cs" t="Include" />
           <e p="JobExecution.cs" t="Include" />
           <e p="JobExecutionConfig.cs" t="Include" />
           <e p="JobExecutionStatus.cs" t="Include" />
+          <e p="JobScheduleRequest.cs" t="Include" />
           <e p="JobsController.cs" t="Include" />
           <e p="JobService.cs" t="Include" />
           <e p="PredefinedJobExecutionStatuses.cs" t="Include" />
+          <e p="RequestAssetTag.cs" t="Include" />
+          <e p="RequestResultAsset.cs" t="Include" />
           <e p="ResultAsset.cs" t="Include" />
         </e>
         <e p="Migrations" t="Include">
@@ -94,6 +99,7 @@
           <e p="S3CompatibleObjectStorageService.cs" t="Include" />
         </e>
         <e p="Processors" t="Include">
+          <e p="CreateProcessorTypeRequest.cs" t="Include" />
           <e p="PredefinedProcessorNodeStatuses.cs" t="Include" />
           <e p="ProcessorNode.cs" t="Include" />
           <e p="ProcessorNodeStatus.cs" t="Include" />

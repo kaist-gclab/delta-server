@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Delta.AppServer.Assets;
@@ -86,6 +87,33 @@ namespace Delta.AppServer.Processors
             return processorVersion;
         }
 
+        public ProcessorType AddProcessorType(string key, string name)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentNullException();
+            }
+
+            using var trx = _context.Database.BeginTransaction();
+            var q = from t in _context.ProcessorTypes
+                    where t.Key == key
+                    select t;
+            if (q.Any())
+            {
+                throw new ArgumentException();
+            }
+
+            var processorType = new ProcessorType
+            {
+                Key = key,
+                Name = name
+            };
+            processorType = _context.Add(processorType).Entity;
+            _context.SaveChanges();
+            trx.Commit();
+            return processorType;
+        }
+
         public ProcessorType GetProcessorType(long id) => _context.ProcessorTypes.Find(id);
 
         public ProcessorType GetProcessorType(string key)
@@ -121,5 +149,12 @@ namespace Delta.AppServer.Processors
         }
 
         public IEnumerable<ProcessorNode> GetProcessorNodes() => _context.ProcessorNodes.ToList();
+
+        public ProcessorVersion GetProcessorVersion(string processorVersionKey)
+        {
+            return (from v in _context.ProcessorVersions
+                    where v.Key == processorVersionKey
+                    select v).First();
+        }
     }
 }

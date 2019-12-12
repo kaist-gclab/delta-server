@@ -26,7 +26,7 @@ namespace Delta.AppServer.Test.Jobs
         {
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 5, 15, 23, 30));
-            var service = new JobService(context, clock, null);
+            var service = new JobService(context, clock, null, null, null);
 
             var processorType = context.Add(new ProcessorType {Key = "type-key", Name = "type-name"}).Entity;
             context.SaveChanges();
@@ -72,8 +72,8 @@ namespace Delta.AppServer.Test.Jobs
 
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 5, 15, 23, 30));
-            var service = new JobService(context, clock, null);
             var assetMetadataService = new AssetMetadataService(context);
+            var service = new JobService(context, clock, null, assetMetadataService, null);
 
             AssetFormat CreateAssetFormatIfNotExists(string key)
             {
@@ -143,7 +143,7 @@ namespace Delta.AppServer.Test.Jobs
         {
             var context = CreateDbContext();
             var clock = new FakeClock(Instant.FromUtc(2010, 5, 15, 23, 30));
-            var service = new JobService(context, clock, null);
+            var service = new JobService(context, clock, null, null, null);
 
             var processorType = context.Add(new ProcessorType {Key = "type-key", Name = "type-name"}).Entity;
             context.SaveChanges();
@@ -171,7 +171,7 @@ namespace Delta.AppServer.Test.Jobs
             var assetService = new AssetService(context, clock, objectStorageService, encryptionService,
                 new CompressionService());
             var assetMetadataService = new AssetMetadataService(context);
-            var service = new JobService(context, clock, assetService);
+            var service = new JobService(context, clock, assetService, assetMetadataService, null);
 
             var processorType = context.Add(new ProcessorType {Key = "type-key", Name = "type-name"}).Entity;
             context.SaveChanges();

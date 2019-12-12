@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Delta.AppServer.Processors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,16 +17,28 @@ namespace Delta.AppServer.Jobs
             _processorService = processorService;
         }
 
-        [HttpGet]
-        public IActionResult Schedule(long processorNodeId)
+        [HttpPost("schedule")]
+        public IActionResult Schedule(JobScheduleRequest jobScheduleRequest)
         {
-            var processorNode = _processorService.GetNode(processorNodeId);
+            var processorNode = _processorService.GetNode(jobScheduleRequest.ProcessorNodeId);
             if (processorNode == null)
             {
                 return NotFound();
             }
 
             return Ok(_jobService.ScheduleNextJob(processorNode));
+        }
+
+        [HttpPost("result")]
+        public async Task<IActionResult> AddJobResult(AddJobResultRequest addJobResultRequest)
+        {
+            return Ok(await _jobService.AddJobResult(addJobResultRequest));
+        }
+
+        [HttpPost]
+        public IActionResult AddJob(AddJobRequest addJobRequest)
+        {
+            return Ok(_jobService.AddJob(addJobRequest));
         }
     }
 }

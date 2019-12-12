@@ -24,5 +24,13 @@ namespace Delta.AppServer.Processors
         {
             return Ok(_processorService.AddNode(registerProcessorNodeRequest));
         }
+
+        [HttpPost("types")]
+        public IActionResult CreateProcessorType([FromBody] CreateProcessorTypeRequest createProcessorTypeRequest)
+        {
+            return Ok(_processorService.AddProcessorType(
+                createProcessorTypeRequest.Key,
+                createProcessorTypeRequest.Name));
+        }
     }
 }

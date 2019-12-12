@@ -13,12 +13,18 @@ namespace Delta.AppServer.Jobs
         private readonly DeltaContext _context;
         private readonly IClock _clock;
         private readonly AssetService _assetService;
+        private readonly AssetMetadataService _assetMetadataService;
+        private readonly ProcessorService _processorService;
 
-        public JobService(DeltaContext context, IClock clock, AssetService assetService)
+        public JobService(DeltaContext context, IClock clock,
+            AssetService assetService, AssetMetadataService assetMetadataService,
+            ProcessorService processorService)
         {
             _context = context;
             _clock = clock;
             _assetService = assetService;
+            _assetMetadataService = assetMetadataService;
+            _processorService = processorService;
         }
 
         public Job AddJob(Asset inputAsset, ProcessorVersion processorVersion, string jobArguments)
@@ -50,9 +56,21 @@ namespace Delta.AppServer.Jobs
             return job;
         }
 
+        public Job AddJob(AddJobRequest addJobRequest)
+        {
+            var inputAsset = _assetMetadataService.GetAsset(addJobRequest.InputAssetId);
+            var processorVersion = _processorService.GetProcessorVersion(addJobRequest.ProcessorVersionKey);
+            return AddJob(inputAsset, processorVersion, addJobRequest.JobArguments);
+        }
+
         public Job GetJob(long id)
         {
             return _context.Jobs.Find(id);
+        }
+
+        public JobExecution GetJobExecution(long id)
+        {
+            return _context.JobExecutions.Find(id);
         }
 
         public JobExecution ScheduleNextJob(ProcessorNode processorNode)
@@ -129,6 +147,22 @@ namespace Delta.AppServer.Jobs
             var status = AddJobExecutionStatus(jobExecution, PredefinedJobExecutionStatuses.Complete);
             _context.SaveChanges();
             return status;
+        }
+
+        public async Task<JobExecutionStatus> AddJobResult(AddJobResultRequest addJobResultRequest)
+        {
+            var jobExecution = GetJobExecution(addJobResultRequest.JobExecutionId);
+            var resultAssets = from r in addJobResultRequest.ResultAssets
+                               let tags = from t in r.AssetTags
+                                          select new AssetTag {Key = t.Key, Value = t.Value}
+                               select new ResultAsset
+                               {
+                                   AssetFormat = _assetMetadataService.GetAssetFormat(r.AssetFormatKey),
+                                   AssetType = _assetMetadataService.GetAssetType(r.AssetTypeKey),
+                                   AssetTags = tags,
+                                   Content = r.Content
+                               };
+            return await AddJobResult(jobExecution, resultAssets);
         }
     }
 }
