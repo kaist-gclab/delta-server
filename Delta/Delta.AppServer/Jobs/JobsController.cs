@@ -42,7 +42,7 @@ namespace Delta.AppServer.Jobs
         }
 
         [HttpGet("executions/{jobExecutionId:long}")]
-        public IActionResult GetJobExecution([FromQuery] long jobExecutionId)
+        public IActionResult GetJobExecution(long jobExecutionId)
         {
             return Ok(_jobService.GetJobExecution(jobExecutionId));
         }

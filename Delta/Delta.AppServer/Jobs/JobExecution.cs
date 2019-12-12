@@ -13,7 +13,9 @@ namespace Delta.AppServer.Jobs
 
         [Required] public virtual Job Job { get; set; }
         [Required] public virtual ProcessorNode ProcessorNode { get; set; }
-        public virtual ICollection<Asset> ChildAssets { get; set; } = new HashSet<Asset>();
+
+        public virtual ICollection<Asset> ChildAssets { get; set; }
+            = new HashSet<Asset>();
 
         public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; } =
             new HashSet<JobExecutionStatus>();

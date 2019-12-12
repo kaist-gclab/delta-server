@@ -6,7 +6,7 @@ namespace Delta.AppServer.Jobs
     {
         public string AssetFormatKey { get; set; }
         public string AssetTypeKey { get; set; }
-        public ICollection<RequestAssetTag> AssetTags { get; set; } = new HashSet<RequestAssetTag>();
+        public IEnumerable<RequestAssetTag> AssetTags { get; set; } = new HashSet<RequestAssetTag>();
         public byte[] Content { get; set; }
     }
 }
