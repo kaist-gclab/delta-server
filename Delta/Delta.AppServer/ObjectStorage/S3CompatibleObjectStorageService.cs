@@ -21,7 +21,7 @@ namespace Delta.AppServer.ObjectStorage
 
         public async Task Write(string key, byte[] content)
         {
-            EnsureBucketExists();
+            await EnsureBucketExists();
 
             if (key == null || content == null)
             {
@@ -39,7 +39,7 @@ namespace Delta.AppServer.ObjectStorage
 
         public async Task<byte[]> Read(string key)
         {
-            EnsureBucketExists();
+            await EnsureBucketExists();
 
             if (key == null)
             {
@@ -60,7 +60,7 @@ namespace Delta.AppServer.ObjectStorage
         private volatile bool _initialized;
         private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1);
 
-        private async void EnsureBucketExists()
+        private async Task EnsureBucketExists()
         {
             if (_initialized == false)
             {
