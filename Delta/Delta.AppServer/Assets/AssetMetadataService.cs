@@ -90,5 +90,28 @@ namespace Delta.AppServer.Assets
                            select t).Any()
                     select a).ToList();
         }
+
+        public AssetFormat AddAssetFormat(string key, string name, string description)
+        {
+            using var trx = _context.Database.BeginTransaction();
+            var q = from f in _context.AssetFormats
+                    where f.Key == key
+                    select f;
+            if (q.Any())
+            {
+                throw new ArgumentException();
+            }
+
+            var assetFormat = new AssetFormat
+            {
+                Key = key,
+                Name = name,
+                Description = description,
+            };
+            assetFormat = _context.Add(assetFormat).Entity;
+            _context.SaveChanges();
+            trx.Commit();
+            return assetFormat;
+        }
     }
 }

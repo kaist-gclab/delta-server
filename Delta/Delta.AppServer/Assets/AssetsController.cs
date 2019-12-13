@@ -55,8 +55,16 @@ namespace Delta.AppServer.Assets
                 return BadRequest();
             }
         }
-
-
+        
+        [HttpPost("formats")]
+        public IActionResult CreateAssetFormat(CreateAssetFormatRequest createAssetFormatRequest)
+        {
+            return Ok(_assetMetadataService.AddAssetFormat(
+                createAssetFormatRequest.Key,
+                createAssetFormatRequest.Name,
+                createAssetFormatRequest.Description));
+        }
+        
         [HttpPost("{assetId:long}/tags")]
         public IActionResult CreateAssetTag(long assetId, [FromBody] CreateAssetTagRequest createAssetTagRequest)
         {
@@ -124,11 +132,5 @@ namespace Delta.AppServer.Assets
 
             return encryptionKey;
         }
-    }
-
-    public class CreateAssetTagRequest
-    {
-        public string Key { get; set; }
-        public string Value { get; set; }
     }
 }

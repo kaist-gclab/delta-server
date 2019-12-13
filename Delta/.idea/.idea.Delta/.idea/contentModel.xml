@@ -32,7 +32,9 @@
           <e p="AssetTag.cs" t="Include" />
           <e p="AssetType.cs" t="Include" />
           <e p="CompressionService.cs" t="Include" />
+          <e p="CreateAssetFormatRequest.cs" t="Include" />
           <e p="CreateAssetRequest.cs" t="Include" />
+          <e p="CreateAssetTagRequest.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Core" t="Include">
