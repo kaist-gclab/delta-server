@@ -10,7 +10,7 @@ namespace Delta.AppServer.Processors
         public string ProcessorNodeKey { get; set; }
         public string ProcessorNodeName { get; set; }
 
-        public List<InputCapability> InputCapabilities { get; set; }
+        public IEnumerable<InputCapability> InputCapabilities { get; set; }
         
         public class InputCapability
         {
