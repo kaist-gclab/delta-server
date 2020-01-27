@@ -1,3 +1,7 @@
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
 *.suo
 *.user
 *.sln.docstates
