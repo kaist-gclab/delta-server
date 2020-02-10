@@ -40,11 +40,31 @@ namespace Delta.AppServer.Processors
             var processorType = GetProcessorType(request.ProcessorTypeKey);
             var processorVersion = RegisterProcessorVersion(processorType, request.ProcessorVersionKey,
                 request.ProcessorVersionDescription);
-            foreach (var c in request.InputCapabilities)
+            var inputCapabilities = request.InputCapabilities.Select(c =>
             {
                 var assetFormat = _assetMetadataService.GetAssetFormat(c.AssetFormatKey);
+                if (assetFormat == null)
+                {
+                    return null;
+                }
+
                 var assetType = _assetMetadataService.GetAssetType(c.AssetTypeKey);
-                RegisterProcessorVersionInputCapability(processorVersion, assetFormat, assetType);
+                if (assetType == null)
+                {
+                    return null;
+                }
+
+                return new {AssetFormat = assetFormat, AssetType = assetType};
+            }).ToList();
+
+            if (inputCapabilities.Any(c => c == null))
+            {
+                return null;
+            }
+
+            foreach (var c in inputCapabilities)
+            {
+                RegisterProcessorVersionInputCapability(processorVersion, c.AssetFormat, c.AssetType);
             }
 
             return AddNode(processorVersion, request.ProcessorNodeKey, request.ProcessorNodeName);

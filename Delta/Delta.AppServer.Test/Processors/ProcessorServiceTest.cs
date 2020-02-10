@@ -104,6 +104,44 @@ namespace Delta.AppServer.Test.Processors
             Assert.Null(node.Name);
             Assert.Equal("node-a", node.Key);
             Assert.Equal(node.Id, service.GetNode(node.Id).Id);
+
+            var badRequestA = new RegisterProcessorNodeRequest
+            {
+                ProcessorTypeKey = processorType.Key,
+                ProcessorVersionKey = "version-a",
+                ProcessorVersionDescription = "Version a.",
+                ProcessorNodeKey = "node-a",
+                ProcessorNodeName = null,
+                InputCapabilities =
+                    new List<RegisterProcessorNodeRequest.InputCapability>
+                    {
+                        new RegisterProcessorNodeRequest.InputCapability
+                        {
+                            AssetFormatKey = "BAD-ASSET-FORMAT-KEY",
+                            AssetTypeKey = assetType.Key
+                        }
+                    }
+            };
+            Assert.Null(service.AddNode(badRequestA));
+
+            var badRequestB = new RegisterProcessorNodeRequest
+            {
+                ProcessorTypeKey = processorType.Key,
+                ProcessorVersionKey = "version-a",
+                ProcessorVersionDescription = "Version a.",
+                ProcessorNodeKey = "node-a",
+                ProcessorNodeName = null,
+                InputCapabilities =
+                    new List<RegisterProcessorNodeRequest.InputCapability>
+                    {
+                        new RegisterProcessorNodeRequest.InputCapability
+                        {
+                            AssetFormatKey = assetFormat.Key,
+                            AssetTypeKey = "BAD-ASSET-TYPE-KEY"
+                        }
+                    }
+            };
+            Assert.Null(service.AddNode(badRequestB));
         }
 
         [Fact]

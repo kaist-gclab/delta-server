@@ -22,7 +22,13 @@ namespace Delta.AppServer.Processors
         [HttpPost("nodes/register")]
         public IActionResult RegisterProcessorNode(RegisterProcessorNodeRequest registerProcessorNodeRequest)
         {
-            return Ok(_processorService.AddNode(registerProcessorNodeRequest));
+            var node = _processorService.AddNode(registerProcessorNodeRequest);
+            if (node == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(node);
         }
 
         [HttpPost("types")]
