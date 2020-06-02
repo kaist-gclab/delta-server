@@ -55,7 +55,7 @@ namespace Delta.AppServer.Assets
                 return BadRequest();
             }
         }
-        
+
         [HttpPost("formats")]
         public IActionResult CreateAssetFormat(CreateAssetFormatRequest createAssetFormatRequest)
         {
@@ -64,12 +64,18 @@ namespace Delta.AppServer.Assets
                 createAssetFormatRequest.Name,
                 createAssetFormatRequest.Description));
         }
-        
+
         [HttpPost("{assetId:long}/tags")]
-        public IActionResult CreateAssetTag(long assetId, [FromBody] CreateAssetTagRequest createAssetTagRequest)
+        public IActionResult UpdateAssetTag(long assetId, [FromBody] UpdateAssetTagRequest updateAssetTagRequest)
         {
             var asset = _assetMetadataService.GetAsset(assetId);
-            return Ok(_assetMetadataService.AddAssetTag(asset, createAssetTagRequest.Key, createAssetTagRequest.Value));
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_assetMetadataService.UpdateAssetTag(asset,
+                updateAssetTagRequest.Key, updateAssetTagRequest.Value));
         }
 
         [HttpGet("{assetId:long}/download")]

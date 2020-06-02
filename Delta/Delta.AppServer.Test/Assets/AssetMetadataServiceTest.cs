@@ -14,22 +14,27 @@ namespace Delta.AppServer.Test.Assets
         }
 
         [Fact]
-        public void AddAssetTag()
+        public void UpdateAssetTag()
         {
-            // TODO 삭제 기능, 이력 관리 기능
             var context = CreateDbContext();
             var service = new AssetMetadataService(context);
             var asset = context.Add(new Asset()).Entity;
             context.SaveChanges();
             Assert.Empty(context.AssetTags);
-            Assert.Throws<ArgumentNullException>(() => service.AddAssetTag(asset, null, null));
-            Assert.Throws<ArgumentNullException>(() => service.AddAssetTag(asset, "key", null));
-            Assert.Throws<ArgumentNullException>(() => service.AddAssetTag(asset, null, "value"));
+            Assert.Throws<ArgumentNullException>(() => service.UpdateAssetTag(asset, null, null));
+            Assert.Throws<ArgumentNullException>(() => service.UpdateAssetTag(asset, null, "value"));
+            service.UpdateAssetTag(asset, "key", null);
             Assert.Empty(context.AssetTags);
-            var tag = service.AddAssetTag(asset, "key", "value");
+            var tag = service.UpdateAssetTag(asset, "key", "value");
             Assert.Single(context.AssetTags);
             Assert.Equal("key", tag.Key);
             Assert.Equal("value", tag.Value);
+            Assert.Null(service.UpdateAssetTag(asset, "key", null));
+            Assert.Empty(context.AssetTags);
+            Assert.Equal("1", service.UpdateAssetTag(asset, "key", "1").Value);
+            Assert.Single(context.AssetTags);
+            Assert.Equal("2", service.UpdateAssetTag(asset, "key", "2").Value);
+            Assert.Single(context.AssetTags);
         }
 
         [Fact]
@@ -40,12 +45,12 @@ namespace Delta.AppServer.Test.Assets
             var assetA = context.Add(new Asset()).Entity;
             var assetB = context.Add(new Asset()).Entity;
             context.SaveChanges();
-            service.AddAssetTag(assetA, "a", "b");
-            service.AddAssetTag(assetA, "z", "b");
-            service.AddAssetTag(assetA, "c", "d");
-            service.AddAssetTag(assetB, "a", "b");
-            service.AddAssetTag(assetB, "e", "f");
-            service.AddAssetTag(assetB, "z", "p");
+            service.UpdateAssetTag(assetA, "a", "b");
+            service.UpdateAssetTag(assetA, "z", "b");
+            service.UpdateAssetTag(assetA, "c", "d");
+            service.UpdateAssetTag(assetB, "a", "b");
+            service.UpdateAssetTag(assetB, "e", "f");
+            service.UpdateAssetTag(assetB, "z", "p");
 
             Assert.Equal(6, context.AssetTags.Count());
             Assert.Equal(2, service.FindByAssetTag("a", null).Count());

@@ -42,11 +42,26 @@ namespace Delta.AppServer.Assets
                     select t).FirstOrDefault();
         }
 
-        public AssetTag AddAssetTag(Asset asset, string key, string value)
+        public AssetTag UpdateAssetTag(Asset asset, string key, string value)
         {
-            if (key == null || value == null)
+            if (key == null)
             {
                 throw new ArgumentNullException();
+            }
+
+            var tag = (from t in asset.AssetTags
+                       where t.Key == key
+                       select t).FirstOrDefault();
+
+            if (tag != null)
+            {
+                asset.AssetTags.Remove(tag);
+            }
+
+            if (value == null)
+            {
+                _context.SaveChanges();
+                return null;
             }
 
             var assetTag = new AssetTag
