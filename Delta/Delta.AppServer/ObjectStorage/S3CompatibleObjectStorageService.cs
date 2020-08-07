@@ -9,11 +9,14 @@ namespace Delta.AppServer.ObjectStorage
     public class S3CompatibleObjectStorageService : IObjectStorageService
     {
         private readonly ObjectStorageConfig _objectStorageConfig;
+        private readonly IObjectStorageKeyConverter _objectStorageKeyConverter;
         private readonly MinioClient _client;
 
-        public S3CompatibleObjectStorageService(ObjectStorageConfig objectStorageConfig)
+        public S3CompatibleObjectStorageService(ObjectStorageConfig objectStorageConfig,
+            IObjectStorageKeyConverter objectStorageKeyConverter)
         {
             _objectStorageConfig = objectStorageConfig;
+            _objectStorageKeyConverter = objectStorageKeyConverter;
             _client = new MinioClient(_objectStorageConfig.Endpoint,
                 _objectStorageConfig.AccessKey,
                 _objectStorageConfig.SecretKey);
@@ -34,7 +37,8 @@ namespace Delta.AppServer.ObjectStorage
             }
 
             var stream = new MemoryStream(content);
-            await _client.PutObjectAsync(_objectStorageConfig.Bucket, key, stream, stream.Length);
+            await _client.PutObjectAsync(_objectStorageConfig.Bucket,
+                _objectStorageKeyConverter.GetKey(key), stream, stream.Length);
         }
 
         public async Task<byte[]> Read(string key)
@@ -52,7 +56,8 @@ namespace Delta.AppServer.ObjectStorage
             }
 
             await using var memoryStream = new MemoryStream();
-            await _client.GetObjectAsync(_objectStorageConfig.Bucket, key,
+            await _client.GetObjectAsync(_objectStorageConfig.Bucket,
+                _objectStorageKeyConverter.GetKey(key),
                 stream => { stream.CopyTo(memoryStream); });
             return memoryStream.ToArray();
         }

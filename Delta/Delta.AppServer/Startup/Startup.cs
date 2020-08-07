@@ -105,6 +105,7 @@ namespace Delta.AppServer.Startup
             services.AddScoped<IObjectStorageService, S3CompatibleObjectStorageService>();
             services.AddScoped<CompressionService>();
             services.AddScoped<EncryptionService>();
+            services.AddScoped<IObjectStorageKeyConverter, PrefixFourObjectStorageKeyConverter>();
 
             services.AddSingleton<ScheduleHelper>();
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
@@ -126,7 +127,7 @@ namespace Delta.AppServer.Startup
             }
 
             app.UseResponseCompression();
-            
+
             app.UseRouting();
 
             app.UseCors(builder => builder
