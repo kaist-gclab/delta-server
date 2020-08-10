@@ -18,7 +18,7 @@ namespace Delta.AppServer.Test.Infrastructure
 
         protected DeltaContext CreateDbContext()
         {
-            var context = Factory.GetService<DeltaContext>();
+            var context = Factory.GetServiceProvider().Get<DeltaContext>();
             Assert.True(context.Database.IsInMemory());
             context.Database.EnsureDeleted();
             return context;
