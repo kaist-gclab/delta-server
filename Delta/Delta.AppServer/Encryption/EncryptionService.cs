@@ -104,7 +104,10 @@ namespace Delta.AppServer.Encryption
             };
             using var csDecrypt =
                 new CryptoStream(msDecrypt, aes.CreateDecryptor(), CryptoStreamMode.Read);
-            return csDecrypt.ReadAsBytes();
+
+            using var stream = new MemoryStream();
+            csDecrypt.CopyTo(stream);
+            return stream.ToArray();
         }
 
 
