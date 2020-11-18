@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-docker build -t delta-app-server .
+IMAGE="delta-app-server"
+
+docker build -t $IMAGE .

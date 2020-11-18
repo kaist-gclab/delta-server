@@ -6,10 +6,11 @@
 : "${DELTA_OBJECT_STORAGE_ACCESS_KEY?DELTA_OBJECT_STORAGE_ACCESS_KEY}"
 : "${DELTA_OBJECT_STORAGE_SECRET_KEY?DELTA_OBJECT_STORAGE_SECRET_KEY}"
 
-docker load --input docker-image.tar && \
-(docker stop delta-app-server || true) && \
-(docker rm delta-app-server || true) && \
-docker run -d --restart=unless-stopped \
+IMAGE="delta-app-server"
+
+(docker stop $IMAGE || true) && \
+(docker rm $IMAGE || true) && \
+docker run --init -d \
 $DELTA_SERVER_RUN_OPTIONS \
 -e "Jwt__Secret=$DELTA_JWT_SECRET" \
 -e "Auth__AdminPassword=$DELTA_AUTH_ADMIN_PASSWORD" \
@@ -17,5 +18,6 @@ $DELTA_SERVER_RUN_OPTIONS \
 -e "ObjectStorage__Endpoint=$DELTA_OBJECT_STORAGE_ENDPOINT" \
 -e "ObjectStorage__AccessKey=$DELTA_OBJECT_STORAGE_ACCESS_KEY" \
 -e "ObjectStorage__SecretKey=$DELTA_OBJECT_STORAGE_SECRET_KEY" \
---name delta-app-server delta-app-server && \
-rm docker-image.tar
+--restart=unless-stopped \
+--log-opt max-size=16m --log-opt max-file=8 \
+--name $IMAGE $IMAGE
