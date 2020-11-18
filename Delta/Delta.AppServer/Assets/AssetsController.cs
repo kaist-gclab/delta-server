@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Delta.AppServer.Encryption;
+using Delta.AppServer.Stats;
 using Microsoft.AspNetCore.Mvc;
+using NodaTime;
 
 namespace Delta.AppServer.Assets
 {
@@ -12,18 +14,24 @@ namespace Delta.AppServer.Assets
         private readonly AssetService _assetService;
         private readonly AssetMetadataService _assetMetadataService;
         private readonly EncryptionService _encryptionService;
+        private readonly StatsService _statsService;
+        private readonly IClock _clock;
 
         public AssetsController(AssetService assetService, AssetMetadataService assetMetadataService,
-            EncryptionService encryptionService)
+            EncryptionService encryptionService, StatsService statsService, IClock clock)
         {
             _assetService = assetService;
             _assetMetadataService = assetMetadataService;
             _encryptionService = encryptionService;
+            _statsService = statsService;
+            _clock = clock;
         }
 
         [HttpGet]
         public IActionResult GetAssets([FromQuery] string assetTagKey, [FromQuery] string assetTagValue)
         {
+            _statsService.AddEvent(_clock.GetCurrentInstant(), "모델 목록 조회");
+
             if (assetTagKey == null && assetTagValue == null)
             {
                 return Ok(_assetMetadataService.GetAssets());
@@ -48,6 +56,53 @@ namespace Delta.AppServer.Assets
                 var encryptionKey = GetEncryptionKey(createAssetRequest.EncryptionKeyName);
                 var asset = await _assetService.AddAsset(assetFormat, assetType, createAssetRequest.Content,
                     encryptionKey, null);
+                return Ok(asset);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPost("model")]
+        [RequestSizeLimit(200 * 1024 * 1024)]
+        public async Task<IActionResult> CreateModelAsset([FromBody] CreateModelAssetRequest createAssetRequest)
+        {
+            if (createAssetRequest.Content == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var eventTimestamp = createAssetRequest.EventTimestamp;
+
+                var b = createAssetRequest.Content.IndexOf("base64,", StringComparison.Ordinal);
+                createAssetRequest.Content = createAssetRequest.Content.Substring(b + 7);
+                var binary = Convert.FromBase64String(createAssetRequest.Content);
+
+                void AddImageUrl(Asset asset)
+                {
+                    _assetMetadataService.UpdateAssetTag(asset, "Image",
+                        "https://image.delta-test.cqcqcqde.com/" + asset.Id + ".bmp");
+                }
+
+                var assetFormat = GetModelAssetFormat();
+                var assetType = GetModelAssetType();
+                var asset = await _assetService.AddAsset(assetFormat, assetType,
+                    binary, null, null);
+                AddImageUrl(asset);
+
+                _assetMetadataService.UpdateAssetTag(asset, "Name", createAssetRequest.Name);
+                if (createAssetRequest.Tag != null)
+                {
+                    _assetMetadataService.UpdateAssetTag(asset, "Tag", createAssetRequest.Tag);
+                }
+
+
+                _statsService.AddEvent(eventTimestamp, "모델 " + createAssetRequest.Name + " 추가");
+
                 return Ok(asset);
             }
             catch (ArgumentException)
@@ -105,6 +160,50 @@ namespace Delta.AppServer.Assets
             }
 
             return assetFormat;
+        }
+
+        private AssetFormat GetModelAssetFormat()
+        {
+            var assetFormat = _assetMetadataService.GetAssetFormat("STL");
+            if (assetFormat != null)
+            {
+                return assetFormat;
+            }
+
+            return _assetMetadataService.AddAssetFormat("STL", "STL", "STL");
+        }
+
+        private AssetFormat GetImageAssetFormat()
+        {
+            var assetFormat = _assetMetadataService.GetAssetFormat("BMP");
+            if (assetFormat != null)
+            {
+                return assetFormat;
+            }
+
+            return _assetMetadataService.AddAssetFormat("BMP", "BMP", "BMP");
+        }
+
+        private AssetType GetModelAssetType()
+        {
+            var assetType = _assetMetadataService.GetAssetType("STL");
+            if (assetType != null)
+            {
+                return assetType;
+            }
+
+            return _assetMetadataService.AddAssetType("STL", "STL");
+        }
+
+        private AssetType GetImageAssetType()
+        {
+            var assetType = _assetMetadataService.GetAssetType("BMP");
+            if (assetType != null)
+            {
+                return assetType;
+            }
+
+            return _assetMetadataService.AddAssetType("BMP", "BMP");
         }
 
         private AssetType GetAssetType(string assetTypeKey)

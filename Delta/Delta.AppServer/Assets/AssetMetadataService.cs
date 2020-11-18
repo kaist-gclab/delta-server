@@ -128,5 +128,27 @@ namespace Delta.AppServer.Assets
             trx.Commit();
             return assetFormat;
         }
+
+        public AssetType AddAssetType(string key, string name)
+        {
+            using var trx = _context.Database.BeginTransaction();
+            var q = from t in _context.AssetTypes
+                    where t.Key == key
+                    select t;
+            if (q.Any())
+            {
+                throw new ArgumentException();
+            }
+
+            var assetType = new AssetType
+            {
+                Key = key,
+                Name = name,
+            };
+            assetType = _context.Add(assetType).Entity;
+            _context.SaveChanges();
+            trx.Commit();
+            return assetType;
+        }
     }
 }

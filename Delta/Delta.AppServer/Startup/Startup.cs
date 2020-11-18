@@ -8,6 +8,7 @@ using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
 using Delta.AppServer.Processors;
 using Delta.AppServer.Encryption;
+using Delta.AppServer.Stats;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -53,7 +54,14 @@ namespace Delta.AppServer.Startup
                         ValidAudience = _configuration["Jwt:Issuer"]
                     };
                 });
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .WithOrigins("http://localhost:3000", "https://delta-test.cqcqcqde.com/")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
             services.AddMvc(options =>
                 {
                     var policy = new AuthorizationPolicyBuilder()
@@ -106,6 +114,7 @@ namespace Delta.AppServer.Startup
             services.AddScoped<CompressionService>();
             services.AddScoped<EncryptionService>();
             services.AddScoped<IObjectStorageKeyConverter, PrefixFourObjectStorageKeyConverter>();
+            services.AddScoped<StatsService>();
 
             services.AddSingleton<ScheduleHelper>();
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
@@ -121,19 +130,15 @@ namespace Delta.AppServer.Startup
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("CorsPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseResponseCompression();
 
             app.UseRouting();
-
-            app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
 
             app.UseAuthentication();
 
