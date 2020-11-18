@@ -58,7 +58,7 @@ namespace Delta.AppServer.Startup
             {
                 options.AddPolicy("CorsPolicy",
                     builder => builder
-                        .WithOrigins("http://localhost:3000", "https://delta-test.cqcqcqde.com/")
+                        .WithOrigins("http://localhost:3000", "https://delta-test.cqcqcqde.com")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
             });
