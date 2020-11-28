@@ -43,16 +43,6 @@ namespace Delta.AppServer.Jobs
             return job;
         }
 
-        public Job GetJob(long id)
-        {
-            return _context.Jobs.Find(id);
-        }
-
-        public JobExecution GetJobExecution(long id)
-        {
-            return _context.JobExecutions.Find(id);
-        }
-
         public JobExecution ScheduleNextJob(ProcessorNode processorNode)
         {
             var job = GetAvailableJobs(processorNode).FirstOrDefault();

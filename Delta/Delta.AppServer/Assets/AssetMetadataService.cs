@@ -15,7 +15,6 @@ namespace Delta.AppServer.Assets
 
         public IEnumerable<Asset> GetAssets() => _context.Assets.ToList();
         public Asset GetAsset(long id) => _context.Assets.Find(id);
-        public AssetType GetAssetType(long id) => _context.AssetTypes.Find(id);
         public IQueryable<AssetType> GetAssetTypes() => _context.AssetTypes;
 
         public AssetType GetAssetType(string key)

@@ -29,22 +29,18 @@ namespace Delta.AppServer.Jobs
             return Ok(_jobService.ScheduleNextJob(processorNode));
         }
 
-        [HttpPost("result")]
-        public async Task<IActionResult> AddJobResult(AddJobResultRequest addJobResultRequest)
-        {
-            return Ok(await _jobService.AddJobResult(addJobResultRequest));
-        }
-
         [HttpPost]
         public IActionResult CreateJob(CreateJobRequest createJobRequest)
         {
             return Ok(_jobService.CreateJob(createJobRequest));
         }
 
-        [HttpGet("executions/{jobExecutionId:long}")]
-        public IActionResult GetJobExecution(long jobExecutionId)
+        [HttpPost("executions/{jobExecutionId:long}/statuses")]
+        public IActionResult AddJobExecutionStatus(long jobExecutionId,
+            AddJobExecutionStatusRequest addJobExecutionStatusRequest)
         {
-            return Ok(_jobService.GetJobExecution(jobExecutionId));
+            _jobService.AddJobExecutionStatus(jobExecutionId, addJobExecutionStatusRequest);
+            return Ok();
         }
     }
 }
