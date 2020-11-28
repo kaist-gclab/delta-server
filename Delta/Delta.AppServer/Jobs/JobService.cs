@@ -12,19 +12,13 @@ namespace Delta.AppServer.Jobs
     {
         private readonly DeltaContext _context;
         private readonly IClock _clock;
-        private readonly AssetService _assetService;
         private readonly AssetMetadataService _assetMetadataService;
-        private readonly ProcessorService _processorService;
 
-        public JobService(DeltaContext context, IClock clock,
-            AssetService assetService, AssetMetadataService assetMetadataService,
-            ProcessorService processorService)
+        public JobService(DeltaContext context, IClock clock, AssetMetadataService assetMetadataService)
         {
             _context = context;
             _clock = clock;
-            _assetService = assetService;
             _assetMetadataService = assetMetadataService;
-            _processorService = processorService;
         }
 
         public IQueryable<JobType> GetJobTypes() => _context.JobTypes;
