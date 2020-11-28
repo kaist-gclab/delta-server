@@ -43,5 +43,10 @@ namespace Delta.AppServer.ObjectStorage
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> GetPresignedDownloadUrl(string key)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

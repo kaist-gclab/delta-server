@@ -69,6 +69,13 @@ namespace Delta.AppServer.ObjectStorage
                 _objectStorageKeyConverter.GetKey(key), 86400);
         }
 
+        public async Task<string> GetPresignedDownloadUrl(string key)
+        {
+            await EnsureBucketExists();
+            return await _client.PresignedGetObjectAsync(_objectStorageConfig.Bucket,
+                _objectStorageKeyConverter.GetKey(key), 86400);
+        }
+
         private volatile bool _initialized;
         private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1);
 
