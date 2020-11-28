@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.Encryption;
 using NodaTime;
@@ -22,5 +23,19 @@ namespace Delta.AppServer.Assets
         public virtual JobExecution ParentJobExecution { get; set; }
         public virtual ICollection<Job> InputJobs { get; set; }
         public virtual ICollection<AssetTag> AssetTags { get; set; } = new HashSet<AssetTag>();
+
+        public void AddAssetTag(string key, string value)
+        {
+            var tag = (from t in AssetTags
+                where t.Key == key
+                select t).FirstOrDefault();
+            if (tag == null)
+            {
+                tag = new AssetTag {Key = key};
+                AssetTags.Add(tag);
+            }
+
+            tag.Value = value;
+        }
     }
 }
