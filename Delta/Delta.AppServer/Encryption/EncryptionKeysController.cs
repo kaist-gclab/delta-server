@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Encryption
 {
     [ApiController]
-    [Route(Delta.ApiRoot + "encryptionKeys")]
+    [Route(Delta.ApiRoot + "encryption-keys")]
     public class EncryptionKeysController : ControllerBase
     {
         private readonly EncryptionService _encryptionService;
@@ -13,16 +14,21 @@ namespace Delta.AppServer.Encryption
             _encryptionService = encryptionService;
         }
 
-        [HttpPost]
-        public EncryptionKey Create([FromBody] EncryptionKeyCreateRequest encryptionKeyCreateRequest)
+        [HttpGet]
+        public IEnumerable<EncryptionKey> GetEncryptionKeys()
         {
-            var key = _encryptionService.AddEncryptionKey(encryptionKeyCreateRequest.Name);
-            if (encryptionKeyCreateRequest.Enabled)
-            {
-                _encryptionService.EnableKey(key);
-            }
+            return _encryptionService.GetEncryptionKeys();
+        }
 
-            return key;
+        [HttpPost]
+        public CreateEncryptionKeyResponse Create([FromBody] CreateEncryptionKeyRequest createEncryptionKeyRequest)
+        {
+            var key = _encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
+            return new CreateEncryptionKeyResponse
+            {
+                EncryptionKey = key,
+                Value = key.Value
+            };
         }
     }
 }
