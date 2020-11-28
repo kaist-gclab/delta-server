@@ -24,7 +24,7 @@ namespace Delta.AppServer.Assets
         public virtual ICollection<Job> InputJobs { get; set; }
         public virtual ICollection<AssetTag> AssetTags { get; set; } = new HashSet<AssetTag>();
 
-        public void AddAssetTag(string key, string value)
+        public void UpdateAssetTag(string key, string value)
         {
             var tag = (from t in AssetTags
                 where t.Key == key
