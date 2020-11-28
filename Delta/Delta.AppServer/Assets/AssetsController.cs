@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Delta.AppServer.Encryption;
-using Delta.AppServer.Stats;
 using Microsoft.AspNetCore.Mvc;
-using NodaTime;
 
 namespace Delta.AppServer.Assets
 {
@@ -14,17 +12,14 @@ namespace Delta.AppServer.Assets
         private readonly AssetService _assetService;
         private readonly AssetMetadataService _assetMetadataService;
         private readonly EncryptionService _encryptionService;
-        private readonly StatsService _statsService;
-        private readonly IClock _clock;
 
-        public AssetsController(AssetService assetService, AssetMetadataService assetMetadataService,
-            EncryptionService encryptionService, StatsService statsService, IClock clock)
+        public AssetsController(AssetService assetService,
+            AssetMetadataService assetMetadataService,
+            EncryptionService encryptionService)
         {
             _assetService = assetService;
             _assetMetadataService = assetMetadataService;
             _encryptionService = encryptionService;
-            _statsService = statsService;
-            _clock = clock;
         }
 
         [HttpGet]
