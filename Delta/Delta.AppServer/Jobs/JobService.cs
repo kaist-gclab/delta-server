@@ -27,41 +27,26 @@ namespace Delta.AppServer.Jobs
             _processorService = processorService;
         }
 
-        public Job AddJob(Asset inputAsset, ProcessorVersion processorVersion, string jobArguments)
         public IQueryable<JobType> GetJobTypes() => _context.JobTypes;
+
+        public Job CreateJob(CreateJobRequest createJobRequest)
         {
-            if (processorVersion == null)
-            {
-                throw new Exception();
-            }
-
-            if (jobArguments == null)
-            {
-                throw new Exception();
-            }
-
-            if (ValidateCompatibility(inputAsset, processorVersion) == false)
+            if (createJobRequest.JobArguments == null)
             {
                 throw new Exception();
             }
 
             var job = new Job
             {
-                InputAsset = inputAsset,
-                ProcessorVersion = processorVersion,
-                JobArguments = jobArguments,
+                InputAssetId = createJobRequest.InputAssetId,
+                JobTypeId = createJobRequest.JobTypeId,
+                JobArguments = createJobRequest.JobArguments,
+                AssignedProcessorNodeId = createJobRequest.AssignedProcessorNodeId,
                 CreatedAt = _clock.GetCurrentInstant()
             };
             job = _context.Add(job).Entity;
             _context.SaveChanges();
             return job;
-        }
-
-        public Job AddJob(AddJobRequest addJobRequest)
-        {
-            var inputAsset = _assetMetadataService.GetAsset(addJobRequest.InputAssetId);
-            var processorVersion = _processorService.GetProcessorVersion(addJobRequest.ProcessorVersionKey);
-            return AddJob(inputAsset, processorVersion, addJobRequest.JobArguments);
         }
 
         public Job GetJob(long id)
