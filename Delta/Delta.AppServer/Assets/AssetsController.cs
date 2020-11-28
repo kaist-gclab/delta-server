@@ -20,16 +20,9 @@ namespace Delta.AppServer.Assets
         }
 
         [HttpGet]
-        public IActionResult GetAssets([FromQuery] string assetTagKey, [FromQuery] string assetTagValue)
+        public IActionResult GetAssets()
         {
-            _statsService.AddEvent(_clock.GetCurrentInstant(), "모델 목록 조회");
-
-            if (assetTagKey == null && assetTagValue == null)
-            {
-                return Ok(_assetMetadataService.GetAssets());
-            }
-
-            return Ok(_assetMetadataService.FindByAssetTag(assetTagKey, assetTagValue));
+            return Ok(_assetMetadataService.GetAssets());
         }
 
         [HttpPost]
@@ -43,10 +36,9 @@ namespace Delta.AppServer.Assets
 
             try
             {
-                var assetFormat = GetAssetFormat(createAssetRequest.AssetFormatKey);
                 var assetType = GetAssetType(createAssetRequest.AssetTypeKey);
                 var encryptionKey = GetEncryptionKey(createAssetRequest.EncryptionKeyName);
-                var asset = await _assetService.AddAsset(assetFormat, assetType, createAssetRequest.Content,
+                var asset = await _assetService.AddAsset(assetType, createAssetRequest.Content,
                     encryptionKey, null);
                 return Ok(asset);
             }
@@ -80,9 +72,8 @@ namespace Delta.AppServer.Assets
                         "https://image.delta-test.cqcqcqde.com/" + asset.Id + ".bmp");
                 }
 
-                var assetFormat = GetModelAssetFormat();
                 var assetType = GetModelAssetType();
-                var asset = await _assetService.AddAsset(assetFormat, assetType,
+                var asset = await _assetService.AddAsset(assetType,
                     binary, null, null);
                 AddImageUrl(asset);
 
@@ -92,24 +83,12 @@ namespace Delta.AppServer.Assets
                     _assetMetadataService.UpdateAssetTag(asset, "Tag", createAssetRequest.Tag);
                 }
 
-
-                _statsService.AddEvent(eventTimestamp, "모델 " + createAssetRequest.Name + " 추가");
-
                 return Ok(asset);
             }
             catch (ArgumentException)
             {
                 return BadRequest();
             }
-        }
-
-        [HttpPost("formats")]
-        public IActionResult CreateAssetFormat(CreateAssetFormatRequest createAssetFormatRequest)
-        {
-            return Ok(_assetMetadataService.AddAssetFormat(
-                createAssetFormatRequest.Key,
-                createAssetFormatRequest.Name,
-                createAssetFormatRequest.Description));
         }
 
         [HttpPost("{assetId:long}/tags")]

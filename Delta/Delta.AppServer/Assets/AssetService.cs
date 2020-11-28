@@ -28,7 +28,6 @@ namespace Delta.AppServer.Assets
         }
 
         public async Task<Asset> AddAsset(
-            AssetFormat assetFormat,
             AssetType assetType,
             byte[] content,
             EncryptionKey encryptionKey,
@@ -44,7 +43,6 @@ namespace Delta.AppServer.Assets
             await _objectStorageService.Write(storeKey, content);
             var asset = new Asset
             {
-                AssetFormat = assetFormat,
                 AssetType = assetType,
                 StoreKey = storeKey,
                 EncryptionKey = encryptionKey,

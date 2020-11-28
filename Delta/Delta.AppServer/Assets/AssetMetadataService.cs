@@ -15,20 +15,7 @@ namespace Delta.AppServer.Assets
 
         public IEnumerable<Asset> GetAssets() => _context.Assets.ToList();
         public Asset GetAsset(long id) => _context.Assets.Find(id);
-        public AssetFormat GetAssetFormat(long id) => _context.AssetFormats.Find(id);
         public AssetType GetAssetType(long id) => _context.AssetTypes.Find(id);
-
-        public AssetFormat GetAssetFormat(string key)
-        {
-            if (key == null)
-            {
-                return null;
-            }
-
-            return (from f in _context.AssetFormats
-                    where f.Key == key
-                    select f).FirstOrDefault();
-        }
         public IQueryable<AssetType> GetAssetTypes() => _context.AssetTypes;
 
         public AssetType GetAssetType(string key)
