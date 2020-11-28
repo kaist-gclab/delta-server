@@ -16,6 +16,7 @@ namespace Delta.AppServer.Test.Assets
         {
         }
 
+        /*
         [Fact]
         public async void AddAsset()
         {
@@ -24,7 +25,7 @@ namespace Delta.AppServer.Test.Assets
             var encryptionService = new EncryptionService(context);
             var objectStorage = new MemoryObjectStorageService();
             var service = new AssetService(context, clock, objectStorage, encryptionService, new CompressionService());
-
+        
             var assetFormat = new AssetFormat
             {
                 Key = "format-a",
@@ -56,7 +57,9 @@ namespace Delta.AppServer.Test.Assets
             Assert.Equal(clock.GetCurrentInstant(), asset.CreatedAt);
             Assert.Null(asset.ParentJobExecution);
         }
-
+        */
+        
+        /*
         [Fact]
         public async void ReadAssetContent()
         {
@@ -65,7 +68,7 @@ namespace Delta.AppServer.Test.Assets
             var encryptionService = new EncryptionService(context);
             var objectStorage = new MemoryObjectStorageService();
             var service = new AssetService(context, clock, objectStorage, encryptionService, new CompressionService());
-
+        
             var assetFormat = new AssetFormat
             {
                 Key = "format-a",
@@ -93,5 +96,6 @@ namespace Delta.AppServer.Test.Assets
             Assert.Equal(content, contentRead);
             Assert.NotEqual(content, await objectStorage.Read(asset.StoreKey));
         }
+        */
     }
 }

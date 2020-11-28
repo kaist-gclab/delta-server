@@ -13,6 +13,7 @@ namespace Delta.AppServer.Test.Assets
         {
         }
 
+        /*
         [Fact]
         public void UpdateAssetTag()
         {
@@ -36,7 +37,9 @@ namespace Delta.AppServer.Test.Assets
             Assert.Equal("2", service.UpdateAssetTag(asset, "key", "2").Value);
             Assert.Single(context.AssetTags);
         }
-
+        */
+        
+        /*
         [Fact]
         public void FindByAssetTag()
         {
@@ -51,7 +54,7 @@ namespace Delta.AppServer.Test.Assets
             service.UpdateAssetTag(assetB, "a", "b");
             service.UpdateAssetTag(assetB, "e", "f");
             service.UpdateAssetTag(assetB, "z", "p");
-
+        
             Assert.Equal(6, context.AssetTags.Count());
             Assert.Equal(2, service.FindByAssetTag("a", null).Count());
             Assert.Equal(2, service.FindByAssetTag("a", "b").Count());
@@ -63,5 +66,6 @@ namespace Delta.AppServer.Test.Assets
             Assert.Empty(service.FindByAssetTag("k", "f"));
             Assert.Throws<ArgumentNullException>(() => service.FindByAssetTag(null, null));
         }
+        */
     }
 }
