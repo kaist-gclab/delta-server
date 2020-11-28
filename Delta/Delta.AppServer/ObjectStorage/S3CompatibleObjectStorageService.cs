@@ -62,6 +62,13 @@ namespace Delta.AppServer.ObjectStorage
             return memoryStream.ToArray();
         }
 
+        public async Task<string> GetPresignedUploadUrl(string key)
+        {
+            await EnsureBucketExists();
+            return await _client.PresignedPutObjectAsync(_objectStorageConfig.Bucket,
+                _objectStorageKeyConverter.GetKey(key), 86400);
+        }
+
         private volatile bool _initialized;
         private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1);
 

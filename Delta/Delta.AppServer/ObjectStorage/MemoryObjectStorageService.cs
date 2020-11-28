@@ -38,5 +38,10 @@ namespace Delta.AppServer.ObjectStorage
 
             return Task.FromResult((byte[]) Storage[key].Clone());
         }
+
+        public Task<string> GetPresignedUploadUrl(string key)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

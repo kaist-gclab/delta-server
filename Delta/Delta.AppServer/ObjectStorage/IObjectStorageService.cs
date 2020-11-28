@@ -6,5 +6,7 @@ namespace Delta.AppServer.ObjectStorage
     {
         Task Write(string key, byte[] content);
         Task<byte[]> Read(string key);
+
+        Task<string> GetPresignedUploadUrl(string key);
     }
 }
