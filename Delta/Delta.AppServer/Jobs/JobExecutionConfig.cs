@@ -4,6 +4,6 @@ namespace Delta.AppServer.Jobs
 {
     public class JobExecutionConfig
     {
-        public Duration JobExecutionTimeout => Duration.FromSeconds(30);
+        public Duration JobExecutionTimeout => Duration.FromMinutes(5);
     }
 }
