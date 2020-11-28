@@ -28,6 +28,7 @@ namespace Delta.AppServer.Jobs
         }
 
         public Job AddJob(Asset inputAsset, ProcessorVersion processorVersion, string jobArguments)
+        public IQueryable<JobType> GetJobTypes() => _context.JobTypes;
         {
             if (processorVersion == null)
             {
