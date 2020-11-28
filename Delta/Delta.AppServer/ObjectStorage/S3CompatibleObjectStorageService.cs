@@ -19,7 +19,7 @@ namespace Delta.AppServer.ObjectStorage
             _objectStorageKeyConverter = objectStorageKeyConverter;
             _client = new MinioClient(_objectStorageConfig.Endpoint,
                 _objectStorageConfig.AccessKey,
-                _objectStorageConfig.SecretKey);
+                _objectStorageConfig.SecretKey).WithSSL();
         }
 
         public async Task Write(string key, byte[] content)
