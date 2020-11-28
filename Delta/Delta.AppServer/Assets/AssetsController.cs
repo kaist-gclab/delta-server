@@ -138,66 +138,6 @@ namespace Delta.AppServer.Assets
             return Ok(bytes);
         }
 
-        private AssetFormat GetAssetFormat(string assetFormatKey)
-        {
-            if (assetFormatKey == null)
-            {
-                return null;
-            }
-
-            var assetFormat = _assetMetadataService.GetAssetFormat(assetFormatKey);
-            if (assetFormat == null)
-            {
-                throw new ArgumentException();
-            }
-
-            return assetFormat;
-        }
-
-        private AssetFormat GetModelAssetFormat()
-        {
-            var assetFormat = _assetMetadataService.GetAssetFormat("STL");
-            if (assetFormat != null)
-            {
-                return assetFormat;
-            }
-
-            return _assetMetadataService.AddAssetFormat("STL", "STL", "STL");
-        }
-
-        private AssetFormat GetImageAssetFormat()
-        {
-            var assetFormat = _assetMetadataService.GetAssetFormat("BMP");
-            if (assetFormat != null)
-            {
-                return assetFormat;
-            }
-
-            return _assetMetadataService.AddAssetFormat("BMP", "BMP", "BMP");
-        }
-
-        private AssetType GetModelAssetType()
-        {
-            var assetType = _assetMetadataService.GetAssetType("STL");
-            if (assetType != null)
-            {
-                return assetType;
-            }
-
-            return _assetMetadataService.AddAssetType("STL", "STL");
-        }
-
-        private AssetType GetImageAssetType()
-        {
-            var assetType = _assetMetadataService.GetAssetType("BMP");
-            if (assetType != null)
-            {
-                return assetType;
-            }
-
-            return _assetMetadataService.AddAssetType("BMP", "BMP");
-        }
-
         private AssetType GetAssetType(string assetTypeKey)
         {
             if (assetTypeKey == null)
