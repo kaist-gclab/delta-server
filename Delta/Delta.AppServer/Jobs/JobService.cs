@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Delta.AppServer.Processors;
 using NodaTime;
 
@@ -40,9 +39,55 @@ namespace Delta.AppServer.Jobs
             return job;
         }
 
-        public JobExecution ScheduleNextJob(ProcessorNode processorNode)
+        public JobScheduleResponse ScheduleNextJob(JobScheduleRequest jobScheduleRequest)
         {
-            var job = GetAvailableJobs(processorNode).FirstOrDefault();
+            using var trx = _context.Database.BeginTransaction();
+
+            var processorNode = _context.ProcessorNodes.Find(jobScheduleRequest.ProcessorNodeId);
+            if (processorNode == null)
+            {
+                throw new Exception();
+            }
+
+            var availableJobs = from j in _context.Jobs
+                let last =
+                    from e in j.JobExecutions
+                    let last =
+                        (from s in e.JobExecutionStatuses
+                            orderby s.Timestamp descending
+                            select s).First()
+                    where
+                        last.Status == PredefinedJobExecutionStatuses.Assigned ||
+                        last.Status == PredefinedJobExecutionStatuses.Complete
+                    select last
+                where !last.Any()
+                select j;
+
+
+            Job GetFirstJob()
+            {
+                foreach (var j in availableJobs)
+                {
+                    if (j.AssignedProcessorNode != null)
+                    {
+                        if (j.AssignedProcessorNode == processorNode)
+                        {
+                            return j;
+                        }
+
+                        continue;
+                    }
+
+                    if (ValidateCompatibility(j, processorNode.ProcessorNodeCapabilities))
+                    {
+                        return j;
+                    }
+                }
+
+                return null;
+            }
+
+            var job = GetFirstJob();
             if (job == null)
             {
                 return null;
@@ -50,13 +95,20 @@ namespace Delta.AppServer.Jobs
 
             var jobExecution = new JobExecution
             {
-                Job = job,
-                ProcessorNode = processorNode
+                ProcessorNode = processorNode,
+                Job = job
             };
-            jobExecution = _context.Add(jobExecution).Entity;
+
+            var now = _clock.GetCurrentInstant();
+            jobExecution.AddStatus(now, PredefinedJobExecutionStatuses.Assigned);
+            processorNode.AddNodeStatus(now, PredefinedProcessorNodeStatuses.Busy);
+
             _context.SaveChanges();
-            AddJobExecutionStatus(jobExecution, PredefinedJobExecutionStatuses.Assigned);
-            return jobExecution;
+            trx.Commit();
+            return new JobScheduleResponse
+            {
+                JobExecution = jobExecution
+            };
         }
 
         public void AddJobExecutionStatus(long jobExecutionId,
@@ -65,39 +117,32 @@ namespace Delta.AppServer.Jobs
             var jobExecution = _context.JobExecutions.Find(jobExecutionId);
             if (jobExecution == null)
             {
-
-        public bool ValidateCompatibility(Asset asset, ProcessorVersion processorVersion)
-        {
-            if (asset == null)
-            {
-                return (from c in processorVersion.ProcessorVersionInputCapabilities
-                        where c.AssetFormat == null && c.AssetType == null
-                        select c).Any();
+                throw new Exception();
             }
 
-            return (from c in processorVersion.ProcessorVersionInputCapabilities
-                    where (c.AssetFormat == null || c.AssetFormat == asset.AssetFormat) &&
-                          (c.AssetType == null || c.AssetType == asset.AssetType)
-                    select c).Any();
-        }
-
-        private IQueryable<Job> GetAvailableJobs(ProcessorNode node)
-        {
-            return from j in _context.Jobs
-                   where node.ProcessorVersion == j.ProcessorVersion
-                   let statuses =
-                       from e in j.JobExecutions
-                       let latestStatus = (from s in e.JobExecutionStatuses
-                                           orderby s.Timestamp descending
-                                           select s).First()
-                       where latestStatus.Status == PredefinedJobExecutionStatuses.Complete
-                       select latestStatus
-                   where !statuses.Any()
-                   orderby j.CreatedAt
-                   select j;
-        }
-
+            jobExecution.AddStatus(_clock.GetCurrentInstant(),
+                addJobExecutionStatusRequest.Status);
             _context.SaveChanges();
+        }
+
+        private static bool ValidateCompatibility(Job job, IEnumerable<ProcessorNodeCapability> capabilities)
+        {
+            foreach (var cap in capabilities)
+            {
+                if (job.InputAsset.MediaType != cap.MediaType ||
+                    job.JobType != cap.JobType)
+                {
+                    continue;
+                }
+
+                if (cap.AssetType == null ||
+                    cap.AssetType == job.InputAsset.AssetType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

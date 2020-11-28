@@ -18,15 +18,9 @@ namespace Delta.AppServer.Jobs
         }
 
         [HttpPost("schedule")]
-        public IActionResult Schedule(JobScheduleRequest jobScheduleRequest)
+        public JobScheduleResponse Schedule(JobScheduleRequest jobScheduleRequest)
         {
-            var processorNode = _processorService.GetNode(jobScheduleRequest.ProcessorNodeId);
-            if (processorNode == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(_jobService.ScheduleNextJob(processorNode));
+            return _jobService.ScheduleNextJob(jobScheduleRequest);
         }
 
         [HttpPost]
