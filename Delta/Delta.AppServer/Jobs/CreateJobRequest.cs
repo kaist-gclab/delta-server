@@ -1,6 +1,6 @@
 namespace Delta.AppServer.Jobs
 {
-    public class AddJobRequest
+    public class CreateJobRequest
     {
         public long InputAssetId { get; set; }
         public string JobArguments { get; set; }

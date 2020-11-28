@@ -36,9 +36,9 @@ namespace Delta.AppServer.Jobs
         }
 
         [HttpPost]
-        public IActionResult AddJob(AddJobRequest addJobRequest)
+        public IActionResult AddJob(CreateJobRequest createJobRequest)
         {
-            return Ok(_jobService.AddJob(addJobRequest));
+            return Ok(_jobService.AddJob(createJobRequest));
         }
 
         [HttpGet("executions/{jobExecutionId:long}")]
