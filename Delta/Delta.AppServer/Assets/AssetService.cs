@@ -12,19 +12,12 @@ namespace Delta.AppServer.Assets
         private readonly DeltaContext _context;
         private readonly IClock _clock;
         private readonly IObjectStorageService _objectStorageService;
-        private readonly EncryptionService _encryptionService;
-        private readonly CompressionService _compressionService;
 
-        public AssetService(DeltaContext context, IClock clock,
-            IObjectStorageService objectStorageService,
-            EncryptionService encryptionService,
-            CompressionService compressionService)
+        public AssetService(DeltaContext context, IClock clock, IObjectStorageService objectStorageService)
         {
             _context = context;
             _clock = clock;
             _objectStorageService = objectStorageService;
-            _encryptionService = encryptionService;
-            _compressionService = compressionService;
         }
 
         public async Task<Asset> AddAsset(
