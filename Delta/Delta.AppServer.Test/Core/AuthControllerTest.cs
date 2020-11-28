@@ -75,7 +75,6 @@ namespace Delta.AppServer.Test.Core
             Assert.Equal("authInfo", claim.Type);
             var authInfo = JsonConvert.DeserializeObject<AuthInfo>(claim.Value);
             Assert.Equal("Admin", authInfo.Role);
-            Assert.Equal(1, authInfo.Account.Id);
             return true;
         }
     }
