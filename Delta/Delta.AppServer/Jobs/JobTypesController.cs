@@ -1,10 +1,23 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Jobs
 {
     [ApiController]
-    [Route("job-types")]
+    [Route(Delta.ApiRoot + "job-types")]
     public class JobTypesController : ControllerBase
     {
+        private readonly JobService _jobService;
+
+        public JobTypesController(JobService jobService)
+        {
+            _jobService = jobService;
+        }
+
+        [HttpGet]
+        public IEnumerable<JobType> GetJobTypes()
+        {
+            return _jobService.GetJobTypes();
+        }
     }
 }
