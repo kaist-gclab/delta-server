@@ -72,17 +72,12 @@ namespace Delta.AppServer.Jobs
             return jobExecution;
         }
 
-        private JobExecutionStatus AddJobExecutionStatus(JobExecution jobExecution, string status)
+        public void AddJobExecutionStatus(long jobExecutionId,
+            AddJobExecutionStatusRequest addJobExecutionStatusRequest)
         {
-            var jobExecutionStatus = new JobExecutionStatus
+            var jobExecution = _context.JobExecutions.Find(jobExecutionId);
+            if (jobExecution == null)
             {
-                Status = status,
-                Timestamp = _clock.GetCurrentInstant()
-            };
-            jobExecution.JobExecutionStatuses.Add(jobExecutionStatus);
-            _context.SaveChanges();
-            return jobExecutionStatus;
-        }
 
         public bool ValidateCompatibility(Asset asset, ProcessorVersion processorVersion)
         {

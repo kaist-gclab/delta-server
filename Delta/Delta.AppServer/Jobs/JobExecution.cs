@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
+using NodaTime;
 
 namespace Delta.AppServer.Jobs
 {
@@ -19,5 +21,21 @@ namespace Delta.AppServer.Jobs
 
         public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; } =
             new HashSet<JobExecutionStatus>();
+
+        public void AddStatus(Instant timestamp, string status)
+        {
+            if (status != PredefinedJobExecutionStatuses.Assigned &&
+                status != PredefinedJobExecutionStatuses.Complete &&
+                status != PredefinedJobExecutionStatuses.Failed)
+            {
+                throw new Exception();
+            }
+
+            JobExecutionStatuses.Add(new JobExecutionStatus
+            {
+                Timestamp = timestamp,
+                Status = status
+            });
+        }
     }
 }
