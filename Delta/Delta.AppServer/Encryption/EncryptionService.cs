@@ -28,8 +28,10 @@ namespace Delta.AppServer.Encryption
             _context = context;
         }
 
-        public EncryptionKey AddEncryptionKey(string name)
+        public EncryptionKey AddEncryptionKey(CreateEncryptionKeyRequest createEncryptionKeyRequest)
         {
+            var name = createEncryptionKeyRequest.Name;
+
             using var trx = _context.Database.BeginTransaction();
             if (_context.EncryptionKeys.Any(k => k.Name == name))
             {
@@ -110,7 +112,6 @@ namespace Delta.AppServer.Encryption
             return stream.ToArray();
         }
 
-
         public EncryptionKey GetEncryptionKey(string name)
         {
             if (name == null)
@@ -119,14 +120,8 @@ namespace Delta.AppServer.Encryption
             }
 
             return (from e in _context.EncryptionKeys
-                    where e.Name == name
-                    select e).FirstOrDefault();
-        }
-
-        public void EnableKey(EncryptionKey key)
-        {
-            key.Enabled = true;
-            _context.SaveChanges();
+                where e.Name == name
+                select e).FirstOrDefault();
         }
 
         private static byte[] GetKey(EncryptionKey key, byte[] salt)
