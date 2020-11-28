@@ -110,34 +110,7 @@ namespace Delta.AppServer.Jobs
                    select j;
         }
 
-        public async Task<JobExecutionStatus> AddJobResult(JobExecution jobExecution,
-            IEnumerable<ResultAsset> resultAssets)
-        {
-            foreach (var r in resultAssets)
-            {
-                var encryptionKey = jobExecution.Job.InputAsset?.EncryptionKey;
-                await _assetService.AddAsset(r.AssetFormat, r.AssetType, r.Content, encryptionKey, jobExecution);
-            }
-
-            var status = AddJobExecutionStatus(jobExecution, PredefinedJobExecutionStatuses.Complete);
             _context.SaveChanges();
-            return status;
-        }
-
-        public async Task<JobExecutionStatus> AddJobResult(AddJobResultRequest addJobResultRequest)
-        {
-            var jobExecution = GetJobExecution(addJobResultRequest.JobExecutionId);
-            var resultAssets = from r in addJobResultRequest.ResultAssets
-                               let tags = from t in r.AssetTags
-                                          select new AssetTag {Key = t.Key, Value = t.Value}
-                               select new ResultAsset
-                               {
-                                   AssetFormat = _assetMetadataService.GetAssetFormat(r.AssetFormatKey),
-                                   AssetType = _assetMetadataService.GetAssetType(r.AssetTypeKey),
-                                   AssetTags = tags,
-                                   Content = r.Content
-                               };
-            return await AddJobResult(jobExecution, resultAssets);
         }
     }
 }
