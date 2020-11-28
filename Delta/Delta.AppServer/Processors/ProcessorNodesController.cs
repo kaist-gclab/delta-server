@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Delta.AppServer.Processors
 {
     [ApiController]
-    [Route(Delta.ApiRoot + "processors")]
-    public class ProcessorsController : ControllerBase
+    [Route(Delta.ApiRoot + "processor-nodes")]
+    public class ProcessorNodesController : ControllerBase
     {
         private readonly ProcessorService _processorService;
 
-        public ProcessorsController(ProcessorService processorService)
+        public ProcessorNodesController(ProcessorService processorService)
         {
             _processorService = processorService;
         }
@@ -29,14 +29,6 @@ namespace Delta.AppServer.Processors
             }
 
             return Ok(node);
-        }
-
-        [HttpPost("types")]
-        public IActionResult CreateProcessorType([FromBody] CreateProcessorTypeRequest createProcessorTypeRequest)
-        {
-            return Ok(_processorService.AddProcessorType(
-                createProcessorTypeRequest.Key,
-                createProcessorTypeRequest.Name));
         }
     }
 }
