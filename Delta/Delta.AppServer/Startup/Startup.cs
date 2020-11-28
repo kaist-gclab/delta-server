@@ -9,6 +9,7 @@ using Delta.AppServer.ObjectStorage;
 using Delta.AppServer.Processors;
 using Delta.AppServer.Encryption;
 using Delta.AppServer.Stats;
+using Delta.AppServer.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -99,7 +100,7 @@ namespace Delta.AppServer.Startup
             services.AddScoped<ObjectStorageConfig>();
             services.AddScoped<JobExecutionConfig>();
 
-            services.AddScoped<AuthService>();
+            services.AddScoped<UserService>();
             services.AddScoped<TokenService>();
             services.AddScoped<JobService>();
             services.AddScoped<ProcessorService>();
