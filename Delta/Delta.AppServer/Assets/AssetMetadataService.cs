@@ -29,6 +29,7 @@ namespace Delta.AppServer.Assets
                     where f.Key == key
                     select f).FirstOrDefault();
         }
+        public IQueryable<AssetType> GetAssetTypes() => _context.AssetTypes;
 
         public AssetType GetAssetType(string key)
         {
@@ -106,44 +107,26 @@ namespace Delta.AppServer.Assets
                     select a).ToList();
         }
 
-        public AssetFormat AddAssetFormat(string key, string name, string description)
-        {
-            using var trx = _context.Database.BeginTransaction();
-            var q = from f in _context.AssetFormats
-                    where f.Key == key
-                    select f;
-            if (q.Any())
-            {
-                throw new ArgumentException();
-            }
-
-            var assetFormat = new AssetFormat
-            {
-                Key = key,
-                Name = name,
-                Description = description,
-            };
-            assetFormat = _context.Add(assetFormat).Entity;
-            _context.SaveChanges();
-            trx.Commit();
-            return assetFormat;
-        }
-
         public AssetType AddAssetType(string key, string name)
         {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(name))
+            {
+                throw new Exception();
+            }
+
             using var trx = _context.Database.BeginTransaction();
             var q = from t in _context.AssetTypes
-                    where t.Key == key
-                    select t;
+                where t.Key == key
+                select t;
             if (q.Any())
             {
-                throw new ArgumentException();
+                throw new Exception();
             }
 
             var assetType = new AssetType
             {
                 Key = key,
-                Name = name,
+                Name = name
             };
             assetType = _context.Add(assetType).Entity;
             _context.SaveChanges();
