@@ -11,15 +11,12 @@ namespace Delta.AppServer.Assets
     {
         private readonly AssetService _assetService;
         private readonly AssetMetadataService _assetMetadataService;
-        private readonly EncryptionService _encryptionService;
 
         public AssetsController(AssetService assetService,
-            AssetMetadataService assetMetadataService,
-            EncryptionService encryptionService)
+            AssetMetadataService assetMetadataService)
         {
             _assetService = assetService;
             _assetMetadataService = assetMetadataService;
-            _encryptionService = encryptionService;
         }
 
         [HttpGet]
@@ -215,22 +212,6 @@ namespace Delta.AppServer.Assets
             }
 
             return assetType;
-        }
-
-        private EncryptionKey GetEncryptionKey(string encryptionKeyName)
-        {
-            if (encryptionKeyName == null)
-            {
-                return null;
-            }
-
-            var encryptionKey = _encryptionService.GetEncryptionKey(encryptionKeyName);
-            if (encryptionKey == null)
-            {
-                throw new ArgumentException();
-            }
-
-            return encryptionKey;
         }
     }
 }
