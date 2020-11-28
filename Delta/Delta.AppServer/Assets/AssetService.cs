@@ -20,44 +20,46 @@ namespace Delta.AppServer.Assets
             _objectStorageService = objectStorageService;
         }
 
-        public async Task<Asset> AddAsset(
-            AssetType assetType,
-            byte[] content,
-            EncryptionKey encryptionKey,
-            JobExecution parentJobExecution)
+        public async Task<Asset> AddAsset(CreateAssetRequest createAssetRequest)
         {
-            content = _compressionService.Compress(content);
-            if (encryptionKey != null)
-            {
-                content = _encryptionService.Encrypt(encryptionKey, content);
-            }
-
-            var storeKey = Guid.NewGuid().ToString();
-            await _objectStorageService.Write(storeKey, content);
             var asset = new Asset
             {
-                AssetType = assetType,
-                StoreKey = storeKey,
-                EncryptionKey = encryptionKey,
-                ParentJobExecution = parentJobExecution,
+                AssetTypeId = createAssetRequest.AssetTypeId,
+                StoreKey = createAssetRequest.StoreKey, //
+                EncryptionKeyId = createAssetRequest.EncryptionKeyId,
+                ParentJobExecutionId = createAssetRequest.ParentJobExecutionId,
+                MediaType = createAssetRequest.MediaType,
                 CreatedAt = _clock.GetCurrentInstant()
             };
+
+            foreach (var t in createAssetRequest.CreateAssetTagRequest)
+            {
+                asset.UpdateAssetTag(t.Key, t.Value);
+            }
+
             asset = (await _context.AddAsync(asset)).Entity;
             await _context.SaveChangesAsync();
             return asset;
         }
 
-        public async Task<byte[]> ReadAssetContent(Asset asset)
+        private async Task<string> GetPresignedDownloadUrl(Asset asset)
         {
-            var content = await _objectStorageService.Read(asset.StoreKey);
-            if (asset.EncryptionKey != null)
+            return await _objectStorageService.GetPresignedDownloadUrl(asset.StoreKey);
+        }
+
+        public async Task<GetAssetResponse> GetAsset(long id)
+        {
+            var asset = _context.Assets.Find(id);
+            if (asset == null)
             {
-                content = _encryptionService.Decrypt(asset.EncryptionKey, content);
+                return null;
             }
 
-            content = _compressionService.Decompress(content);
-
-            return content;
+            return new GetAssetResponse
+            {
+                Asset = asset,
+                PresignedDownloadUrl = await GetPresignedDownloadUrl(asset)
+            };
         }
     }
 }
