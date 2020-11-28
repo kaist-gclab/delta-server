@@ -19,5 +19,12 @@ namespace Delta.AppServer.Assets
         {
             return _assetMetadataService.GetAssetTypes();
         }
+
+        [HttpPost]
+        public AssetType Create([FromBody] CreateAssetTypeRequest createAssetTypeRequest)
+        {
+            var assetType = _assetMetadataService.AddAssetType(createAssetTypeRequest.Key, createAssetTypeRequest.Name);
+            return assetType;
+        }
     }
 }
