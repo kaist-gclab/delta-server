@@ -13,16 +13,16 @@ namespace Delta.AppServer.Processors
             _processorService = processorService;
         }
 
-        [HttpGet("nodes")]
+        [HttpGet]
         public IActionResult GetNodes()
         {
             return Ok(_processorService.GetProcessorNodes());
         }
 
-        [HttpPost("nodes/register")]
+        [HttpPost("register")]
         public IActionResult RegisterProcessorNode(RegisterProcessorNodeRequest registerProcessorNodeRequest)
         {
-            var node = _processorService.AddNode(registerProcessorNodeRequest);
+            var node = _processorService.RegisterProcessorNode(registerProcessorNodeRequest);
             if (node == null)
             {
                 return BadRequest();
