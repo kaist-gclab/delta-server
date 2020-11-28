@@ -26,9 +26,8 @@ namespace Delta.AppServer.Assets
             }
 
             return (from t in _context.AssetTypes
-                    where t.Key == key
-                    select t).FirstOrDefault();
-
+                where t.Key == key
+                select t).FirstOrDefault();
         }
 
         public IEnumerable<Asset> FindByAssetTag(string key, string value)
@@ -41,26 +40,26 @@ namespace Delta.AppServer.Assets
             if (key == null)
             {
                 return (from a in _context.Assets
-                        where (from t in a.AssetTags
-                               where t.Value == value
-                               select t).Any()
-                        select a).ToList();
+                    where (from t in a.AssetTags
+                        where t.Value == value
+                        select t).Any()
+                    select a).ToList();
             }
 
             if (value == null)
             {
                 return (from a in _context.Assets
-                        where (from t in a.AssetTags
-                               where t.Key == key
-                               select t).Any()
-                        select a).ToList();
+                    where (from t in a.AssetTags
+                        where t.Key == key
+                        select t).Any()
+                    select a).ToList();
             }
 
             return (from a in _context.Assets
-                    where (from t in a.AssetTags
-                           where t.Key == key && t.Value == value
-                           select t).Any()
-                    select a).ToList();
+                where (from t in a.AssetTags
+                    where t.Key == key && t.Value == value
+                    select t).Any()
+                select a).ToList();
         }
 
         public AssetType AddAssetType(string key, string name)
