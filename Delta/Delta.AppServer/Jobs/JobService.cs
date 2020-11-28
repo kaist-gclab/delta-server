@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
 using NodaTime;
 
@@ -12,13 +11,11 @@ namespace Delta.AppServer.Jobs
     {
         private readonly DeltaContext _context;
         private readonly IClock _clock;
-        private readonly AssetMetadataService _assetMetadataService;
 
-        public JobService(DeltaContext context, IClock clock, AssetMetadataService assetMetadataService)
+        public JobService(DeltaContext context, IClock clock)
         {
             _context = context;
             _clock = clock;
-            _assetMetadataService = assetMetadataService;
         }
 
         public IQueryable<JobType> GetJobTypes() => _context.JobTypes;
