@@ -1,8 +1,10 @@
+using Delta.AppServer.Users;
+
 namespace Delta.AppServer.Core.Security
 {
     public class AuthInfo
     {
-        public Account Account { get; set; }
+        public User User { get; set; }
         public string Role { get; set; }
     }
 }
