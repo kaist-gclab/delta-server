@@ -11,6 +11,6 @@ namespace Delta.AppServer.Assets
         [Required] public string Name { get; set; }
 
         public virtual ICollection<Asset> Assets { get; set; }
-        public virtual ICollection<ProcessorVersionInputCapability> ProcessorVersionInputCapabilities { get; set; }
+        public virtual ICollection<ProcessorNodeCapability> ProcessorNodeCapabilities { get; set; }
     }
 }
