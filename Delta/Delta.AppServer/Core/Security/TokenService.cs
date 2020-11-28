@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Delta.AppServer.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -12,12 +13,12 @@ namespace Delta.AppServer.Core.Security
     public class TokenService
     {
         private readonly IConfiguration _configuration;
-        private readonly AuthService _authService;
+        private readonly UserService _userService;
 
-        public TokenService(IConfiguration configuration, AuthService authService)
+        public TokenService(IConfiguration configuration, UserService userService)
         {
             _configuration = configuration;
-            _authService = authService;
+            _userService = userService;
         }
 
         private static string GenerateJwtId()
@@ -27,12 +28,12 @@ namespace Delta.AppServer.Core.Security
             return randomBytes.ToHexString();
         }
 
-        public string BuildToken(Account account)
+        public string BuildToken(User user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var authInfo = BuildAuthInfo(account);
+            var authInfo = BuildAuthInfo(user);
             var claims = new[]
             {
                 new Claim("authInfo",
@@ -48,12 +49,12 @@ namespace Delta.AppServer.Core.Security
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private AuthInfo BuildAuthInfo(Account account)
+        private AuthInfo BuildAuthInfo(User user)
         {
             return new AuthInfo
             {
-                Account = account,
-                Role = _authService.GetRole(account)
+                User = user,
+                Role = _userService.GetRole(user)
             };
         }
     }
