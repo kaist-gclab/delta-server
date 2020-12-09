@@ -144,5 +144,10 @@ namespace Delta.AppServer.Jobs
 
             return false;
         }
+
+        public IEnumerable<Job> GetJobs()
+        {
+            return _context.Jobs.ToList();
+        }
     }
 }

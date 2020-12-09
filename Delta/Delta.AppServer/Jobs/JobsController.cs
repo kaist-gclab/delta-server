@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Jobs
@@ -12,6 +13,13 @@ namespace Delta.AppServer.Jobs
         {
             _jobService = jobService;
         }
+
+        [HttpGet]
+        public IEnumerable<Job> GetJobs()
+        {
+            return _jobService.GetJobs();
+        }
+            
 
         [HttpPost("schedule")]
         public JobScheduleResponse Schedule(JobScheduleRequest jobScheduleRequest)
