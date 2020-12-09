@@ -19,11 +19,11 @@ namespace Delta.AppServer.Users
             var saltBytes = Convert.FromBase64String(salt);
 
             var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: saltBytes,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
+                password,
+                saltBytes,
+                KeyDerivationPrf.HMACSHA256,
+                10000,
+                256 / 8));
 
             return hashed;
         }

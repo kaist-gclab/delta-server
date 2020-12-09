@@ -1,11 +1,4 @@
-using System;
-using Delta.AppServer.Assets;
-using Delta.AppServer.ObjectStorage;
-using Delta.AppServer.Encryption;
 using Delta.AppServer.Test.Infrastructure;
-using NodaTime;
-using NodaTime.Testing;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Delta.AppServer.Test.Assets

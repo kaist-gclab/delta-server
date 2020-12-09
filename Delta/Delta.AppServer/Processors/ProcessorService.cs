@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Delta.AppServer.Assets;
 using NodaTime;
 
 namespace Delta.AppServer.Processors
@@ -10,13 +8,11 @@ namespace Delta.AppServer.Processors
     {
         private readonly DeltaContext _context;
         private readonly IClock _clock;
-        private readonly AssetMetadataService _assetMetadataService;
 
-        public ProcessorService(DeltaContext context, IClock clock, AssetMetadataService assetMetadataService)
+        public ProcessorService(DeltaContext context, IClock clock)
         {
             _context = context;
             _clock = clock;
-            _assetMetadataService = assetMetadataService;
         }
 
         public ProcessorNode GetNode(long id) => _context.ProcessorNodes.Find(id);
@@ -25,13 +21,9 @@ namespace Delta.AppServer.Processors
         {
             using var trx = _context.Database.BeginTransaction();
             var node = (from n in _context.ProcessorNodes
-                where n.Key == request.Key
-                select n).FirstOrDefault();
-
-            if (node == null)
-            {
-                node = _context.Add(new ProcessorNode {Key = request.Key}).Entity;
-            }
+                           where n.Key == request.Key
+                           select n).FirstOrDefault() ??
+                       _context.Add(new ProcessorNode {Key = request.Key}).Entity;
 
             node.UpdateCapabilities(request.Capabilities);
             node.AddNodeStatus(_clock.GetCurrentInstant(),

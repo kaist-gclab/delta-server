@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Delta.AppServer.Jobs
 {
     public class AddJobExecutionStatusRequest

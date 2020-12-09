@@ -1,16 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Delta.AppServer.Assets;
-using Delta.AppServer.Jobs;
-using Delta.AppServer.ObjectStorage;
-using Delta.AppServer.Processors;
-using Delta.AppServer.Encryption;
 using Delta.AppServer.Test.Infrastructure;
-using NodaTime;
-using NodaTime.Testing;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Delta.AppServer.Test.Jobs

@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using RestSharp.Extensions;
 
 namespace Delta.AppServer.Encryption
 {

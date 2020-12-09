@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using Delta.AppServer.Processors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Jobs
@@ -9,12 +7,10 @@ namespace Delta.AppServer.Jobs
     public class JobsController : ControllerBase
     {
         private readonly JobService _jobService;
-        private readonly ProcessorService _processorService;
 
-        public JobsController(JobService jobService, ProcessorService processorService)
+        public JobsController(JobService jobService)
         {
             _jobService = jobService;
-            _processorService = processorService;
         }
 
         [HttpPost("schedule")]

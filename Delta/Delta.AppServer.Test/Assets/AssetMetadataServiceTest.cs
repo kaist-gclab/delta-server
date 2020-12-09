@@ -1,8 +1,4 @@
-using System;
-using System.Linq;
-using Delta.AppServer.Assets;
 using Delta.AppServer.Test.Infrastructure;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Delta.AppServer.Test.Assets

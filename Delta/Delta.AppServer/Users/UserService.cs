@@ -51,7 +51,7 @@ namespace Delta.AppServer.Users
             var user = new User
             {
                 Username = username,
-                Name = name,
+                Name = name
             };
             user.ChangePassword(password);
 
