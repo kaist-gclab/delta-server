@@ -11,7 +11,7 @@ then
 INITDB="-v $DELTA_POSTGRES_INITDB:/docker-entrypoint-initdb.d/ "
 fi
 
-sudo docker run -d \
+docker run -d \
 -p $DELTA_POSTGRES_PORT:5432 \
 -e "POSTGRES_PASSWORD=$DELTA_POSTGRES_PASSWORD" \
 -e "POSTGRES_USER=$DELTA_POSTGRES_USER" \
