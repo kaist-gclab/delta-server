@@ -17,9 +17,14 @@ namespace Delta.AppServer.ObjectStorage
         {
             _objectStorageConfig = objectStorageConfig;
             _objectStorageKeyConverter = objectStorageKeyConverter;
+
             _client = new MinioClient(_objectStorageConfig.Endpoint,
                 _objectStorageConfig.AccessKey,
-                _objectStorageConfig.SecretKey).WithSSL();
+                _objectStorageConfig.SecretKey);
+            if (_objectStorageConfig.Https)
+            {
+                _client = _client.WithSSL();
+            }
         }
 
         public async Task Write(string key, byte[] content)
@@ -45,14 +50,12 @@ namespace Delta.AppServer.ObjectStorage
         {
             await EnsureBucketExists();
 
-            if (key == null)
+            switch (key)
             {
-                throw new ArgumentNullException();
-            }
-
-            if (key == "")
-            {
-                throw new ArgumentOutOfRangeException();
+                case null:
+                    throw new ArgumentNullException();
+                case "":
+                    throw new ArgumentOutOfRangeException();
             }
 
             await using var memoryStream = new MemoryStream();
