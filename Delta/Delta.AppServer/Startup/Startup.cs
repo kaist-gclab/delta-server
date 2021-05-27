@@ -110,7 +110,7 @@ namespace Delta.AppServer.Startup
             services.AddScoped<CompressionService>();
             services.AddScoped<EncryptionService>();
             services.AddScoped<IObjectStorageKeyConverter, PrefixFourObjectStorageKeyConverter>();
-            services.AddScoped<StatsService>();
+            services.AddScoped<MonitoringService>();
 
             services.AddSingleton<ScheduleHelper>();
             services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);

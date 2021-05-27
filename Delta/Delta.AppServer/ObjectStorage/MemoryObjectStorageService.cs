@@ -48,5 +48,10 @@ namespace Delta.AppServer.ObjectStorage
         {
             throw new NotImplementedException();
         }
+
+        public Task<ulong> GetTotalSize()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

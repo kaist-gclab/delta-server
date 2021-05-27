@@ -9,5 +9,6 @@ namespace Delta.AppServer.ObjectStorage
 
         Task<string> GetPresignedUploadUrl(string key);
         Task<string> GetPresignedDownloadUrl(string key);
+        Task<ulong> GetTotalSize();
     }
 }

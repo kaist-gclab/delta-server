@@ -27,6 +27,16 @@ namespace Delta.AppServer.ObjectStorage
             }
         }
 
+        public Task<ulong> GetTotalSize()
+        {
+            var s = new TaskCompletionSource<ulong>();
+            var objects = _client.ListObjectsAsync(_objectStorageConfig.Bucket);
+            ulong totalSize = 0;
+            objects.Subscribe(item => { totalSize += item.Size; }, 
+                () => { s.SetResult(totalSize); });
+            return s.Task;
+        }
+
         public async Task Write(string key, byte[] content)
         {
             await EnsureBucketExists();
