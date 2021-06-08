@@ -52,20 +52,21 @@ namespace Delta.AppServer.Startup
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"])),
                         ValidIssuer = _configuration["Jwt:Issuer"],
-                        ValidAudience = _configuration["Jwt:Issuer"]
+                        ValidAudience = _configuration["Jwt:Issuer"],
+                        ValidAlgorithms = new[] {"HS256"}
                     };
                 });
 
             services.AddCors();
-            
+
             services.AddMvc(options =>
                 {
                     var policy = new AuthorizationPolicyBuilder()
                         .RequireAssertion(context =>
                         {
                             var json = (from c in context.User.Claims
-                                        where c.Type == "authInfo"
-                                        select c.Value).FirstOrDefault();
+                                where c.Type == "authInfo"
+                                select c.Value).FirstOrDefault();
 
                             if (json == null)
                             {
