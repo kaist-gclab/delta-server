@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <UserSecretsId>5237c31b-9298-4655-a8e7-03e0a20d080a</UserSecretsId>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
