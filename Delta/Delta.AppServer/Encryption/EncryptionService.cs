@@ -70,7 +70,7 @@ namespace Delta.AppServer.Encryption
             var tag = new byte[AesGcm.TagByteSizes.MaxSize];
             using var aes = new AesGcm(GetKey(encryptionKey, _salt));
             aes.Encrypt(nonce, plainData, cipherData, tag);
-            return cipherData;
+            return nonce.Concat(cipherData).Concat(tag).ToArray();
         }
 
         public byte[] Decrypt(EncryptionKey encryptionKey, byte[] cipherData)
