@@ -64,23 +64,13 @@ namespace Delta.AppServer.Encryption
                 throw new Exception();
             }
 
-            using var aes = new AesCryptoServiceProvider
-            {
-                Mode = CipherMode.CBC,
-                KeySize = 256,
-                Key = GetKey(encryptionKey, _salt),
-                BlockSize = 128,
-                Padding = PaddingMode.PKCS7
-            };
-            using var msEncrypt = new MemoryStream();
-            msEncrypt.Write(aes.IV);
-            using (var csEncrypt =
-                new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
-            {
-                csEncrypt.Write(plainData);
-            }
-
-            return msEncrypt.ToArray();
+            var nonce = new byte[AesGcm.NonceByteSizes.MaxSize];
+            RandomNumberGenerator.Fill(nonce);
+            var cipherData = new byte[plainData.Length];
+            var tag = new byte[AesGcm.TagByteSizes.MaxSize];
+            using var aes = new AesGcm(GetKey(encryptionKey, _salt));
+            aes.Encrypt(nonce, plainData, cipherData, tag);
+            return cipherData;
         }
 
         public byte[] Decrypt(EncryptionKey encryptionKey, byte[] cipherData)
