@@ -80,25 +80,17 @@ namespace Delta.AppServer.Encryption
                 throw new Exception();
             }
 
-            using var msDecrypt = new MemoryStream(cipherData);
-            var iv = new byte[128 / 8];
-            msDecrypt.Read(iv);
+            var nonce = new ArraySegment<byte>(cipherData, 0, AesGcm.NonceByteSizes.MaxSize);
+            var dataLength = cipherData.Length - AesGcm.NonceByteSizes.MaxSize - AesGcm.TagByteSizes.MaxSize;
+            var data = new ArraySegment<byte>(cipherData, AesGcm.NonceByteSizes.MaxSize, dataLength);
+            var tag = new ArraySegment<byte>(cipherData,
+                AesGcm.NonceByteSizes.MaxSize + dataLength, AesGcm.TagByteSizes.MaxSize);
+            var plainText = new byte[data.Count];
 
-            using var aes = new AesCryptoServiceProvider
-            {
-                Mode = CipherMode.CBC,
-                KeySize = 256,
-                Key = GetKey(encryptionKey, _salt),
-                BlockSize = 128,
-                Padding = PaddingMode.PKCS7,
-                IV = iv
-            };
-            using var csDecrypt =
-                new CryptoStream(msDecrypt, aes.CreateDecryptor(), CryptoStreamMode.Read);
+            using var aes = new AesGcm(GetKey(encryptionKey, _salt));
+            aes.Decrypt(nonce, data, tag, plainText);
 
-            using var stream = new MemoryStream();
-            csDecrypt.CopyTo(stream);
-            return stream.ToArray();
+            return plainText;
         }
 
         public EncryptionKey GetEncryptionKey(string name)
