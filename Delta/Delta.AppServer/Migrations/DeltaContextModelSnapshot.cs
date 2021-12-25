@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace Delta.AppServer.Migrations
 {
     [DbContext(typeof(DeltaContext))]
@@ -16,24 +18,26 @@ namespace Delta.AppServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityByDefaultColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.0");
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Delta.AppServer.Assets.Asset", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("AssetTypeId")
                         .HasColumnType("bigint")
                         .HasColumnName("asset_type_id");
 
                     b.Property<Instant>("CreatedAt")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<long?>("EncryptionKeyId")
@@ -70,8 +74,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("AssetId")
                         .HasColumnType("bigint")
@@ -99,8 +104,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -122,8 +128,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("boolean")
@@ -148,15 +155,16 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long?>("AssignedProcessorNodeId")
                         .HasColumnType("bigint")
                         .HasColumnName("assigned_processor_node_id");
 
                     b.Property<Instant>("CreatedAt")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<long?>("InputAssetId")
@@ -188,8 +196,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("JobId")
                         .HasColumnType("bigint")
@@ -213,8 +222,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("JobExecutionId")
                         .HasColumnType("bigint")
@@ -226,7 +236,7 @@ namespace Delta.AppServer.Migrations
                         .HasColumnName("status");
 
                     b.Property<Instant>("Timestamp")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
                     b.HasKey("Id");
@@ -241,8 +251,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -264,8 +275,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -290,8 +302,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long?>("AssetTypeId")
                         .HasColumnType("bigint")
@@ -326,8 +339,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ProcessorNodeId")
                         .HasColumnType("bigint")
@@ -339,7 +353,7 @@ namespace Delta.AppServer.Migrations
                         .HasColumnName("status");
 
                     b.Property<Instant>("Timestamp")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
                     b.HasKey("Id");
@@ -370,8 +384,9 @@ namespace Delta.AppServer.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
