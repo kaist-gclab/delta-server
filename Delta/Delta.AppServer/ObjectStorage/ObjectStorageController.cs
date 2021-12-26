@@ -20,11 +20,7 @@ namespace Delta.AppServer.ObjectStorage
         {
             var storeKey = Guid.NewGuid().ToString();
             var url = await _objectStorageService.GetPresignedUploadUrl(storeKey);
-            return new UploadTicket
-            {
-                Url = url,
-                StoreKey = storeKey
-            };
+            return new UploadTicket(url, storeKey);
         }
     }
 }
