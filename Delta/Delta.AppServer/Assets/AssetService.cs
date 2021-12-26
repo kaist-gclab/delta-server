@@ -29,9 +29,9 @@ public class AssetService
             CreatedAt = _clock.GetCurrentInstant()
         };
 
-        foreach (var t in createAssetRequest.CreateAssetTagRequest)
+        foreach (var (key, value) in createAssetRequest.CreateAssetTagRequest)
         {
-            asset.UpdateAssetTag(t.Key, t.Value);
+            asset.UpdateAssetTag(key, value);
         }
 
         asset = (await _context.AddAsync(asset)).Entity;
@@ -44,7 +44,7 @@ public class AssetService
         return await _objectStorageService.GetPresignedDownloadUrl(asset.StoreKey);
     }
 
-    public async Task<GetAssetResponse> GetAsset(long id)
+    public async Task<GetAssetResponse?> GetAsset(long id)
     {
         var asset = _context.Assets.Find(id);
         if (asset == null)
