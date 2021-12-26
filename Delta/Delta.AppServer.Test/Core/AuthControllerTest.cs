@@ -62,6 +62,13 @@ namespace Delta.AppServer.Test.Core
                 return false;
             }
 
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Assert.Contains("validation errors", content);
+                return false;
+            }
+
             var text = await response.Content.ReadAsStringAsync();
             var obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
             Assert.Single(obj);
