@@ -1,7 +1,6 @@
-namespace Delta.AppServer.Jobs
+namespace Delta.AppServer.Jobs;
+
+public class JobScheduleRequest
 {
-    public class JobScheduleRequest
-    {
-        public long ProcessorNodeId { get; set; }
-    }
+    public long ProcessorNodeId { get; set; }
 }

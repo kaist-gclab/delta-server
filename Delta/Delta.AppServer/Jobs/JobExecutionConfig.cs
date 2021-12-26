@@ -1,9 +1,8 @@
 using NodaTime;
 
-namespace Delta.AppServer.Jobs
+namespace Delta.AppServer.Jobs;
+
+public class JobExecutionConfig
 {
-    public class JobExecutionConfig
-    {
-        public Duration JobExecutionTimeout => Duration.FromMinutes(5);
-    }
+    public Duration JobExecutionTimeout => Duration.FromMinutes(5);
 }

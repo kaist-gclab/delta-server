@@ -1,7 +1,6 @@
-namespace Delta.AppServer.Jobs
+namespace Delta.AppServer.Jobs;
+
+public class JobScheduleResponse
 {
-    public class JobScheduleResponse
-    {
-        public JobExecution JobExecution { get; set; }
-    }
+    public JobExecution JobExecution { get; set; }
 }
