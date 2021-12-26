@@ -17,14 +17,14 @@ namespace Delta.AppServer.Processors
         public virtual ICollection<ProcessorNodeCapability> ProcessorNodeCapabilities { get; set; } =
             new HashSet<ProcessorNodeCapability>();
 
-        public void UpdateCapabilities(IEnumerable<CreateProcessorNodeCapabilityRequest> requests)
+        public void UpdateCapabilities(IEnumerable<CreateProcessorNodeCapability> requests)
         {
             var removed =
                 from cap in ProcessorNodeCapabilities
                 where (from req in requests
                     where req.MediaType == cap.MediaType &&
-                          req.AssetTypeId == cap.AssetTypeId &&
-                          req.JobTypeId == cap.JobTypeId
+                          req.AssetType == cap.AssetType &&
+                          req.JobType == cap.JobType
                     select req).Any()
                 select cap;
             foreach (var c in removed.ToList())
@@ -35,19 +35,14 @@ namespace Delta.AppServer.Processors
             var adding = from req in requests
                 where (from cap in ProcessorNodeCapabilities
                     where req.MediaType == cap.MediaType &&
-                          req.AssetTypeId == cap.AssetTypeId &&
-                          req.JobTypeId == cap.JobTypeId
+                          req.AssetType == cap.AssetType &&
+                          req.JobType == cap.JobType
                     select req).Any() == false
                 select req;
 
-            foreach (var c in adding.ToList())
+            foreach (var (jobType, assetType, mediaType) in adding.ToList())
             {
-                ProcessorNodeCapabilities.Add(new ProcessorNodeCapability
-                {
-                    MediaType = c.MediaType,
-                    AssetTypeId = c.AssetTypeId,
-                    JobTypeId = c.JobTypeId
-                });
+                ProcessorNodeCapabilities.Add(new ProcessorNodeCapability(mediaType, this, jobType, assetType));
             }
         }
 
