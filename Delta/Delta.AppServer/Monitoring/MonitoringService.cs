@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Delta.AppServer.Monitoring;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core.Flux.Domain;
-using Microsoft.AspNetCore.Http;
 using NodaTime;
 
-namespace Delta.AppServer.Stats
+namespace Delta.AppServer.Monitoring
 {
     public class MonitoringService
     {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Delta.AppServer.Stats;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Monitoring
