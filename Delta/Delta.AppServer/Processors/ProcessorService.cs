@@ -15,7 +15,7 @@ namespace Delta.AppServer.Processors
             _clock = clock;
         }
 
-        public ProcessorNode GetNode(long id) => _context.ProcessorNodes.Find(id);
+        public ProcessorNode? GetNode(long id) => _context.ProcessorNodes.Find(id);
 
         public ProcessorNode RegisterProcessorNode(RegisterProcessorNodeRequest request)
         {
