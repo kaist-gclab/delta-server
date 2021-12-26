@@ -8,11 +8,6 @@ namespace Delta.AppServer.ObjectStorage
 
         public string GetKey(string key)
         {
-            if (key == null)
-            {
-                return null;
-            }
-
             var builder = new StringBuilder();
             for (var i = 0; i < PrefixLength; i++)
             {
