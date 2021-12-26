@@ -38,7 +38,8 @@ namespace Delta.AppServer.Core.Security
             {
                 new Claim("authInfo",
                     JsonConvert.SerializeObject(authInfo,
-                        new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()})),
+                        new JsonSerializerSettings
+                            { ContractResolver = new CamelCasePropertyNamesContractResolver() })),
                 new Claim("jti", GenerateJwtId())
             };
 
