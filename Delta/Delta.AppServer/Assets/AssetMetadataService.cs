@@ -17,13 +17,8 @@ public class AssetMetadataService
     public Asset? GetAsset(long id) => _context.Assets.Find(id);
     public IQueryable<AssetType> GetAssetTypes() => _context.AssetTypes;
 
-    public AssetType GetAssetType(string key)
+    public AssetType? GetAssetType(string key)
     {
-        if (key == null)
-        {
-            return null;
-        }
-
         return (from t in _context.AssetTypes
             where t.Key == key
             select t).FirstOrDefault();
