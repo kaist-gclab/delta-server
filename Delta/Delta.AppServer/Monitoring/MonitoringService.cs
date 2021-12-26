@@ -57,7 +57,7 @@ public class MonitoringService
         }
     }
 
-    public List<object> GetEvents()
+    public IEnumerable<object> GetEvents()
     {
         lock (typeof(MonitoringService))
         {
