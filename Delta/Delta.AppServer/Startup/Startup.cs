@@ -86,7 +86,6 @@ public class Startup
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddNewtonsoftJson(options => { options.SerializerSettings.ConfigureJsonSerializerSettings(); })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddApplicationPart(Assembly.GetAssembly(typeof(Startup)));
         services.AddScoped<EncryptionService>();
         services.AddSingleton<IClock>(SystemClock.Instance);
