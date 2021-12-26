@@ -52,11 +52,7 @@ namespace Delta.AppServer.Core.Security
 
         private AuthInfo BuildAuthInfo(User user)
         {
-            return new AuthInfo
-            {
-                User = user,
-                Role = _userService.GetRole(user)
-            };
+            return new AuthInfo(user, _userService.GetRole(user));
         }
     }
 }

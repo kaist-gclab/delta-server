@@ -45,14 +45,11 @@ namespace Delta.AppServer.Test.Core
         private async Task<bool> LoginAdmin(string username, string password)
         {
             var client = Factory.CreateClient();
-            var request = new LoginRequest
-            {
-                Username = username,
-                Password = password
-            };
+            var request = new LoginRequest(username, password);
             var response = await client.PostAsync("/auth/1/login",
                 new ObjectContent<LoginRequest>(request, new JsonMediaTypeFormatter()));
-            Assert.Contains(response.StatusCode, new[] {HttpStatusCode.Unauthorized, HttpStatusCode.OK, HttpStatusCode.BadRequest});
+            Assert.Contains(response.StatusCode,
+                new[] { HttpStatusCode.Unauthorized, HttpStatusCode.OK, HttpStatusCode.BadRequest });
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
