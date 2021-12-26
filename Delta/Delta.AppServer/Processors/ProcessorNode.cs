@@ -60,11 +60,7 @@ namespace Delta.AppServer.Processors
                 throw new Exception();
             }
 
-            ProcessorNodeStatuses.Add(new ProcessorNodeStatus
-            {
-                Timestamp = timestamp,
-                Status = status
-            });
+            ProcessorNodeStatuses.Add(new ProcessorNodeStatus(timestamp, status, this));
         }
 
         public virtual ICollection<JobExecution> JobExecutions { get; set; }
