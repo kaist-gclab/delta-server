@@ -16,19 +16,19 @@ public class DeltaContext : DbContext
     {
     }
 
-    public DbSet<Asset> Assets { get; set; }
-    public DbSet<AssetTag> AssetTags { get; set; }
-    public DbSet<AssetType> AssetTypes { get; set; }
-    public DbSet<Job> Jobs { get; set; }
-    public DbSet<JobType> JobTypes { get; set; }
-    public DbSet<JobExecution> JobExecutions { get; set; }
-    public DbSet<JobExecutionStatus> JobExecutionStatuses { get; set; }
-    public DbSet<ProcessorNode> ProcessorNodes { get; set; }
-    public DbSet<ProcessorNodeStatus> ProcessorNodeStatuses { get; set; }
-    public DbSet<ProcessorNodeCapability> ProcessorNodeCapabilities { get; set; }
-    public DbSet<EncryptionKey> EncryptionKeys { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Setting> Settings { get; set; }
+    public virtual DbSet<Asset> Assets => Set<Asset>();
+    public virtual DbSet<AssetTag> AssetTags => Set<AssetTag>();
+    public virtual DbSet<AssetType> AssetTypes => Set<AssetType>();
+    public virtual DbSet<Job> Jobs => Set<Job>();
+    public virtual DbSet<JobType> JobTypes => Set<JobType>();
+    public virtual DbSet<JobExecution> JobExecutions => Set<JobExecution>();
+    public virtual DbSet<JobExecutionStatus> JobExecutionStatuses => Set<JobExecutionStatus>();
+    public virtual DbSet<ProcessorNode> ProcessorNodes => Set<ProcessorNode>();
+    public virtual DbSet<ProcessorNodeStatus> ProcessorNodeStatuses => Set<ProcessorNodeStatus>();
+    public virtual DbSet<ProcessorNodeCapability> ProcessorNodeCapabilities => Set<ProcessorNodeCapability>();
+    public virtual DbSet<EncryptionKey> EncryptionKeys => Set<EncryptionKey>();
+    public virtual DbSet<User> Users => Set<User>();
+    public virtual DbSet<Setting> Settings => Set<Setting>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
