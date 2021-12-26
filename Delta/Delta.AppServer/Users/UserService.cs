@@ -35,7 +35,7 @@ public class UserService
     {
         if (username == _authConfig.AdminUsername)
         {
-            throw new Exception();
+            return null;
         }
 
         using var trx = _context.Database.BeginTransaction();
@@ -45,7 +45,7 @@ public class UserService
             select u;
         if (duplicates.Any())
         {
-            throw new Exception();
+            return null;
         }
 
         var user = new User
