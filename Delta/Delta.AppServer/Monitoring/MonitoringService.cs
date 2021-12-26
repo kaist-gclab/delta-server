@@ -6,62 +6,61 @@ using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core.Flux.Domain;
 using NodaTime;
 
-namespace Delta.AppServer.Monitoring
+namespace Delta.AppServer.Monitoring;
+
+public class MonitoringService
 {
-    public class MonitoringService
+    private static readonly List<object> InMemoryStore = new();
+    private readonly MonitoringConfig _monitoringConfig;
+    private readonly IClock _clock;
+
+    public MonitoringService(IClock clock)
     {
-        private static readonly List<object> InMemoryStore = new List<object>();
-        private readonly MonitoringConfig _monitoringConfig;
-        private readonly IClock _clock;
+        _clock = clock;
+    }
 
-        public MonitoringService(IClock clock)
+    public void AddProcessorNodeEvent(string content)
+    {
+    }
+
+    public async Task AddObjectStorageEvent(ObjectStorageEvent objectStorageEvent)
+    {
+        using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
+        var write = client.GetWriteApiAsync();
+        await write.WriteMeasurementAsync(
+            _monitoringConfig.Bucket, _monitoringConfig.Organization,
+            WritePrecision.Ns, objectStorageEvent);
+    }
+
+    public async Task<List<FluxTable>> GetObjectStorageEvents()
+    {
+        using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
+        var query = client.GetQueryApi();
+        return await query.QueryAsync(
+            "from(bucket: \"" + _monitoringConfig.Bucket + "\")" +
+            "|> range(start: -1d)" +
+            "|> aggregateWindow(every: 15m, fn: mean)", _monitoringConfig.Organization);
+    }
+
+
+    public void AddEvent(Instant eventTimestamp, string content)
+    {
+        lock (typeof(MonitoringService))
         {
-            _clock = clock;
-        }
-
-        public void AddProcessorNodeEvent(string content)
-        {
-        }
-
-        public async Task AddObjectStorageEvent(ObjectStorageEvent objectStorageEvent)
-        {
-            using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
-            var write = client.GetWriteApiAsync();
-            await write.WriteMeasurementAsync(
-                _monitoringConfig.Bucket, _monitoringConfig.Organization,
-                WritePrecision.Ns, objectStorageEvent);
-        }
-
-        public async Task<List<FluxTable>> GetObjectStorageEvents()
-        {
-            using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
-            var query = client.GetQueryApi();
-            return await query.QueryAsync(
-                "from(bucket: \"" + _monitoringConfig.Bucket + "\")" +
-                "|> range(start: -1d)" +
-                "|> aggregateWindow(every: 15m, fn: mean)", _monitoringConfig.Organization);
-        }
-
-
-        public void AddEvent(Instant eventTimestamp, string content)
-        {
-            lock (typeof(MonitoringService))
+            InMemoryStore.Add(new
             {
-                InMemoryStore.Add(new
-                {
-                    EventTimestamp = eventTimestamp,
-                    StatsTimestamp = _clock.GetCurrentInstant(),
-                    Content = content
-                });
-            }
+                EventTimestamp = eventTimestamp,
+                StatsTimestamp = _clock.GetCurrentInstant(),
+                Content = content
+            });
         }
+    }
 
-        public List<object> GetEvents()
+    public List<object> GetEvents()
+    {
+        lock (typeof(MonitoringService))
         {
-            lock (typeof(MonitoringService))
-            {
-                return InMemoryStore.OrderBy(o => o.ToString()).ToList();
-            }
+            return InMemoryStore.OrderBy(o => o.ToString()).ToList();
         }
     }
 }
