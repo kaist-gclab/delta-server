@@ -52,11 +52,7 @@ namespace Delta.AppServer.Assets
                 return null;
             }
 
-            return new GetAssetResponse
-            {
-                Asset = asset,
-                PresignedDownloadUrl = await GetPresignedDownloadUrl(asset)
-            };
+            return new GetAssetResponse(asset, await GetPresignedDownloadUrl(asset));
         }
     }
 }
