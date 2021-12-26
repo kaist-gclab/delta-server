@@ -24,7 +24,7 @@ public class AssetMetadataService
             select t).FirstOrDefault();
     }
 
-    public IEnumerable<Asset> FindByAssetTag(string key, string? value)
+    public IEnumerable<Asset> FindByAssetTag(string? key, string? value)
     {
         if (key == null && value == null)
         {
