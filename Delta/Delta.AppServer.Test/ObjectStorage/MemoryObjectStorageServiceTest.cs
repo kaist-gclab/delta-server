@@ -10,13 +10,8 @@ namespace Delta.AppServer.Test.ObjectStorage
         public async void Write()
         {
             IObjectStorageService service = new MemoryObjectStorageService();
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write(null, null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write("", null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write(null, new byte[] { }));
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.Write("", new byte[] { }));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write(null, new byte[] {1}));
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.Write("", new byte[] {1}));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.Write("a", null));
             await service.Write("a", new byte[] { });
             await service.Write("a", new byte[] {1});
         }
