@@ -1,7 +1,6 @@
-namespace Delta.AppServer.ObjectStorage
+namespace Delta.AppServer.ObjectStorage;
+
+public interface IObjectStorageKeyConverter
 {
-    public interface IObjectStorageKeyConverter
-    {
-        string GetKey(string key);
-    }
+    string GetKey(string key);
 }
