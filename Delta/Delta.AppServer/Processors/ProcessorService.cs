@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NodaTime;
@@ -23,9 +24,20 @@ namespace Delta.AppServer.Processors
             var node = (from n in _context.ProcessorNodes
                            where n.Key == request.Key
                            select n).FirstOrDefault() ??
-                       _context.Add(new ProcessorNode {Key = request.Key}).Entity;
+                       _context.Add(new ProcessorNode { Key = request.Key }).Entity;
 
-            node.UpdateCapabilities(request.Capabilities);
+            node.UpdateCapabilities(request.Capabilities.Select(cap =>
+            {
+                var (jobTypeId, assetTypeId, mediaType) = cap;
+                var jobType = _context.JobTypes.Find(jobTypeId);
+                var assetType = _context.AssetTypes.Find(assetTypeId);
+                if (jobType == null)
+                {
+                    throw new ArgumentException();
+                }
+
+                return new CreateProcessorNodeCapability(jobType, assetType, mediaType);
+            }));
             node.AddNodeStatus(_clock.GetCurrentInstant(),
                 PredefinedProcessorNodeStatuses.Available);
             _context.SaveChanges();
