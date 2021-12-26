@@ -35,7 +35,7 @@ public class UserService
     {
         if (username == _authConfig.AdminUsername)
         {
-            return GetUserByUsername(_authConfig.AdminUsername);
+            throw new Exception();
         }
 
         using var trx = _context.Database.BeginTransaction();
