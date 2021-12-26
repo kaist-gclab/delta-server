@@ -15,7 +15,7 @@ namespace Delta.AppServer.Users
             _authConfig = authConfig;
         }
 
-        public User Login(string username, string password)
+        public User? Login(string username, string password)
         {
             var user = GetUserByUsername(username);
             if (user == null)
