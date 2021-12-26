@@ -31,7 +31,7 @@ public class UserService
         return user.ValidatePassword(password) ? user : null;
     }
 
-    public User AddUser(string username, string password, string name)
+    public User? AddUser(string username, string password, string name)
     {
         if (username == _authConfig.AdminUsername)
         {
