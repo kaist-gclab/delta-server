@@ -105,10 +105,7 @@ public class JobService
 
         _context.SaveChanges();
         trx.Commit();
-        return new JobScheduleResponse
-        {
-            JobExecution = jobExecution
-        };
+        return new JobScheduleResponse(jobExecution);
     }
 
     public void AddJobExecutionStatus(long jobExecutionId,
