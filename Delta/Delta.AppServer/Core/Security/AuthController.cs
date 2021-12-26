@@ -2,36 +2,32 @@ using Delta.AppServer.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Delta.AppServer.Core.Security
+namespace Delta.AppServer.Core.Security;
+
+[Route("/auth/1/")]
+[ApiController]
+public class AuthController : ControllerBase
 {
-    [Route("/auth/1/")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly UserService _userService;
+    private readonly TokenService _tokenService;
+
+    public AuthController(TokenService tokenService, UserService userService)
     {
-        private readonly UserService _userService;
-        private readonly TokenService _tokenService;
+        _tokenService = tokenService;
+        _userService = userService;
+    }
 
-        public AuthController(TokenService tokenService, UserService userService)
+    [HttpPost]
+    [Route("login")]
+    [AllowAnonymous]
+    public IActionResult Login([FromBody] LoginRequest loginRequest)
+    {
+        var user = _userService.Login(loginRequest.Username, loginRequest.Password);
+        if (user == null)
         {
-            _tokenService = tokenService;
-            _userService = userService;
+            return Unauthorized();
         }
 
-        [HttpPost]
-        [Route("login")]
-        [AllowAnonymous]
-        public IActionResult Login([FromBody] LoginRequest loginRequest)
-        {
-            var user = _userService.Login(loginRequest.Username, loginRequest.Password);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            return Ok(new LoginResponse
-            {
-                Token = _tokenService.BuildToken(user)
-            });
-        }
+        return Ok(new LoginResponse(_tokenService.BuildToken(user)));
     }
 }
