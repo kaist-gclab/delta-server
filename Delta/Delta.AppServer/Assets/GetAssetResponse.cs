@@ -1,4 +1,3 @@
-namespace Delta.AppServer.Assets
-{
-    public record GetAssetResponse(Asset Asset, string PresignedDownloadUrl);
-}
+namespace Delta.AppServer.Assets;
+
+public record GetAssetResponse(Asset Asset, string PresignedDownloadUrl);

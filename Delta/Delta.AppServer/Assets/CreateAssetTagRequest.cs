@@ -1,4 +1,3 @@
-namespace Delta.AppServer.Assets
-{
-    public record CreateAssetTagRequest(string Key, string Value);
-}
+namespace Delta.AppServer.Assets;
+
+public record CreateAssetTagRequest(string Key, string Value);
