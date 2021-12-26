@@ -2,23 +2,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Delta.AppServer.Monitoring
+namespace Delta.AppServer.Monitoring;
+
+[ApiController]
+[Route(Delta.ApiRoot + "monitoring")]
+public class MonitoringController
 {
-    [ApiController]
-    [Route(Delta.ApiRoot + "monitoring")]
-    public class MonitoringController
+    private readonly MonitoringService _monitoringService;
+
+    public MonitoringController(MonitoringService monitoringService)
     {
-        private readonly MonitoringService _monitoringService;
+        _monitoringService = monitoringService;
+    }
 
-        public MonitoringController(MonitoringService monitoringService)
-        {
-            _monitoringService = monitoringService;
-        }
-
-        [HttpGet]
-        public List<object> GetStats()
-        {
-            return _monitoringService.GetEvents().TakeLast(20).ToList();
-        }
+    [HttpGet]
+    public List<object> GetStats()
+    {
+        return _monitoringService.GetEvents().TakeLast(20).ToList();
     }
 }
