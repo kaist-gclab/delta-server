@@ -10,11 +10,6 @@ public class MemoryObjectStorageService : IObjectStorageService
 
     public Task Write(string key, byte[] content)
     {
-        if (key == null || content == null)
-        {
-            throw new ArgumentNullException();
-        }
-
         if (key == "")
         {
             throw new ArgumentOutOfRangeException();
@@ -26,11 +21,6 @@ public class MemoryObjectStorageService : IObjectStorageService
 
     public Task<byte[]> Read(string key)
     {
-        if (key == null)
-        {
-            throw new ArgumentNullException();
-        }
-
         if (key == "")
         {
             throw new ArgumentOutOfRangeException();
