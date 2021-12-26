@@ -14,9 +14,10 @@ public class MonitoringService
     private readonly MonitoringConfig _monitoringConfig;
     private readonly IClock _clock;
 
-    public MonitoringService(IClock clock)
+    public MonitoringService(IClock clock, MonitoringConfig monitoringConfig)
     {
         _clock = clock;
+        _monitoringConfig = monitoringConfig;
     }
 
     public void AddProcessorNodeEvent(string content)
