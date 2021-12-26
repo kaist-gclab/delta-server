@@ -52,7 +52,7 @@ namespace Delta.AppServer.Test.Core
             };
             var response = await client.PostAsync("/auth/1/login",
                 new ObjectContent<LoginRequest>(request, new JsonMediaTypeFormatter()));
-            Assert.Contains(response.StatusCode, new[] {HttpStatusCode.Unauthorized, HttpStatusCode.OK});
+            Assert.Contains(response.StatusCode, new[] {HttpStatusCode.Unauthorized, HttpStatusCode.OK, HttpStatusCode.BadRequest});
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
