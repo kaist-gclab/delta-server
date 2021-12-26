@@ -47,11 +47,7 @@ public class UserService
             return null;
         }
 
-        var user = new User
-        {
-            Username = username,
-            Name = name
-        };
+        var user = new User(name, username);
         user.ChangePassword(password);
 
         user = _context.Add(user).Entity;
@@ -81,11 +77,7 @@ public class UserService
     {
         if (username == _authConfig.AdminUsername)
         {
-            return new User
-            {
-                Username = _authConfig.AdminUsername,
-                Name = _authConfig.AdminUsername
-            };
+            return new User(_authConfig.AdminUsername, _authConfig.AdminUsername);
         }
 
         return (from u in _context.Users
