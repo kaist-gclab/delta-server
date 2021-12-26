@@ -1,8 +1,4 @@
 namespace Delta.AppServer.Assets
 {
-    public class CreateAssetTypeRequest
-    {
-        public string Key { get; set; }
-        public string Name { get; set; }
-    }
+    public record CreateAssetTypeRequest(string Key, string Name);
 }
