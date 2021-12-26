@@ -7,7 +7,7 @@ namespace Delta.AppServer.Processors;
 public class ProcessorNodeCapability
 {
     public ProcessorNodeCapability(
-        string mediaType, ProcessorNode processorNode, JobType jobType, AssetType assetType)
+        string mediaType, ProcessorNode processorNode, JobType jobType, AssetType? assetType)
     {
         MediaType = mediaType;
         _processorNode = processorNode;
