@@ -25,6 +25,8 @@ namespace Delta.AppServer.ObjectStorage
             {
                 _client = _client.WithSSL();
             }
+
+            _client = _client.Build();
         }
 
         public Task<ulong> GetTotalSize()
