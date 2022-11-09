@@ -22,8 +22,8 @@
         <PackageReference Include="Minio" Version="4.0.6" />
         <PackageReference Include="NodaTime" Version="3.1.5" />
         <PackageReference Include="NodaTime.Serialization.JsonNet" Version="3.0.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="6.0.7" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-rc.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="7.0.0-rc.2" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
         <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
     </ItemGroup>
