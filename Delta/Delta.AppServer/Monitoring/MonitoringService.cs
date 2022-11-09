@@ -29,8 +29,8 @@ public class MonitoringService
         using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
         var write = client.GetWriteApiAsync();
         await write.WriteMeasurementAsync(
-            _monitoringConfig.Bucket, _monitoringConfig.Organization,
-            WritePrecision.Ns, objectStorageEvent);
+            objectStorageEvent, WritePrecision.Ns,
+            _monitoringConfig.Bucket, _monitoringConfig.Organization);
     }
 
     public async Task<List<FluxTable>> GetObjectStorageEvents()
