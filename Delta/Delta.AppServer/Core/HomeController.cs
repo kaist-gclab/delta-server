@@ -7,12 +7,14 @@ namespace Delta.AppServer.Core
     [ApiController]
     public class HomeController : ControllerBase
     {
+        [HttpGet]
         [AllowAnonymous]
         public string Home()
         {
             return "Delta";
         }
 
+        [HttpGet]
         [Route(Delta.ApiRoot)]
         public ApiHomeResponse ApiHome()
         {
