@@ -29,12 +29,14 @@ namespace Delta.AppServer.Startup;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
         _configuration = configuration;
+        _env = env;
     }
 
     private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _env;
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
@@ -114,8 +116,11 @@ public class Startup
 
         services.AddSingleton<ScheduleHelper>();
         services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
-    
-        services.AddCodeGen();
+
+        if (_env.IsDevelopment())
+        {
+            services.AddCodeGen();
+        }
     }
 
     protected virtual void ConfigureDbContext(DbContextOptionsBuilder options)
@@ -142,6 +147,13 @@ public class Startup
 
         app.UseAuthentication();
 
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            if (_env.IsDevelopment())
+            {
+                endpoints.MapCodeGen();
+            }
+        });
     }
 }
