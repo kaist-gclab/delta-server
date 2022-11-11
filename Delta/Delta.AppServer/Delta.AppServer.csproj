@@ -36,4 +36,10 @@
       <ProjectReference Include="..\Delta\Delta.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="CodeGen">
+        <HintPath>CodeGen.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
