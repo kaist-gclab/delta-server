@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +13,7 @@ namespace Delta.AppServer.Test.Infrastructure
         private readonly string _databaseName;
         private readonly InMemoryDatabaseRoot _inMemoryDatabaseRoot;
 
-        public TestStartup(IConfiguration configuration, ITestOutputHelper testOutputHelper) : base(configuration)
+        public TestStartup(IConfiguration configuration, ITestOutputHelper testOutputHelper, IWebHostEnvironment env) : base(configuration, env)
         {
             _testOutputHelper = testOutputHelper;
             _databaseName = Guid.NewGuid().ToString();
