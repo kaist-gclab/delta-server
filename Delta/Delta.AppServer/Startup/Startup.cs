@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Text;
+using CodeGen.Web;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Core.Schedule;
 using Delta.AppServer.Core.Security;
@@ -113,6 +114,8 @@ public class Startup
 
         services.AddSingleton<ScheduleHelper>();
         services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
+    
+        services.AddCodeGen();
     }
 
     protected virtual void ConfigureDbContext(DbContextOptionsBuilder options)
