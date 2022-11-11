@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Processors
@@ -14,13 +15,14 @@ namespace Delta.AppServer.Processors
         }
 
         [HttpGet]
-        public IActionResult GetNodes()
+        public IEnumerable<ProcessorNode> GetNodes()
         {
-            return Ok(_processorService.GetProcessorNodes());
+            return _processorService.GetProcessorNodes();
         }
 
         [HttpPost("register")]
-        public IActionResult RegisterProcessorNode(RegisterProcessorNodeRequest registerProcessorNodeRequest)
+        public ActionResult<ProcessorNode> RegisterProcessorNode(
+            RegisterProcessorNodeRequest registerProcessorNodeRequest)
         {
             var node = _processorService.RegisterProcessorNode(registerProcessorNodeRequest);
             if (node == null)
