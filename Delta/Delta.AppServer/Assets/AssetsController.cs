@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,13 +19,13 @@ namespace Delta.AppServer.Assets
         }
 
         [HttpGet]
-        public IActionResult GetAssets()
+        public ActionResult<IEnumerable<Asset>> GetAssets()
         {
             return Ok(_assetMetadataService.GetAssets());
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
+        public async Task<ActionResult<Asset>> CreateAsset(CreateAssetRequest createAssetRequest)
         {
             if (createAssetRequest.CreateAssetTagRequest == null)
             {
@@ -43,7 +44,7 @@ namespace Delta.AppServer.Assets
         }
 
         [HttpGet("{id:long}")]
-        public async Task<IActionResult> GetAsset(long id)
+        public async Task<ActionResult<GetAssetResponse?>> GetAsset(long id)
         {
             var response = await _assetService.GetAsset(id);
             if (response == null)
