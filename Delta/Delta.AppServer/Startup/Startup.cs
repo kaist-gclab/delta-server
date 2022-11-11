@@ -117,6 +117,8 @@ public class Startup
         services.AddSingleton<ScheduleHelper>();
         services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
 
+        services.AddSingleton(new MonitoringConfig("", "", "", ""));
+
         if (_env.IsDevelopment())
         {
             services.AddCodeGen();
