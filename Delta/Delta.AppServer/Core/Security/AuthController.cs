@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    public IActionResult Login([FromBody] LoginRequest loginRequest)
+    public ActionResult<LoginResponse> Login([FromBody] LoginRequest loginRequest)
     {
         var user = _userService.Login(loginRequest.Username, loginRequest.Password);
         if (user == null)
