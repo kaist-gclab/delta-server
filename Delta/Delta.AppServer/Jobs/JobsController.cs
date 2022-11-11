@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CodeGen.Analysis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Jobs;
@@ -28,12 +29,13 @@ public class JobsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateJob(CreateJobRequest createJobRequest)
+    public ActionResult<Job> CreateJob(CreateJobRequest createJobRequest)
     {
         return Ok(_jobService.CreateJob(createJobRequest));
     }
 
     [HttpPost("executions/{jobExecutionId:long}/statuses")]
+    [Command]
     public IActionResult AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
