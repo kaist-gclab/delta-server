@@ -23,7 +23,7 @@ public class ScheduleHelperTest
     private static void TestComputeNext(Instant current, Duration interval, Instant next)
     {
         var helper = new ScheduleHelper(new FakeClock(current), DateTimeZoneProviders.Tzdb["Asia/Seoul"]);
-        var actual = helper.ComputeNext(interval);
+        var actual = helper.ComputeNext(interval, LocalTime.Midnight);
         Assert.Equal(next, actual);
     }
 }
