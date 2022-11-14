@@ -13,7 +13,7 @@ public class ScheduleHelper
         _dateTimeZone = dateTimeZone;
     }
 
-    public Instant ComputeNext(Duration interval)
+    public Instant ComputeNext(Duration interval, LocalTime offset)
     {
         if (interval == Duration.MaxValue)
         {
@@ -23,7 +23,7 @@ public class ScheduleHelper
         var current = _clock.GetCurrentInstant();
         current += Duration.FromSeconds(1);
 
-        var next = current.InZone(_dateTimeZone).Date.AtMidnight()
+        var next = current.InZone(_dateTimeZone).Date.At(offset)
             .InZoneLeniently(_dateTimeZone).ToInstant();
 
         for (;;)

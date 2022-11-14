@@ -2,12 +2,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NodaTime;
 
 namespace Delta.AppServer.Core.Schedule;
 
-public class ScopedScheduledHostedService<T> : HostedService
+public class ScopedScheduledHostedService<T> : BackgroundService
     where T : IScheduledTask
 {
     private readonly ILogger<ScopedScheduledHostedService<T>> _logger;
@@ -37,14 +38,18 @@ public class ScopedScheduledHostedService<T> : HostedService
 
                 try
                 {
-                    await service.DoWorkAsync();
+                    if (service.RunAtStartup || next != Instant.MinValue)
+                    {
+                        await service.DoWorkAsync();
+                    }
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, e.Message);
+                    var typeFullName = typeof(T).FullName;
+                    _logger.LogError(e, "ExecuteAsync {TypeFullName}", typeFullName);
                 }
 
-                next = _scheduleHelper.ComputeNext(service.Interval);
+                next = _scheduleHelper.ComputeNext(service.Interval, service.Offset);
             }
 
             if (next == Instant.MaxValue)
@@ -56,13 +61,13 @@ public class ScopedScheduledHostedService<T> : HostedService
             var delay = next.Minus(_clock.GetCurrentInstant());
             delay = Duration.Max(delay, Duration.Zero);
 
-            if (delay >= Duration.FromMinutes(5))
+            if (delay >= Duration.FromMinutes(10))
             {
-                delay -= Duration.FromMinutes(2);
+                delay -= Duration.FromMinutes(5);
             }
             else
             {
-                delay = Duration.Min(delay, Duration.FromSeconds(10));
+                delay = Duration.Min(delay, Duration.FromSeconds(30));
             }
 
             await Task.Delay(delay.ToTimeSpan(), cancellationToken);
