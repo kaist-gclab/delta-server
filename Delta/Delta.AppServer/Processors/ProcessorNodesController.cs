@@ -1,36 +1,35 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Delta.AppServer.Processors
+namespace Delta.AppServer.Processors;
+
+[ApiController]
+[Route(Delta.ApiRoot + "processor-nodes")]
+public class ProcessorNodesController : ControllerBase
 {
-    [ApiController]
-    [Route(Delta.ApiRoot + "processor-nodes")]
-    public class ProcessorNodesController : ControllerBase
+    private readonly ProcessorService _processorService;
+
+    public ProcessorNodesController(ProcessorService processorService)
     {
-        private readonly ProcessorService _processorService;
+        _processorService = processorService;
+    }
 
-        public ProcessorNodesController(ProcessorService processorService)
+    [HttpGet]
+    public IEnumerable<ProcessorNode> GetNodes()
+    {
+        return _processorService.GetProcessorNodes();
+    }
+
+    [HttpPost("register")]
+    public ActionResult<ProcessorNode> RegisterProcessorNode(
+        RegisterProcessorNodeRequest registerProcessorNodeRequest)
+    {
+        var node = _processorService.RegisterProcessorNode(registerProcessorNodeRequest);
+        if (node == null)
         {
-            _processorService = processorService;
+            return BadRequest();
         }
 
-        [HttpGet]
-        public IEnumerable<ProcessorNode> GetNodes()
-        {
-            return _processorService.GetProcessorNodes();
-        }
-
-        [HttpPost("register")]
-        public ActionResult<ProcessorNode> RegisterProcessorNode(
-            RegisterProcessorNodeRequest registerProcessorNodeRequest)
-        {
-            var node = _processorService.RegisterProcessorNode(registerProcessorNodeRequest);
-            if (node == null)
-            {
-                return BadRequest();
-            }
-
-            return Ok(node);
-        }
+        return Ok(node);
     }
 }

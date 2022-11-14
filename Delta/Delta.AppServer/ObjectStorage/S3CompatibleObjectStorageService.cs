@@ -4,113 +4,112 @@ using System.Threading;
 using System.Threading.Tasks;
 using Minio;
 
-namespace Delta.AppServer.ObjectStorage
+namespace Delta.AppServer.ObjectStorage;
+
+public class S3CompatibleObjectStorageService : IObjectStorageService
 {
-    public class S3CompatibleObjectStorageService : IObjectStorageService
+    private readonly ObjectStorageConfig _objectStorageConfig;
+    private readonly IObjectStorageKeyConverter _objectStorageKeyConverter;
+    private readonly MinioClient _client;
+
+    public S3CompatibleObjectStorageService(ObjectStorageConfig objectStorageConfig,
+        IObjectStorageKeyConverter objectStorageKeyConverter)
     {
-        private readonly ObjectStorageConfig _objectStorageConfig;
-        private readonly IObjectStorageKeyConverter _objectStorageKeyConverter;
-        private readonly MinioClient _client;
+        _objectStorageConfig = objectStorageConfig;
+        _objectStorageKeyConverter = objectStorageKeyConverter;
 
-        public S3CompatibleObjectStorageService(ObjectStorageConfig objectStorageConfig,
-            IObjectStorageKeyConverter objectStorageKeyConverter)
+        _client = new MinioClient(_objectStorageConfig.Endpoint,
+            _objectStorageConfig.AccessKey,
+            _objectStorageConfig.SecretKey);
+        if (_objectStorageConfig.Https)
         {
-            _objectStorageConfig = objectStorageConfig;
-            _objectStorageKeyConverter = objectStorageKeyConverter;
-
-            _client = new MinioClient(_objectStorageConfig.Endpoint,
-                _objectStorageConfig.AccessKey,
-                _objectStorageConfig.SecretKey);
-            if (_objectStorageConfig.Https)
-            {
-                _client = _client.WithSSL();
-            }
-
-            _client = _client.Build();
+            _client = _client.WithSSL();
         }
 
-        public Task<ulong> GetTotalSize()
+        _client = _client.Build();
+    }
+
+    public Task<ulong> GetTotalSize()
+    {
+        var s = new TaskCompletionSource<ulong>();
+        var objects = _client.ListObjectsAsync(_objectStorageConfig.Bucket);
+        ulong totalSize = 0;
+        objects.Subscribe(item => { totalSize += item.Size; }, 
+            () => { s.SetResult(totalSize); });
+        return s.Task;
+    }
+
+    public async Task Write(string key, byte[] content)
+    {
+        await EnsureBucketExists();
+
+        if (key == null || content == null)
         {
-            var s = new TaskCompletionSource<ulong>();
-            var objects = _client.ListObjectsAsync(_objectStorageConfig.Bucket);
-            ulong totalSize = 0;
-            objects.Subscribe(item => { totalSize += item.Size; }, 
-                () => { s.SetResult(totalSize); });
-            return s.Task;
+            throw new ArgumentNullException();
         }
 
-        public async Task Write(string key, byte[] content)
+        if (key == "")
         {
-            await EnsureBucketExists();
+            throw new ArgumentOutOfRangeException();
+        }
 
-            if (key == null || content == null)
-            {
+        var stream = new MemoryStream(content);
+        await _client.PutObjectAsync(_objectStorageConfig.Bucket,
+            _objectStorageKeyConverter.GetKey(key), stream, stream.Length);
+    }
+
+    public async Task<byte[]> Read(string key)
+    {
+        await EnsureBucketExists();
+
+        switch (key)
+        {
+            case null:
                 throw new ArgumentNullException();
-            }
-
-            if (key == "")
-            {
+            case "":
                 throw new ArgumentOutOfRangeException();
-            }
-
-            var stream = new MemoryStream(content);
-            await _client.PutObjectAsync(_objectStorageConfig.Bucket,
-                _objectStorageKeyConverter.GetKey(key), stream, stream.Length);
         }
 
-        public async Task<byte[]> Read(string key)
+        await using var memoryStream = new MemoryStream();
+        await _client.GetObjectAsync(_objectStorageConfig.Bucket,
+            _objectStorageKeyConverter.GetKey(key),
+            stream => { stream.CopyTo(memoryStream); });
+        return memoryStream.ToArray();
+    }
+
+    public async Task<string> GetPresignedUploadUrl(string key)
+    {
+        await EnsureBucketExists();
+        return await _client.PresignedPutObjectAsync(_objectStorageConfig.Bucket,
+            _objectStorageKeyConverter.GetKey(key), 86400);
+    }
+
+    public async Task<string> GetPresignedDownloadUrl(string key)
+    {
+        await EnsureBucketExists();
+        return await _client.PresignedGetObjectAsync(_objectStorageConfig.Bucket,
+            _objectStorageKeyConverter.GetKey(key), 86400);
+    }
+
+    private volatile bool _initialized;
+    private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1);
+
+    private async Task EnsureBucketExists()
+    {
+        if (_initialized == false)
         {
-            await EnsureBucketExists();
-
-            switch (key)
-            {
-                case null:
-                    throw new ArgumentNullException();
-                case "":
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            await using var memoryStream = new MemoryStream();
-            await _client.GetObjectAsync(_objectStorageConfig.Bucket,
-                _objectStorageKeyConverter.GetKey(key),
-                stream => { stream.CopyTo(memoryStream); });
-            return memoryStream.ToArray();
-        }
-
-        public async Task<string> GetPresignedUploadUrl(string key)
-        {
-            await EnsureBucketExists();
-            return await _client.PresignedPutObjectAsync(_objectStorageConfig.Bucket,
-                _objectStorageKeyConverter.GetKey(key), 86400);
-        }
-
-        public async Task<string> GetPresignedDownloadUrl(string key)
-        {
-            await EnsureBucketExists();
-            return await _client.PresignedGetObjectAsync(_objectStorageConfig.Bucket,
-                _objectStorageKeyConverter.GetKey(key), 86400);
-        }
-
-        private volatile bool _initialized;
-        private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1);
-
-        private async Task EnsureBucketExists()
-        {
+            await _initializationLock.WaitAsync();
             if (_initialized == false)
             {
-                await _initializationLock.WaitAsync();
-                if (_initialized == false)
+                if (!await _client.BucketExistsAsync(_objectStorageConfig.Bucket))
                 {
-                    if (!await _client.BucketExistsAsync(_objectStorageConfig.Bucket))
-                    {
-                        await _client.MakeBucketAsync(_objectStorageConfig.Bucket);
-                    }
-
-                    _initialized = true;
+                    await _client.MakeBucketAsync(_objectStorageConfig.Bucket);
                 }
 
-                _initializationLock.Release();
+                _initialized = true;
             }
+
+            _initializationLock.Release();
         }
     }
 }

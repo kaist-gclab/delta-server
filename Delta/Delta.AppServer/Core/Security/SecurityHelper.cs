@@ -1,12 +1,11 @@
 using System;
 
-namespace Delta.AppServer.Core.Security
+namespace Delta.AppServer.Core.Security;
+
+public static class SecurityHelper
 {
-    public static class SecurityHelper
+    public static string ToHexString(this byte[] bytes)
     {
-        public static string ToHexString(this byte[] bytes)
-        {
-            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
-        }
+        return BitConverter.ToString(bytes).Replace("-", "").ToLower();
     }
 }

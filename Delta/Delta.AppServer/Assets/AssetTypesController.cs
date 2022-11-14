@@ -1,30 +1,29 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Delta.AppServer.Assets
+namespace Delta.AppServer.Assets;
+
+[ApiController]
+[Route(Delta.ApiRoot + "asset-types")]
+public class AssetTypesController : ControllerBase
 {
-    [ApiController]
-    [Route(Delta.ApiRoot + "asset-types")]
-    public class AssetTypesController : ControllerBase
+    private readonly AssetMetadataService _assetMetadataService;
+
+    public AssetTypesController(AssetMetadataService assetMetadataService)
     {
-        private readonly AssetMetadataService _assetMetadataService;
+        _assetMetadataService = assetMetadataService;
+    }
 
-        public AssetTypesController(AssetMetadataService assetMetadataService)
-        {
-            _assetMetadataService = assetMetadataService;
-        }
+    [HttpGet]
+    public IEnumerable<AssetType> GetAssetTypes()
+    {
+        return _assetMetadataService.GetAssetTypes();
+    }
 
-        [HttpGet]
-        public IEnumerable<AssetType> GetAssetTypes()
-        {
-            return _assetMetadataService.GetAssetTypes();
-        }
-
-        [HttpPost]
-        public AssetType Create([FromBody] CreateAssetTypeRequest createAssetTypeRequest)
-        {
-            var assetType = _assetMetadataService.AddAssetType(createAssetTypeRequest.Key, createAssetTypeRequest.Name);
-            return assetType;
-        }
+    [HttpPost]
+    public AssetType Create([FromBody] CreateAssetTypeRequest createAssetTypeRequest)
+    {
+        var assetType = _assetMetadataService.AddAssetType(createAssetTypeRequest.Key, createAssetTypeRequest.Name);
+        return assetType;
     }
 }

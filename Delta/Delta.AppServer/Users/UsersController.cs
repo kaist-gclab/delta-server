@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Delta.AppServer.Users
+namespace Delta.AppServer.Users;
+
+[ApiController]
+[Route("users")]
+public class UsersController : ControllerBase
 {
-    [ApiController]
-    [Route("users")]
-    public class UsersController : ControllerBase
-    {
-    }
 }

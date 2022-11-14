@@ -1,7 +1,6 @@
-namespace Delta.AppServer.Encryption
+namespace Delta.AppServer.Encryption;
+
+public class CreateEncryptionKeyRequest
 {
-    public class CreateEncryptionKeyRequest
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }
