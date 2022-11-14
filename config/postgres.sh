@@ -21,4 +21,4 @@ docker run -d \
 --restart=unless-stopped \
 -v "$DELTA_POSTGRES_DATA_DIRECTORY:/var/lib/postgresql/data" \
 $INITDB \
-postgres:14
+postgres:15
