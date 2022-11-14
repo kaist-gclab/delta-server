@@ -5,25 +5,24 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Xunit.Abstractions;
 
-namespace Delta.AppServer.Test.Infrastructure
+namespace Delta.AppServer.Test.Infrastructure;
+
+public class TestStartup : Startup.Startup
 {
-    public class TestStartup : Startup.Startup
+    private readonly ITestOutputHelper _testOutputHelper;
+    private readonly string _databaseName;
+    private readonly InMemoryDatabaseRoot _inMemoryDatabaseRoot;
+
+    public TestStartup(IConfiguration configuration, ITestOutputHelper testOutputHelper, IWebHostEnvironment env) : base(configuration, env)
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-        private readonly string _databaseName;
-        private readonly InMemoryDatabaseRoot _inMemoryDatabaseRoot;
+        _testOutputHelper = testOutputHelper;
+        _databaseName = Guid.NewGuid().ToString();
+        _inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+    }
 
-        public TestStartup(IConfiguration configuration, ITestOutputHelper testOutputHelper, IWebHostEnvironment env) : base(configuration, env)
-        {
-            _testOutputHelper = testOutputHelper;
-            _databaseName = Guid.NewGuid().ToString();
-            _inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
-        }
-
-        protected override void ConfigureDbContext(DbContextOptionsBuilder options)
-        {
-            var builder = new TestDeltaDbContextOptionsBuilder(_testOutputHelper, _databaseName, _inMemoryDatabaseRoot);
-            builder.ConfigureDbContextOptionsBuilder(options);
-        }
+    protected override void ConfigureDbContext(DbContextOptionsBuilder options)
+    {
+        var builder = new TestDeltaDbContextOptionsBuilder(_testOutputHelper, _databaseName, _inMemoryDatabaseRoot);
+        builder.ConfigureDbContextOptionsBuilder(options);
     }
 }

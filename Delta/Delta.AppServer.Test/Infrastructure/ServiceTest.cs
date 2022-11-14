@@ -1,19 +1,18 @@
 using Xunit.Abstractions;
 
-namespace Delta.AppServer.Test.Infrastructure
+namespace Delta.AppServer.Test.Infrastructure;
+
+public abstract class ServiceTest
 {
-    public abstract class ServiceTest
+    protected ITestOutputHelper Output { get; }
+
+    protected ServiceTest(ITestOutputHelper output)
     {
-        protected ITestOutputHelper Output { get; }
+        Output = output;
+    }
 
-        protected ServiceTest(ITestOutputHelper output)
-        {
-            Output = output;
-        }
-
-        protected DeltaContext CreateDbContext()
-        {
-            return new DeltaContext(new TestDeltaDbContextOptionsBuilder(Output).Build());
-        }
+    protected DeltaContext CreateDbContext()
+    {
+        return new DeltaContext(new TestDeltaDbContextOptionsBuilder(Output).Build());
     }
 }
