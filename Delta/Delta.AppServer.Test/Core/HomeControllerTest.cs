@@ -36,7 +36,8 @@ public class HomeControllerTest : ControllerTest
         var response = await client.GetAsync("/api/1");
         response.EnsureSuccessStatusCode();
         var text = await response.Content.ReadAsStringAsync();
-        var actual = JsonConvert.DeserializeObject<HomeController.ApiHomeResponse>(text);
+        var actual = JsonConvert.DeserializeObject<ApiHomeResponse>(text);
+        Assert.NotNull(actual);
         Assert.Equal(Delta.ServiceName, actual.ServiceName);
         Assert.Equal(Delta.ApiVersion, actual.ApiVersion);
     }
