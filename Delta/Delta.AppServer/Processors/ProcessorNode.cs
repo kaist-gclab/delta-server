@@ -11,8 +11,8 @@ public class ProcessorNode
 {
     public long Id { get; set; }
     public long ProcessorVersionId { get; set; }
-    [Required] public string Key { get; set; }
-    public string Name { get; set; }
+    public string Key { get; set; }
+    public string? Name { get; set; }
 
     public virtual ICollection<ProcessorNodeCapability> ProcessorNodeCapabilities { get; set; } =
         new HashSet<ProcessorNodeCapability>();
@@ -58,10 +58,10 @@ public class ProcessorNode
         ProcessorNodeStatuses.Add(new ProcessorNodeStatus(timestamp, status, this));
     }
 
-    public virtual ICollection<JobExecution> JobExecutions { get; set; }
+    public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
 
     public virtual ICollection<ProcessorNodeStatus> ProcessorNodeStatuses { get; set; } =
         new HashSet<ProcessorNodeStatus>();
 
-    public virtual ICollection<Job> AssignedJobs { get; set; }
+    public virtual ICollection<Job> AssignedJobs { get; set; } = new HashSet<Job>();
 }
