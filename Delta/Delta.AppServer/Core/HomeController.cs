@@ -18,16 +18,8 @@ public class HomeController : ControllerBase
     [Route(Delta.ApiRoot)]
     public ApiHomeResponse ApiHome()
     {
-        return new ApiHomeResponse
-        {
-            ServiceName = Delta.ServiceName,
-            ApiVersion = Delta.ApiVersion
-        };
+        return new ApiHomeResponse(Delta.ServiceName, Delta.ApiVersion);
     }
 
-    public class ApiHomeResponse
-    {
-        public string ServiceName { get; set; }
-        public string ApiVersion { get; set; }
-    }
+    public record ApiHomeResponse(string ServiceName, string ApiVersion);
 }
