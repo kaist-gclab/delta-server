@@ -13,14 +13,11 @@ public class JobExecution
     public long JobId { get; set; }
     public long ProcessorNodeId { get; set; }
 
-    [Required] public virtual Job Job { get; set; }
-    [Required] public virtual ProcessorNode ProcessorNode { get; set; }
+    public virtual Job Job { get; set; }
+    public virtual ProcessorNode ProcessorNode { get; set; }
 
-    public virtual ICollection<Asset> ResultAssets { get; set; }
-        = new HashSet<Asset>();
-
-    public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; } =
-        new HashSet<JobExecutionStatus>();
+    public virtual ICollection<Asset> ResultAssets { get; set; } = new HashSet<Asset>();
+    public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; } = new HashSet<JobExecutionStatus>();
 
     public void AddStatus(Instant timestamp, string status)
     {
