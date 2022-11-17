@@ -20,6 +20,4 @@ public class HomeController : ControllerBase
     {
         return new ApiHomeResponse(Delta.ServiceName, Delta.ApiVersion);
     }
-
-    public record ApiHomeResponse(string ServiceName, string ApiVersion);
 }
