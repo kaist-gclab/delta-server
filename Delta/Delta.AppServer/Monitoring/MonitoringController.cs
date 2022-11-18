@@ -16,7 +16,7 @@ public class MonitoringController
     }
 
     [HttpGet]
-    public List<object> GetStats()
+    public IEnumerable<MonitoringServiceEvent> GetStats()
     {
         return _monitoringService.GetEvents().TakeLast(20).ToList();
     }
