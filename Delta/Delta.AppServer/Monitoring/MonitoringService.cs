@@ -10,7 +10,7 @@ namespace Delta.AppServer.Monitoring;
 
 public class MonitoringService
 {
-    private static readonly List<object> InMemoryStore = new();
+    private static readonly List<MonitoringServiceEvent> InMemoryStore = new();
     private readonly MonitoringConfig _monitoringConfig;
     private readonly IClock _clock;
 
@@ -43,21 +43,16 @@ public class MonitoringService
             "|> aggregateWindow(every: 15m, fn: mean)", _monitoringConfig.Organization);
     }
 
-
     public void AddEvent(Instant eventTimestamp, string content)
     {
         lock (typeof(MonitoringService))
         {
-            InMemoryStore.Add(new
-            {
-                EventTimestamp = eventTimestamp,
-                StatsTimestamp = _clock.GetCurrentInstant(),
-                Content = content
-            });
+            InMemoryStore.Add(new MonitoringServiceEvent(eventTimestamp, _clock.GetCurrentInstant(), content));
         }
     }
 
-    public IEnumerable<object> GetEvents()
+
+    public IEnumerable<MonitoringServiceEvent> GetEvents()
     {
         lock (typeof(MonitoringService))
         {
