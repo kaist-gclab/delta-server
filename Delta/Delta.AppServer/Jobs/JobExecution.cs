@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
 using NodaTime;
