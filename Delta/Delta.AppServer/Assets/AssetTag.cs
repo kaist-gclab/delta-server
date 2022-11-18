@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Delta.AppServer.Assets;
 
 public class AssetTag
