@@ -68,7 +68,7 @@ public class UserService
             return;
         }
 
-        var user = GetUserByUsername(username);
+        var user = await GetUserByUsername(username);
         user?.ChangePassword(newPassword);
         await _context.SaveChangesAsync();
     }
