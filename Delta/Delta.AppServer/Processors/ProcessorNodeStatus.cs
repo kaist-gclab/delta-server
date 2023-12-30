@@ -5,19 +5,6 @@ namespace Delta.AppServer.Processors;
 
 public class ProcessorNodeStatus
 {
-    public ProcessorNodeStatus(Instant timestamp, string status, ProcessorNode processorNode)
-    {
-        Timestamp = timestamp;
-        Status = status;
-        _processorNode = processorNode;
-    }
-
-    protected ProcessorNodeStatus(Instant timestamp, string status)
-    {
-        Timestamp = timestamp;
-        Status = status;
-    }
-
     public long Id { get; set; }
     public Instant Timestamp { get; set; }
     public string Status { get; set; }
