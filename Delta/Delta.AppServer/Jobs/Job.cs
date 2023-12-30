@@ -8,8 +8,8 @@ namespace Delta.AppServer.Jobs;
 public class Job
 {
     public long Id { get; set; }
-    public string JobArguments { get; set; }
     public Instant CreatedAt { get; set; }
+    public required string JobArguments { get; set; }
     public long? AssignedProcessorNodeId { get; set; }
 
     public virtual JobType JobType { get; set; }
