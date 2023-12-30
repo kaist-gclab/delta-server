@@ -45,7 +45,7 @@ public class UserService
             select u;
         if (duplicates.Any())
         {
-            return null;
+            return;
         }
 
         var user = new User
