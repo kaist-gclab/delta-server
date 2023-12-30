@@ -35,7 +35,7 @@ public class UserService
     {
         if (username == _authConfig.AdminUsername)
         {
-            return null;
+            return;
         }
 
         await using var trx = await _context.Database.BeginTransactionAsync();
