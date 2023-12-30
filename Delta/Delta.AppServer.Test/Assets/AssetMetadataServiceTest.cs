@@ -45,14 +45,6 @@ public class AssetMetadataServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
-        context.SaveChanges();
-        service.UpdateAssetTag(assetA, "a", "b");
-        service.UpdateAssetTag(assetA, "z", "b");
-        service.UpdateAssetTag(assetA, "c", "d");
-        service.UpdateAssetTag(assetB, "a", "b");
-        service.UpdateAssetTag(assetB, "e", "f");
-        service.UpdateAssetTag(assetB, "z", "p");
-    
         var assetType = context.Add(new AssetType
         {
             Key = "k",
@@ -74,6 +66,15 @@ public class AssetMetadataServiceTest : ServiceTest
             AssetType = assetType,
             ParentJobExecution = null
         }).Entity;
+        await context.SaveChangesAsync();
+
+        await service.UpdateAssetTag(assetA.Id, "a", "b");
+        await service.UpdateAssetTag(assetA.Id, "z", "b");
+        await service.UpdateAssetTag(assetA.Id, "c", "d");
+        await service.UpdateAssetTag(assetB.Id, "a", "b");
+        await service.UpdateAssetTag(assetB.Id, "e", "f");
+        await service.UpdateAssetTag(assetB.Id, "z", "p");
+
         Assert.Equal(6, context.AssetTags.Count());
         Assert.Equal(2, service.FindByAssetTag("a", null).Count());
         Assert.Equal(2, service.FindByAssetTag("a", "b").Count());
