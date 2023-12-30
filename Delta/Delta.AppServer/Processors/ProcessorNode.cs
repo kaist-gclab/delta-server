@@ -10,7 +10,7 @@ public class ProcessorNode
 {
     public long Id { get; set; }
     public long ProcessorVersionId { get; set; }
-    public string Key { get; set; }
+    public required string Key { get; set; }
     public string? Name { get; set; }
 
     public virtual ICollection<ProcessorNodeCapability> ProcessorNodeCapabilities { get; set; } =
