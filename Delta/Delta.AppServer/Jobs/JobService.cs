@@ -140,6 +140,12 @@ public class JobService
     {
         foreach (var cap in capabilities)
         {
+            if (job.InputAsset == null)
+            {
+                // TODO
+                continue;
+            }
+
             if (job.InputAsset.MediaType != cap.MediaType ||
                 job.JobType != cap.JobType)
             {
