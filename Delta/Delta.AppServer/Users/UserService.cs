@@ -38,7 +38,7 @@ public class UserService
             return null;
         }
 
-        using var trx = _context.Database.BeginTransaction();
+        await using var trx = await _context.Database.BeginTransactionAsync();
 
         var duplicates = from u in _context.Users
             where u.Username == username
