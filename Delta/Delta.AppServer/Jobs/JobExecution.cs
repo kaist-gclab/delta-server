@@ -9,7 +9,6 @@ namespace Delta.AppServer.Jobs;
 public class JobExecution
 {
     public long Id { get; set; }
-    public long ProcessorNodeId { get; set; }
 
     public virtual Job Job { get; set; }
     public virtual ProcessorNode ProcessorNode { get; set; }
