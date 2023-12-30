@@ -11,11 +11,10 @@ public class ObjectStorageConfig
     {
         _configuration = configuration;
     }
-        
-        
-    public string Endpoint => _configuration["ObjectStorage:Endpoint"];
     public string AccessKey => _configuration["ObjectStorage:AccessKey"];
     public string SecretKey => _configuration["ObjectStorage:SecretKey"];
     public string Bucket => _configuration["ObjectStorage:Bucket"];
     public bool Https => bool.Parse(_configuration["ObjectStorage:Https"]);
+    public string Endpoint => _configuration["ObjectStorage:Endpoint"] ??
+                              throw new InvalidOperationException();
 }
