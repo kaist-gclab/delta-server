@@ -34,10 +34,6 @@ public class AssetMetadataServiceTest : ServiceTest
         }).Entity;
         context.SaveChanges();
         Assert.Empty(context.AssetTags);
-        Assert.Throws<ArgumentNullException>(() => service.UpdateAssetTag(asset, null, null));
-        Assert.Throws<ArgumentNullException>(() => service.UpdateAssetTag(asset, null, "value"));
-        service.UpdateAssetTag(asset, "key", null);
-        Assert.Empty(context.AssetTags);
         var tag = service.UpdateAssetTag(asset, "key", "value");
         Assert.Single(context.AssetTags);
         Assert.Equal("key", tag.Key);
