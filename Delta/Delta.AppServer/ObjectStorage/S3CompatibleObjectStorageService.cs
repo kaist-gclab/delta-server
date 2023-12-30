@@ -104,7 +104,7 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
             {
                 if (!await _client.BucketExistsAsync(new BucketExistsArgs().WithBucket(_objectStorageConfig.Bucket)))
                 {
-                    await _client.MakeBucketAsync(_objectStorageConfig.Bucket);
+                    await _client.MakeBucketAsync(new MakeBucketArgs().WithBucket(_objectStorageConfig.Bucket));
                 }
 
                 _initialized = true;
