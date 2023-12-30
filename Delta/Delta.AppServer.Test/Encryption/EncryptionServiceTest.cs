@@ -67,7 +67,6 @@ public class EncryptionServiceTest : ServiceTest
     }
     */
 
-    /*
     [Fact]
     public void GetEncryptionKey()
     {
@@ -78,7 +77,6 @@ public class EncryptionServiceTest : ServiceTest
         Assert.Equal(a.Id, service.GetEncryptionKey("a").Id);
         Assert.Equal(b.Id, service.GetEncryptionKey("b").Id);
     }
-    */
 
     /*
     [Fact]
