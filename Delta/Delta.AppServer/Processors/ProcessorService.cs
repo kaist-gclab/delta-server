@@ -17,7 +17,7 @@ public class ProcessorService
         _clock = clock;
     }
 
-    public ProcessorNode? GetNode(long id) => _context.ProcessorNodes.Find(id);
+    public async Task<ProcessorNode?> GetNode(long id) => await _context.ProcessorNodes.FindAsync(id);
 
     public ProcessorNode RegisterProcessorNode(RegisterProcessorNodeRequest request)
     {
