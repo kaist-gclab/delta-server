@@ -20,7 +20,7 @@ public class JobService
 
     public IQueryable<JobType> GetJobTypes() => _context.JobTypes;
 
-    public Job CreateJob(CreateJobRequest createJobRequest)
+    public async Task<Job> CreateJob(CreateJobRequest createJobRequest)
     {
         if (createJobRequest.JobArguments == null)
         {
