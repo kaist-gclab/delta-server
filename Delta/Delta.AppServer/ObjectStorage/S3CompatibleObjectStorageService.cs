@@ -88,8 +88,11 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
     public async Task<string> GetPresignedDownloadUrl(string key)
     {
         await EnsureBucketExists();
-        return await _client.PresignedGetObjectAsync(_objectStorageConfig.Bucket,
-            _objectStorageKeyConverter.GetKey(key), 86400);
+        return await _client.PresignedGetObjectAsync(
+            new PresignedGetObjectArgs()
+                .WithBucket(_objectStorageConfig.Bucket)
+                .WithObject(_objectStorageKeyConverter.GetKey(key))
+                .WithExpiry(86400));
     }
 
     private volatile bool _initialized;
