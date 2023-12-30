@@ -77,7 +77,11 @@ public class UserService
     {
         if (username == _authConfig.AdminUsername)
         {
-            return new User(_authConfig.AdminUsername, _authConfig.AdminUsername);
+            return new User
+            {
+                Name = _authConfig.AdminUsername,
+                Username = _authConfig.AdminUsername
+            };
         }
 
         return (from u in _context.Users
