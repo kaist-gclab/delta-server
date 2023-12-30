@@ -22,13 +22,15 @@ public class EncryptionKeysController : ControllerBase
     }
 
     [HttpPost]
-    public CreateEncryptionKeyResponse Create([FromBody] CreateEncryptionKeyRequest createEncryptionKeyRequest)
+    public async Task<ActionResult<CreateEncryptionKeyResponse>> Create(
+        [FromBody] CreateEncryptionKeyRequest createEncryptionKeyRequest)
     {
-        var key = _encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
-        return new CreateEncryptionKeyResponse
+        var response = await _encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
+        if (response == null)
         {
-            EncryptionKey = key,
-            Value = key.Value
-        };
+            return BadRequest();
+        }
+
+        return Ok(response);
     }
 }
