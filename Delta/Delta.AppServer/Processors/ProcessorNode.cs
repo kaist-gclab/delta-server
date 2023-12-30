@@ -41,7 +41,13 @@ public class ProcessorNode
 
         foreach (var (jobType, assetType, mediaType) in adding.ToList())
         {
-            ProcessorNodeCapabilities.Add(new ProcessorNodeCapability(mediaType, this, jobType, assetType));
+            ProcessorNodeCapabilities.Add(new ProcessorNodeCapability
+            {
+                MediaType = mediaType,
+                ProcessorNode = this,
+                JobType = jobType,
+                AssetType = assetType
+            });
         }
     }
 
