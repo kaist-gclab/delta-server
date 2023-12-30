@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
+using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 namespace Delta.AppServer.Jobs;
@@ -52,7 +53,11 @@ public class JobService
     {
         await using var trx = await _context.Database.BeginTransactionAsync();
 
-        var processorNode = await _context.ProcessorNodes.FindAsync(jobScheduleRequest.ProcessorNodeId);
+        var processorNodeQuery = from n in _context.ProcessorNodes
+                .Include(n => n.ProcessorNodeCapabilities)
+            where n.Id == jobScheduleRequest.ProcessorNodeId
+            select n;
+        var processorNode = await processorNodeQuery.FirstOrDefaultAsync();
         if (processorNode == null)
         {
             return null;
