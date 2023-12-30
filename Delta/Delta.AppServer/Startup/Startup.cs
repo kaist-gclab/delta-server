@@ -121,7 +121,7 @@ public class Startup
 
         if (_env.IsDevelopment())
         {
-            services.AddCodeGen();
+            services.AddCodeGen(true);
         }
     }
 
