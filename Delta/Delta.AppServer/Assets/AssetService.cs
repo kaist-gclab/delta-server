@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
 using NodaTime;
 
@@ -24,12 +25,19 @@ public class AssetService
         {
             return;
         }
+
+        var parentJobExecution = await _context.FindAsync<JobExecution>(createAssetRequest.ParentJobExecutionId);
+        if (parentJobExecution == null)
+        {
+            return;
+        }
+
         var asset = new Asset
         {
             StoreKey = createAssetRequest.StoreKey, //
             AssetType = assetType,
             EncryptionKeyId = createAssetRequest.EncryptionKeyId,
-            ParentJobExecutionId = createAssetRequest.ParentJobExecutionId,
+            ParentJobExecution = parentJobExecution,
             MediaType = createAssetRequest.MediaType,
             CreatedAt = _clock.GetCurrentInstant()
         };
