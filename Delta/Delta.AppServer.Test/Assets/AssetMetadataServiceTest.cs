@@ -24,7 +24,14 @@ public class AssetMetadataServiceTest : ServiceTest
             Key = "k",
             Name = "n"
         }).Entity;
-        var asset = context.Add(new Asset()).Entity;
+        var asset = context.Add(new Asset
+        {
+            MediaType = "text/plain",
+            StoreKey = "a",
+            CreatedAt = default,
+            AssetType = assetType,
+            ParentJobExecution = null
+        }).Entity;
         context.SaveChanges();
         Assert.Empty(context.AssetTags);
         Assert.Throws<ArgumentNullException>(() => service.UpdateAssetTag(asset, null, null));
