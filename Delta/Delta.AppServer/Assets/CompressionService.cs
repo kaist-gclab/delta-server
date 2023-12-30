@@ -18,13 +18,13 @@ public class CompressionService
         return outputStream.ToArray();
     }
 
-    public byte[] Decompress(byte[] data)
+    public async Task<byte[]> Decompress(byte[] data)
     {
-        using var inputStream = new MemoryStream(data);
-        using var outputStream = new MemoryStream();
-        using (var compressionStream = new GZipStream(inputStream, CompressionMode.Decompress))
+        await using var inputStream = new MemoryStream(data);
+        await using var outputStream = new MemoryStream();
+        await using (var compressionStream = new GZipStream(inputStream, CompressionMode.Decompress))
         {
-            compressionStream.CopyTo(outputStream);
+            await compressionStream.CopyToAsync(outputStream);
         }
 
         return outputStream.ToArray();
