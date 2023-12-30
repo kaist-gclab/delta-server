@@ -10,8 +10,8 @@ public class JobExecution
 {
     public long Id { get; set; }
 
-    public virtual ProcessorNode ProcessorNode { get; set; }
     public virtual required Job Job { get; set; }
+    public virtual required ProcessorNode ProcessorNode { get; set; }
 
     public virtual ICollection<Asset> ResultAssets { get; set; } = new HashSet<Asset>();
     public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; } = new HashSet<JobExecutionStatus>();
