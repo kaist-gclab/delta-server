@@ -17,7 +17,7 @@ public class AssetService
         _objectStorageService = objectStorageService;
     }
 
-    public async Task<Asset> AddAsset(CreateAssetRequest createAssetRequest)
+    public async Task AddAsset(CreateAssetRequest createAssetRequest)
     {
         var assetType = await _context.FindAsync<AssetType>(createAssetRequest.AssetTypeId);
         if (assetType == null)
@@ -39,9 +39,8 @@ public class AssetService
             asset.UpdateAssetTag(key, value);
         }
 
-        asset = (await _context.AddAsync(asset)).Entity;
+        await _context.AddAsync(asset);
         await _context.SaveChangesAsync();
-        return asset;
     }
 
     private async Task<string> GetPresignedDownloadUrl(Asset asset)
