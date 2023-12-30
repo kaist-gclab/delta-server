@@ -9,7 +9,6 @@ namespace Delta.AppServer.Assets;
 public class Asset
 {
     public long Id { get; set; }
-    public long AssetTypeId { get; set; }
     public long? EncryptionKeyId { get; set; }
     public string MediaType { get; set; }
     public string StoreKey { get; set; }
