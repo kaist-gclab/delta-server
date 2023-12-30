@@ -10,8 +10,7 @@ public class EncryptionServiceTest : ServiceTest
     public EncryptionServiceTest(ITestOutputHelper output) : base(output)
     {
     }
-
-    /*
+    
     [Fact]
     public void AddEncryptionKey()
     {
@@ -27,7 +26,6 @@ public class EncryptionServiceTest : ServiceTest
         service.AddEncryptionKey("B");
         Assert.Equal(2, context.EncryptionKeys.Count());
     }
-    */
 
     [Fact]
     public void GetEncryptionKeys()
