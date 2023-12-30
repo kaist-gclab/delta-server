@@ -60,7 +60,12 @@ public class ProcessorNode
             throw new Exception();
         }
 
-        ProcessorNodeStatuses.Add(new ProcessorNodeStatus(timestamp, status, this));
+        ProcessorNodeStatuses.Add(new ProcessorNodeStatus
+        {
+            Timestamp = timestamp,
+            Status = status,
+            ProcessorNode = this,
+        });
     }
 
     public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
