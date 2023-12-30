@@ -93,7 +93,7 @@ public class JobService
         trx.Commit();
         return new JobScheduleResponse(jobExecution);
 
-        Job GetFirstJob()
+        Job? GetFirstJob()
         {
             foreach (var j in availableJobs)
             {
