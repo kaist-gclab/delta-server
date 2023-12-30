@@ -36,7 +36,7 @@ public class EncryptionService
         await using var trx = await _context.Database.BeginTransactionAsync();
         if (_context.EncryptionKeys.Any(k => k.Name == name))
         {
-            throw new Exception();
+            return null;
         }
 
         if (string.IsNullOrEmpty(name))
