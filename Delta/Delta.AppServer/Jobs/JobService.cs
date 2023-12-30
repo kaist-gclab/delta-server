@@ -90,7 +90,7 @@ public class JobService
         processorNode.AddNodeStatus(now, PredefinedProcessorNodeStatuses.Busy);
 
         _context.SaveChanges();
-        trx.Commit();
+        await trx.CommitAsync();
         return new JobScheduleResponse(jobExecution);
 
         Job? GetFirstJob()
