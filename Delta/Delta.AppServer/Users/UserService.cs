@@ -57,7 +57,7 @@ public class UserService
 
         user = _context.Add(user).Entity;
         _context.SaveChanges();
-        trx.Commit();
+        await trx.CommitAsync();
         return user;
     }
 
