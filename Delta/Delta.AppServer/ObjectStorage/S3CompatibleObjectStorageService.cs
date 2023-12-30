@@ -72,9 +72,11 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
         }
 
         await using var memoryStream = new MemoryStream();
-        await _client.GetObjectAsync(_objectStorageConfig.Bucket,
-            _objectStorageKeyConverter.GetKey(key),
-            stream => { stream.CopyTo(memoryStream); });
+        await _client.GetObjectAsync(
+            new GetObjectArgs()
+                .WithBucket(_objectStorageConfig.Bucket)
+                .WithObject(_objectStorageKeyConverter.GetKey(key))
+                .WithCallbackStream(stream => { stream.CopyTo(memoryStream); }));
         return memoryStream.ToArray();
     }
 
