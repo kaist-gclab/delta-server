@@ -28,6 +28,13 @@ public class JobService
         {
             return;
         }
+
+        var jobType = await _context.FindAsync<JobType>(createJobRequest.JobTypeId);
+        if (jobType == null)
+        {
+            return;
+        }
+
         var job = new Job
         {
             InputAssetId = createJobRequest.InputAssetId,
