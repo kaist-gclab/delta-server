@@ -90,9 +90,15 @@ public class EncryptionServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        var a = service.AddEncryptionKey("a");
-        Assert.False(service.GetEncryptionKey("a").Enabled);
-        service.EnableKey(a);
-        Assert.True(service.GetEncryptionKey("a").Enabled);
+        var response = await service.AddEncryptionKey(new CreateEncryptionKeyRequest("a"));
+        Assert.NotNull(response);
+        Assert.False(response.EncryptionKey.Enabled);
+        var a = await service.GetEncryptionKey("a");
+        Assert.NotNull(a);
+        Assert.False(a.Enabled);
+        await service.EnableKey(a.Id);
+        a = await service.GetEncryptionKey("a");
+        Assert.NotNull(a);
+        Assert.True(a.Enabled);
     }
 }
