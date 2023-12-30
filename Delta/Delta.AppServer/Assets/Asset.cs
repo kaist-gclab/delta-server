@@ -14,7 +14,7 @@ public class Asset
     public required string StoreKey { get; set; }
     public required Instant CreatedAt { get; set; }
 
-    public virtual AssetType AssetType { get; set; }
+    public virtual required AssetType AssetType { get; set; }
 
     public virtual EncryptionKey? EncryptionKey { get; set; }
 
