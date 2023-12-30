@@ -128,7 +128,7 @@ public class JobService
         var jobExecution = await _context.JobExecutions.FindAsync(jobExecutionId);
         if (jobExecution == null)
         {
-            throw new Exception();
+            return;
         }
 
         jobExecution.AddStatus(_clock.GetCurrentInstant(),
