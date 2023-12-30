@@ -74,11 +74,11 @@ public class EncryptionService
         return nonce.Concat(cipherData).Concat(tag).ToArray();
     }
 
-    public byte[] Decrypt(EncryptionKey encryptionKey, byte[] cipherData)
+    public byte[]? Decrypt(EncryptionKey encryptionKey, byte[] cipherData)
     {
         if (!encryptionKey.Enabled)
         {
-            throw new Exception();
+            return null;
         }
 
         var nonce = new ArraySegment<byte>(cipherData, 0, AesGcm.NonceByteSizes.MaxSize);
