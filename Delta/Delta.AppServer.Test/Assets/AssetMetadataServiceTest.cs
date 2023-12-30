@@ -76,14 +76,14 @@ public class AssetMetadataServiceTest : ServiceTest
         await service.UpdateAssetTag(assetB.Id, "z", "p");
 
         Assert.Equal(6, context.AssetTags.Count());
-        Assert.Equal(2, service.FindByAssetTag("a", null).Count());
-        Assert.Equal(2, service.FindByAssetTag("a", "b").Count());
-        Assert.Equal(2, service.FindByAssetTag(null, "b").Count());
-        Assert.Equal(2, service.FindByAssetTag("z", null).Count());
-        Assert.Single(service.FindByAssetTag("z", "b"));
-        Assert.Single(service.FindByAssetTag("z", "p"));
-        Assert.Single(service.FindByAssetTag("e", "f"));
-        Assert.Empty(service.FindByAssetTag("k", "f"));
         Assert.Throws<ArgumentNullException>(() => service.FindByAssetTag(null, null));
+        Assert.Equal(2, (await service.FindByAssetTag("a", null)).Count());
+        Assert.Equal(2, (await service.FindByAssetTag("a", "b")).Count());
+        Assert.Equal(2, (await service.FindByAssetTag(null, "b")).Count());
+        Assert.Equal(2, (await service.FindByAssetTag("z", null)).Count());
+        Assert.Single(await service.FindByAssetTag("z", "b"));
+        Assert.Single(await service.FindByAssetTag("z", "p"));
+        Assert.Single(await service.FindByAssetTag("e", "f"));
+        Assert.Empty(await service.FindByAssetTag("k", "f"));
     }
 }
