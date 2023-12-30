@@ -17,11 +17,10 @@ public class JobsController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Job> GetJobs()
+    public async Task<IEnumerable<Job>> GetJobs()
     {
-        return _jobService.GetJobs();
+        return await _jobService.GetJobs();
     }
-            
 
     [HttpPost("schedule")]
     public JobScheduleResponse Schedule(JobScheduleRequest jobScheduleRequest)
