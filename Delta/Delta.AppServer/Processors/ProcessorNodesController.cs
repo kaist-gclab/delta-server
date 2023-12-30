@@ -16,9 +16,9 @@ public class ProcessorNodesController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<ProcessorNode> GetNodes()
+    public async Task<IEnumerable<ProcessorNode>> GetNodes()
     {
-        return _processorService.GetProcessorNodes();
+        return await _processorService.GetProcessorNodes();
     }
 
     [HttpPost("register")]
