@@ -47,7 +47,11 @@ public class UserService
             return null;
         }
 
-        var user = new User(name, username);
+        var user = new User
+        {
+            Name = name,
+            Username = username
+        };
         user.ChangePassword(password);
 
         user = _context.Add(user).Entity;
