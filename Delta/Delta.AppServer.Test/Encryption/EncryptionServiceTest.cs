@@ -38,20 +38,22 @@ public class EncryptionServiceTest : ServiceTest
     }
 
     [Fact]
-    public void EncryptAndDecrypt()
+    public async Task EncryptAndDecrypt()
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        service.AddEncryptionKey("A");
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A"));
         var a = service.GetEncryptionKeys().First();
         var data = Encoding.UTF8.GetBytes("Delta_KqKsqvE4_테스트_WZLUI2m0_데이터");
-        Assert.Throws<Exception>(() => { service.Encrypt(a, data); });
+        Assert.Null(service.Encrypt(a, data));
         a.Enabled = true;
         var encrypted = service.Encrypt(a, data);
+        Assert.NotNull(encrypted);
         a.Enabled = false;
-        Assert.Throws<Exception>(() => { service.Decrypt(a, encrypted); });
+        Assert.Null(service.Decrypt(a, encrypted));
         a.Enabled = true;
         var decrypted = service.Decrypt(a, encrypted);
+        Assert.NotNull(decrypted);
 
         Assert.NotSame(data, encrypted);
         Assert.NotSame(data, decrypted);
