@@ -132,4 +132,16 @@ public class EncryptionService
             iterationCount: 10000,
             numBytesRequested: 256 / 8);
     }
+
+    public async Task EnableKey(long encryptionKeyId)
+    {
+        var key = await _context.EncryptionKeys.FindAsync(encryptionKeyId);
+        if (key == null)
+        {
+            return;
+        }
+
+        key.Enabled = true;
+        await _context.SaveChangesAsync();
+    }
 }
