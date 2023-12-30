@@ -88,7 +88,13 @@ public class EncryptionService
             AesGcm.NonceByteSizes.MaxSize + dataLength, AesGcm.TagByteSizes.MaxSize);
         var plainText = new byte[data.Count];
 
-        using var aes = new AesGcm(GetKey(encryptionKey, _salt));
+        var key = GetKey(encryptionKey, _salt);
+        if (key == null)
+        {
+            return null;
+        }
+
+        using var aes = new AesGcm(key);
         aes.Decrypt(nonce, data, tag, plainText);
 
         return plainText;
