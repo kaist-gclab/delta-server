@@ -33,9 +33,10 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
     public Task<ulong> GetTotalSize()
     {
         var s = new TaskCompletionSource<ulong>();
-        var objects = _client.ListObjectsAsync(_objectStorageConfig.Bucket);
+        var objects = _client.ListObjectsAsync(
+            new ListObjectsArgs().WithBucket(_objectStorageConfig.Bucket));
         ulong totalSize = 0;
-        objects.Subscribe(item => { totalSize += item.Size; }, 
+        objects.Subscribe(item => { totalSize += item.Size; },
             () => { s.SetResult(totalSize); });
         return s.Task;
     }
