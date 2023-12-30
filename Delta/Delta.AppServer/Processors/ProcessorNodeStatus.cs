@@ -6,7 +6,6 @@ namespace Delta.AppServer.Processors;
 public class ProcessorNodeStatus
 {
     public long Id { get; set; }
-    public string Status { get; set; }
 
     private ProcessorNode? _processorNode;
 
@@ -16,4 +15,5 @@ public class ProcessorNodeStatus
         set => _processorNode = value;
     }
     public required Instant Timestamp { get; set; }
+    public required string Status { get; set; }
 }
