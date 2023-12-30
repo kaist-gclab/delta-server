@@ -19,6 +19,11 @@ public class AssetMetadataServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
+        var assetType = context.Add(new AssetType
+        {
+            Key = "k",
+            Name = "n"
+        }).Entity;
         var asset = context.Add(new Asset()).Entity;
         context.SaveChanges();
         Assert.Empty(context.AssetTags);
