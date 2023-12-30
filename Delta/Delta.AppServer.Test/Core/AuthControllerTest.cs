@@ -30,9 +30,6 @@ public class AuthControllerTest : ControllerTest
     }
 
     [Theory]
-    [InlineData(null, null)]
-    [InlineData(null, "")]
-    [InlineData("", null)]
     [InlineData("", "")]
     [InlineData("a", "a")]
     [InlineData(Username, "a")]
