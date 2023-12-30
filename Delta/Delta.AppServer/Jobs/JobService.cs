@@ -22,11 +22,6 @@ public class JobService
 
     public async Task CreateJob(CreateJobRequest createJobRequest)
     {
-        if (createJobRequest.JobArguments == null)
-        {
-            throw new Exception();
-        }
-
         var job = new Job
         {
             InputAssetId = createJobRequest.InputAssetId,
