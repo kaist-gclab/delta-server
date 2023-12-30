@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Delta.AppServer.Core.Security;
+using Microsoft.EntityFrameworkCore;
 
 namespace Delta.AppServer.Users;
 
