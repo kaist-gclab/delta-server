@@ -7,7 +7,7 @@ namespace Delta.AppServer.Encryption;
 public class EncryptionKey
 {
     public long Id { get; set; }
-    public string Name { get; set; }
+    public required string Name { get; set; }
     [JsonIgnore] public string? Value { get; set; }
     public bool Enabled { get; set; }
 
