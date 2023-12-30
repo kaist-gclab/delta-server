@@ -60,7 +60,7 @@ public class UserService
         await trx.CommitAsync();
     }
 
-    public void ChangePassword(string username, string newPassword)
+    public async Task ChangePassword(string username, string newPassword)
     {
         if (username == _authConfig.AdminUsername)
         {
@@ -69,7 +69,7 @@ public class UserService
 
         var user = GetUserByUsername(username);
         user?.ChangePassword(newPassword);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public string GetRole(User user)
