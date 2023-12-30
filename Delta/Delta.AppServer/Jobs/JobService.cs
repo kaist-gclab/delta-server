@@ -48,7 +48,7 @@ public class JobService
         await _context.SaveChangesAsync();
     }
 
-    public JobScheduleResponse ScheduleNextJob(JobScheduleRequest jobScheduleRequest)
+    public async Task<JobScheduleResponse> ScheduleNextJob(JobScheduleRequest jobScheduleRequest)
     {
         using var trx = _context.Database.BeginTransaction();
 
