@@ -28,7 +28,7 @@ public class EncryptionService
         _context = context;
     }
 
-    public EncryptionKey AddEncryptionKey(CreateEncryptionKeyRequest createEncryptionKeyRequest)
+    public async Task<CreateEncryptionKeyResponse?> AddEncryptionKey(CreateEncryptionKeyRequest createEncryptionKeyRequest)
     {
         var name = createEncryptionKeyRequest.Name;
 
