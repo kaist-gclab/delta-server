@@ -38,8 +38,7 @@ public class AssetMetadataServiceTest : ServiceTest
         Assert.Single(context.AssetTags);
     }
     */
-        
-    /*
+    
     [Fact]
     public void FindByAssetTag()
     {
@@ -66,5 +65,4 @@ public class AssetMetadataServiceTest : ServiceTest
         Assert.Empty(service.FindByAssetTag("k", "f"));
         Assert.Throws<ArgumentNullException>(() => service.FindByAssetTag(null, null));
     }
-    */
 }
