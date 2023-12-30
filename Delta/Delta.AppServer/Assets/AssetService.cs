@@ -19,10 +19,15 @@ public class AssetService
 
     public async Task<Asset> AddAsset(CreateAssetRequest createAssetRequest)
     {
+        var assetType = await _context.FindAsync<AssetType>(createAssetRequest.AssetTypeId);
+        if (assetType == null)
+        {
+            return;
+        }
         var asset = new Asset
         {
-            AssetTypeId = createAssetRequest.AssetTypeId,
             StoreKey = createAssetRequest.StoreKey, //
+            AssetType = assetType,
             EncryptionKeyId = createAssetRequest.EncryptionKeyId,
             ParentJobExecutionId = createAssetRequest.ParentJobExecutionId,
             MediaType = createAssetRequest.MediaType,
