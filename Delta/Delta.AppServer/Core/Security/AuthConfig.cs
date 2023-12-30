@@ -12,6 +12,7 @@ public class AuthConfig
         _configuration = configuration;
     }
 
-    public string AdminUsername => _configuration["Auth:AdminUsername"];
     public string AdminPassword => _configuration["Auth:AdminPassword"];
+    public string AdminUsername => _configuration["Auth:AdminUsername"] ??
+                                   throw new InvalidOperationException();
 }
