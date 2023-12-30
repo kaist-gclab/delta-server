@@ -52,8 +52,8 @@ public class EncryptionService
             Enabled = false
         };
         encryptionKey = _context.Add(encryptionKey).Entity;
-        _context.SaveChanges();
-        trx.Commit();
+        await _context.SaveChangesAsync();
+        await trx.CommitAsync();
         return encryptionKey;
     }
 
