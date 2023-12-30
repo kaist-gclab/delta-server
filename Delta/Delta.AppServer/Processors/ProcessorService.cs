@@ -19,7 +19,7 @@ public class ProcessorService
 
     public async Task<ProcessorNode?> GetNode(long id) => await _context.ProcessorNodes.FindAsync(id);
 
-    public ProcessorNode RegisterProcessorNode(RegisterProcessorNodeRequest request)
+    public async Task<ProcessorNode> RegisterProcessorNode(RegisterProcessorNodeRequest request)
     {
         using var trx = _context.Database.BeginTransaction();
         var node = (from n in _context.ProcessorNodes
