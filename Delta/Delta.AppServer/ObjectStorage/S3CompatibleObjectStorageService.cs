@@ -19,9 +19,9 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
         _objectStorageConfig = objectStorageConfig;
         _objectStorageKeyConverter = objectStorageKeyConverter;
 
-        _client = new MinioClient(_objectStorageConfig.Endpoint,
-            _objectStorageConfig.AccessKey,
-            _objectStorageConfig.SecretKey);
+        _client = new MinioClient()
+            .WithEndpoint(_objectStorageConfig.Endpoint)
+            .WithCredentials(_objectStorageConfig.AccessKey, _objectStorageConfig.SecretKey);
         if (_objectStorageConfig.Https)
         {
             _client = _client.WithSSL();
