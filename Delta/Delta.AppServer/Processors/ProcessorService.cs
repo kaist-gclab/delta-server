@@ -42,7 +42,7 @@ public class ProcessorService
         node.AddNodeStatus(_clock.GetCurrentInstant(),
             PredefinedProcessorNodeStatuses.Available);
         _context.SaveChanges();
-        trx.Commit();
+        await trx.CommitAsync();
         return node;
     }
 
