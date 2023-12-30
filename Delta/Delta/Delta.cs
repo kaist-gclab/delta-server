@@ -3,6 +3,6 @@
 public class Delta
 {
     public static string ServiceName => "Delta";
-    public static string ApiVersion => "5";
+    public static string ApiVersion => "6";
     public const string ApiRoot = "/api/1/";
 }
