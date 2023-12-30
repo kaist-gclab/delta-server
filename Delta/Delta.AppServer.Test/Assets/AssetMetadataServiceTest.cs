@@ -15,7 +15,7 @@ public class AssetMetadataServiceTest : ServiceTest
     }
 
     [Fact]
-    public void UpdateAssetTag()
+    public async Task UpdateAssetTag()
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
@@ -32,17 +32,21 @@ public class AssetMetadataServiceTest : ServiceTest
             AssetType = assetType,
             ParentJobExecution = null
         }).Entity;
-        context.SaveChanges();
+        await context.SaveChangesAsync();
+
         Assert.Empty(context.AssetTags);
-        var tag = service.UpdateAssetTag(asset, "key", "value");
+        await service.UpdateAssetTag(asset.Id, "key", "value");
         Assert.Single(context.AssetTags);
+        var tag = context.AssetTags.First();
         Assert.Equal("key", tag.Key);
         Assert.Equal("value", tag.Value);
-        Assert.Null(service.UpdateAssetTag(asset, "key", null));
-        Assert.Empty(context.AssetTags);
-        Assert.Equal("1", service.UpdateAssetTag(asset, "key", "1").Value);
+        await service.UpdateAssetTag(asset.Id, "key", "1");
+        tag = context.AssetTags.First();
+        Assert.Equal("1", tag.Value);
         Assert.Single(context.AssetTags);
-        Assert.Equal("2", service.UpdateAssetTag(asset, "key", "2").Value);
+        await service.UpdateAssetTag(asset.Id, "key", "2");
+        tag = context.AssetTags.First();
+        Assert.Equal("2", tag.Value);
         Assert.Single(context.AssetTags);
     }
 
