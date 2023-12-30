@@ -52,7 +52,7 @@ public class JobService
     {
         await using var trx = await _context.Database.BeginTransactionAsync();
 
-        var processorNode = _context.ProcessorNodes.Find(jobScheduleRequest.ProcessorNodeId);
+        var processorNode = await _context.ProcessorNodes.FindAsync(jobScheduleRequest.ProcessorNodeId);
         if (processorNode == null)
         {
             throw new Exception();
