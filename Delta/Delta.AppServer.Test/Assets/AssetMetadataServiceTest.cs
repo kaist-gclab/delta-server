@@ -39,9 +39,9 @@ public class AssetMetadataServiceTest : ServiceTest
         Assert.Single(context.AssetTags);
     }
     */
-    
+
     [Fact]
-    public void FindByAssetTag()
+    public async Task FindByAssetTag()
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
@@ -55,6 +55,11 @@ public class AssetMetadataServiceTest : ServiceTest
         service.UpdateAssetTag(assetB, "e", "f");
         service.UpdateAssetTag(assetB, "z", "p");
     
+        var assetType = context.Add(new AssetType
+        {
+            Key = "k",
+            Name = "n"
+        }).Entity;
         Assert.Equal(6, context.AssetTags.Count());
         Assert.Equal(2, service.FindByAssetTag("a", null).Count());
         Assert.Equal(2, service.FindByAssetTag("a", "b").Count());
