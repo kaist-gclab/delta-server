@@ -103,8 +103,13 @@ public class EncryptionService
         return await q.FirstOrDefaultAsync();
     }
 
-    private static byte[] GetKey(EncryptionKey key, byte[] salt)
+    private static byte[]? GetKey(EncryptionKey key, byte[] salt)
     {
+        if (key.Value == null)
+        {
+            return null;
+        }
+
         return KeyDerivation.Pbkdf2(
             password: key.Value,
             salt: salt,
