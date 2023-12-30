@@ -2,12 +2,6 @@ namespace Delta.AppServer.Users;
 
 public class User
 {
-    public User(string name, string username)
-    {
-        Name = name;
-        Username = username;
-    }
-
     public long Id { get; set; }
     public required string Name { get; set; }
     public required string Username { get; set; }
