@@ -6,13 +6,13 @@ namespace Delta.AppServer.Assets;
 
 public class CompressionService
 {
-    public byte[] Compress(byte[] data)
+    public async Task<byte[]> Compress(byte[] data)
     {
-        using var outputStream = new MemoryStream();
-        using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress))
+        await using var outputStream = new MemoryStream();
+        await using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress))
         {
             using var inputStream = new MemoryStream(data);
-            inputStream.CopyTo(compressionStream);
+            await inputStream.CopyToAsync(compressionStream);
         }
 
         return outputStream.ToArray();
