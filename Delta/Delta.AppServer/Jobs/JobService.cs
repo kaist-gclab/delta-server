@@ -37,15 +37,15 @@ public class JobService
 
         var job = new Job
         {
-            InputAssetId = createJobRequest.InputAssetId,
-            JobTypeId = createJobRequest.JobTypeId,
+            InputAsset = inputAsset,
+            JobType = jobType,
             JobArguments = createJobRequest.JobArguments,
             AssignedProcessorNodeId = createJobRequest.AssignedProcessorNodeId,
             CreatedAt = _clock.GetCurrentInstant()
         };
-        job = _context.Add(job).Entity;
-        _context.SaveChanges();
-        return job;
+
+        await _context.AddAsync(job);
+        await _context.SaveChangesAsync();
     }
 
     public JobScheduleResponse ScheduleNextJob(JobScheduleRequest jobScheduleRequest)
