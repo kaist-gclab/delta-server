@@ -35,8 +35,7 @@ public class EncryptionServiceTest : ServiceTest
         var service = new EncryptionService(context);
         service.GetEncryptionKeys();
     }
-        
-    /*
+
     [Fact]
     public void EncryptAndDecrypt()
     {
@@ -52,19 +51,18 @@ public class EncryptionServiceTest : ServiceTest
         Assert.Throws<Exception>(() => { service.Decrypt(a, encrypted); });
         a.Enabled = true;
         var decrypted = service.Decrypt(a, encrypted);
-    
+
         Assert.NotSame(data, encrypted);
         Assert.NotSame(data, decrypted);
         Assert.NotSame(encrypted, decrypted);
-    
+
         Assert.Equal(data, decrypted);
         Assert.NotEqual(data, encrypted);
         Assert.NotEqual(encrypted, decrypted);
-    
+
         Assert.NotEqual(data.Length, encrypted.Length);
         Assert.Equal(data.Length, decrypted.Length);
     }
-    */
 
     [Fact]
     public async Task GetEncryptionKey()
