@@ -58,11 +58,11 @@ public class EncryptionService
 
     public IQueryable<EncryptionKey> GetEncryptionKeys() => _context.EncryptionKeys;
 
-    public byte[] Encrypt(EncryptionKey encryptionKey, byte[] plainData)
+    public byte[]? Encrypt(EncryptionKey encryptionKey, byte[] plainData)
     {
         if (!encryptionKey.Enabled)
         {
-            throw new Exception();
+            return null;
         }
 
         var nonce = new byte[AesGcm.NonceByteSizes.MaxSize];
