@@ -21,7 +21,7 @@ public class ProcessorService
 
     public async Task<ProcessorNode> RegisterProcessorNode(RegisterProcessorNodeRequest request)
     {
-        using var trx = _context.Database.BeginTransaction();
+        await using var trx = await _context.Database.BeginTransactionAsync();
         var node = (from n in _context.ProcessorNodes
                        where n.Key == request.Key
                        select n).FirstOrDefault() ??
