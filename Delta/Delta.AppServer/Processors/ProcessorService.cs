@@ -39,9 +39,11 @@ public class ProcessorService
 
             return new CreateProcessorNodeCapability(jobType, assetType, mediaType);
         }));
+
         node.AddNodeStatus(_clock.GetCurrentInstant(),
             PredefinedProcessorNodeStatuses.Available);
-        _context.SaveChanges();
+
+        await _context.SaveChangesAsync();
         await trx.CommitAsync();
         return node;
     }
