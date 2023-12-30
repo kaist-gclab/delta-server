@@ -66,20 +66,21 @@ public class AssetMetadataService
         return await keyValueQuery.ToListAsync();
     }
 
-    public AssetType AddAssetType(string key, string name)
+    public async Task AddAssetType(string key, string name)
     {
         if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(name))
         {
-            throw new Exception();
+            return;
         }
 
-        using var trx = _context.Database.BeginTransaction();
+        await using var trx = await _context.Database.BeginTransactionAsync();
         var q = from t in _context.AssetTypes
             where t.Key == key
             select t;
+
         if (q.Any())
         {
-            throw new Exception();
+            return;
         }
 
         var assetType = new AssetType
@@ -87,9 +88,9 @@ public class AssetMetadataService
             Key = key,
             Name = name
         };
-        assetType = _context.Add(assetType).Entity;
-        _context.SaveChanges();
-        trx.Commit();
-        return assetType;
+
+        await _context.AddAsync(assetType);
+        await _context.SaveChangesAsync();
+        await trx.CommitAsync();
     }
 }
