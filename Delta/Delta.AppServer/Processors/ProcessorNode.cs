@@ -64,7 +64,7 @@ public class ProcessorNode
         {
             Timestamp = timestamp,
             Status = status,
-            ProcessorNode = this,
+            ProcessorNode = this
         });
     }
 
