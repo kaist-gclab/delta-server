@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CodeGen.Analysis;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +24,9 @@ public class AssetTypesController : ControllerBase
 
     [HttpPost]
     [Command]
-    public AssetType Create([FromBody] CreateAssetTypeRequest createAssetTypeRequest)
+    public async Task<IActionResult> Create([FromBody] CreateAssetTypeRequest createAssetTypeRequest)
     {
-        var assetType = _assetMetadataService.AddAssetType(createAssetTypeRequest.Key, createAssetTypeRequest.Name);
-        return assetType;
+        await _assetMetadataService.AddAssetType(createAssetTypeRequest.Key, createAssetTypeRequest.Name);
+        return Ok();
     }
 }
