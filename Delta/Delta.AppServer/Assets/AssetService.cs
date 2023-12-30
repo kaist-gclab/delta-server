@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Delta.AppServer.Encryption;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.ObjectStorage;
 using NodaTime;
@@ -32,11 +33,20 @@ public class AssetService
             return;
         }
 
+        var encryptionKey = createAssetRequest.EncryptionKeyId == null
+            ? null
+            : await _context.FindAsync<EncryptionKey>(createAssetRequest.EncryptionKeyId);
+
+        if (createAssetRequest.EncryptionKeyId != null && encryptionKey == null)
+        {
+            return;
+        }
+
         var asset = new Asset
         {
             AssetType = assetType,
             StoreKey = createAssetRequest.StoreKey,
-            EncryptionKeyId = createAssetRequest.EncryptionKeyId,
+            EncryptionKey = encryptionKey,
             ParentJobExecution = parentJobExecution,
             MediaType = createAssetRequest.MediaType,
             CreatedAt = _clock.GetCurrentInstant()
