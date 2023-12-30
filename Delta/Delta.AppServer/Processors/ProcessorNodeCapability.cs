@@ -21,7 +21,6 @@ public class ProcessorNodeCapability
     }
 
     public long Id { get; set; }
-    public long ProcessorNodeId { get; set; }
     public long JobTypeId { get; set; }
     public long? AssetTypeId { get; set; }
     public string MediaType { get; set; }
