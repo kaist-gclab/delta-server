@@ -45,7 +45,6 @@ public class AssetMetadataServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
-        var assetB = context.Add(new Asset()).Entity;
         context.SaveChanges();
         service.UpdateAssetTag(assetA, "a", "b");
         service.UpdateAssetTag(assetA, "z", "b");
@@ -63,6 +62,14 @@ public class AssetMetadataServiceTest : ServiceTest
         {
             MediaType = "text/plain",
             StoreKey = "a",
+            CreatedAt = default,
+            AssetType = assetType,
+            ParentJobExecution = null
+        }).Entity;
+        var assetB = context.Add(new Asset
+        {
+            MediaType = "text/plain",
+            StoreKey = "b",
             CreatedAt = default,
             AssetType = assetType,
             ParentJobExecution = null
