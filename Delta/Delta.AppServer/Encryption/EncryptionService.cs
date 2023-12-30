@@ -56,6 +56,7 @@ public class EncryptionService
         await trx.CommitAsync();
 
         var keyView = new EncryptionKeyView(encryptionKey.Id, encryptionKey.Name, encryptionKey.Enabled);
+        return new CreateEncryptionKeyResponse(keyView, value);
     }
 
     public IQueryable<EncryptionKey> GetEncryptionKeys() => _context.EncryptionKeys;
