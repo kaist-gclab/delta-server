@@ -18,7 +18,7 @@ public class UserService
 
     public async Task<User?> Login(string username, string password)
     {
-        var user = GetUserByUsername(username);
+        var user = await GetUserByUsername(username);
         if (user == null)
         {
             return null;
