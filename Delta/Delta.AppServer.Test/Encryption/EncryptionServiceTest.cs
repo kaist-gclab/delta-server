@@ -68,14 +68,21 @@ public class EncryptionServiceTest : ServiceTest
     */
 
     [Fact]
-    public void GetEncryptionKey()
+    public async Task GetEncryptionKey()
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        var a = service.AddEncryptionKey("a");
-        var b = service.AddEncryptionKey("b");
-        Assert.Equal(a.Id, service.GetEncryptionKey("a").Id);
-        Assert.Equal(b.Id, service.GetEncryptionKey("b").Id);
+        var a = await service.AddEncryptionKey(new CreateEncryptionKeyRequest("a"));
+        var b = await service.AddEncryptionKey(new CreateEncryptionKeyRequest("b"));
+        var p = await service.GetEncryptionKey("a");
+        var q = await service.GetEncryptionKey("b");
+        Assert.NotNull(a);
+        Assert.NotNull(b);
+        Assert.NotNull(p);
+        Assert.NotNull(q);
+        Assert.Null(await service.GetEncryptionKey("c"));
+        Assert.Equal(a.EncryptionKey.Id, p.Id);
+        Assert.Equal(b.EncryptionKey.Id, q.Id);
     }
 
     /*
