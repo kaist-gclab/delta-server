@@ -25,17 +25,10 @@ public class AssetsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Asset>> CreateAsset(CreateAssetRequest createAssetRequest)
+    public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
     {
-        try
-        {
-            var asset = await _assetService.AddAsset(createAssetRequest);
-            return Ok(asset);
-        }
-        catch
-        {
-            return BadRequest();
-        }
+        await _assetService.AddAsset(createAssetRequest);
+        return Ok();
     }
 
     [HttpGet("{id:long}")]
