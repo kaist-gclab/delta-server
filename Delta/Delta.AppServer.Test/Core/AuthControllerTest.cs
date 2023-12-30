@@ -76,6 +76,7 @@ public class AuthControllerTest : ControllerTest
         var claim = jwt.Claims.First();
         Assert.Equal("authInfo", claim.Type);
         var authInfo = JsonConvert.DeserializeObject<AuthInfo>(claim.Value);
+        Assert.NotNull(authInfo);
         Assert.Equal("Admin", authInfo.Role);
         return true;
     }
