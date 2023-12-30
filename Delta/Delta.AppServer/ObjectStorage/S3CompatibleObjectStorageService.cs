@@ -81,8 +81,11 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
     public async Task<string> GetPresignedUploadUrl(string key)
     {
         await EnsureBucketExists();
-        return await _client.PresignedPutObjectAsync(_objectStorageConfig.Bucket,
-            _objectStorageKeyConverter.GetKey(key), 86400);
+        return await _client.PresignedPutObjectAsync(
+            new PresignedPutObjectArgs()
+                .WithBucket(_objectStorageConfig.Bucket)
+                .WithObject(_objectStorageKeyConverter.GetKey(key))
+                .WithExpiry(86400));
     }
 
     public async Task<string> GetPresignedDownloadUrl(string key)
