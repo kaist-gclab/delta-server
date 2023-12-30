@@ -94,7 +94,7 @@ public class JobService
         jobExecution.AddStatus(now, PredefinedJobExecutionStatuses.Assigned);
         processorNode.AddNodeStatus(now, PredefinedProcessorNodeStatuses.Busy);
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         await trx.CommitAsync();
         return new JobScheduleResponse(jobExecution);
 
