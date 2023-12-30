@@ -15,7 +15,7 @@ public class UserService
         _authConfig = authConfig;
     }
 
-    public User? Login(string username, string password)
+    public async Task<User?> Login(string username, string password)
     {
         var user = GetUserByUsername(username);
         if (user == null)
