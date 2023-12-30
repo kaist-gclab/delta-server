@@ -22,6 +22,7 @@ public class AssetTypesController : ControllerBase
     }
 
     [HttpPost]
+    [Command]
     public AssetType Create([FromBody] CreateAssetTypeRequest createAssetTypeRequest)
     {
         var assetType = _assetMetadataService.AddAssetType(createAssetTypeRequest.Key, createAssetTypeRequest.Name);
