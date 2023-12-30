@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Delta.AppServer.Assets;
 using Delta.AppServer.Processors;
 using NodaTime;
 
@@ -22,6 +23,11 @@ public class JobService
 
     public async Task CreateJob(CreateJobRequest createJobRequest)
     {
+        var inputAsset = await _context.FindAsync<Asset>(createJobRequest.InputAssetId);
+        if (inputAsset == null)
+        {
+            return;
+        }
         var job = new Job
         {
             InputAssetId = createJobRequest.InputAssetId,
