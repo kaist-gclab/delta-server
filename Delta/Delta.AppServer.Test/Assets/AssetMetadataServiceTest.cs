@@ -45,7 +45,6 @@ public class AssetMetadataServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
-        var assetA = context.Add(new Asset()).Entity;
         var assetB = context.Add(new Asset()).Entity;
         context.SaveChanges();
         service.UpdateAssetTag(assetA, "a", "b");
@@ -59,6 +58,14 @@ public class AssetMetadataServiceTest : ServiceTest
         {
             Key = "k",
             Name = "n"
+        }).Entity;
+        var assetA = context.Add(new Asset
+        {
+            MediaType = "text/plain",
+            StoreKey = "a",
+            CreatedAt = default,
+            AssetType = assetType,
+            ParentJobExecution = null
         }).Entity;
         Assert.Equal(6, context.AssetTags.Count());
         Assert.Equal(2, service.FindByAssetTag("a", null).Count());
