@@ -20,7 +20,10 @@ public class JobService
         _clock = clock;
     }
 
-    public IQueryable<JobType> GetJobTypes() => _context.JobTypes;
+    public async Task<IEnumerable<JobType>> GetJobTypes()
+    {
+        return await _context.JobTypes.ToListAsync();
+    }
 
     public async Task CreateJob(CreateJobRequest createJobRequest)
     {
