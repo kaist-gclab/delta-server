@@ -19,9 +19,9 @@ public class AssetsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Asset>> GetAssets()
+    public IEnumerable<Asset> GetAssets()
     {
-        return Ok(_assetMetadataService.GetAssets());
+        return _assetMetadataService.GetAssets();
     }
 
     [HttpPost]
