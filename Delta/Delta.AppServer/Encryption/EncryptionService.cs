@@ -94,7 +94,7 @@ public class EncryptionService
             return null;
         }
 
-        using var aes = new AesGcm(key);
+        using var aes = new AesGcm(key, 16);
         aes.Decrypt(nonce, data, tag, plainText);
 
         return plainText;
