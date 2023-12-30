@@ -12,7 +12,6 @@ public class ObjectStorageConfig
         _configuration = configuration;
     }
 
-
     public string Endpoint => _configuration["ObjectStorage:Endpoint"] ??
                               throw new InvalidOperationException();
 
