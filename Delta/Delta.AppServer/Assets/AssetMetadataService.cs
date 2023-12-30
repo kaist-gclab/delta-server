@@ -92,4 +92,16 @@ public class AssetMetadataService
         await _context.SaveChangesAsync();
         await trx.CommitAsync();
     }
+
+    public async Task UpdateAssetTag(long assetId, string key, string value)
+    {
+        var asset = await _context.Assets.FindAsync(assetId);
+        if (asset == null)
+        {
+            return;
+        }
+
+        asset.UpdateAssetTag(key, value);
+        await _context.SaveChangesAsync();
+    }
 }
