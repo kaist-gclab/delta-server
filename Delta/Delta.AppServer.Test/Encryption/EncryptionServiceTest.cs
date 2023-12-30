@@ -85,9 +85,8 @@ public class EncryptionServiceTest : ServiceTest
         Assert.Equal(b.EncryptionKey.Id, q.Id);
     }
 
-    /*
     [Fact]
-    public void EnableKey()
+    public async Task EnableKey()
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
@@ -96,5 +95,4 @@ public class EncryptionServiceTest : ServiceTest
         service.EnableKey(a);
         Assert.True(service.GetEncryptionKey("a").Enabled);
     }
-    */
 }
