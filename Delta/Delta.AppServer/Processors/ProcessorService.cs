@@ -20,26 +20,35 @@ public class ProcessorService
 
     public async Task<ProcessorNode?> GetNode(long id) => await _context.ProcessorNodes.FindAsync(id);
 
-    public async Task<ProcessorNode> RegisterProcessorNode(RegisterProcessorNodeRequest request)
+    public async Task<ProcessorNode?> RegisterProcessorNode(RegisterProcessorNodeRequest request)
     {
         await using var trx = await _context.Database.BeginTransactionAsync();
-        var node = (from n in _context.ProcessorNodes
-                       where n.Key == request.Key
-                       select n).FirstOrDefault() ??
-                   _context.Add(new ProcessorNode { Key = request.Key }).Entity;
 
-        node.UpdateCapabilities(request.Capabilities.Select(cap =>
+        var node = await (from n in _context.ProcessorNodes
+            where n.Key == request.Key
+            select n).FirstOrDefaultAsync();
+
+        if (node == null)
+        {
+            node = new ProcessorNode { Key = request.Key };
+            await _context.AddAsync(node);
+        }
+
+        var capabilities = new List<CreateProcessorNodeCapability>();
+        foreach (var cap in request.Capabilities)
         {
             var (jobTypeId, assetTypeId, mediaType) = cap;
-            var jobType = _context.JobTypes.Find(jobTypeId);
-            var assetType = _context.AssetTypes.Find(assetTypeId);
+            var jobType = await _context.JobTypes.FindAsync(jobTypeId);
+            var assetType = assetTypeId == null ? null : await _context.AssetTypes.FindAsync(assetTypeId);
             if (jobType == null)
             {
-                throw new ArgumentException();
+                return null;
             }
 
-            return new CreateProcessorNodeCapability(jobType, assetType, mediaType);
-        }));
+            capabilities.Add(new CreateProcessorNodeCapability(jobType, assetType, mediaType));
+        }
+
+        node.UpdateCapabilities(capabilities);
 
         node.AddNodeStatus(_clock.GetCurrentInstant(),
             PredefinedProcessorNodeStatuses.Available);
