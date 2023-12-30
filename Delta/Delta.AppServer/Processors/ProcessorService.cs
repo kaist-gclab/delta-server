@@ -49,5 +49,5 @@ public class ProcessorService
         return node;
     }
 
-    public IEnumerable<ProcessorNode> GetProcessorNodes() => _context.ProcessorNodes.ToList();
+    public async Task<IEnumerable<ProcessorNode>> GetProcessorNodes() => await _context.ProcessorNodes.ToListAsync();
 }
