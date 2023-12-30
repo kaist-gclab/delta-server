@@ -89,8 +89,10 @@ public class UserService
             };
         }
 
-        return (from u in _context.Users
+        var q = from u in _context.Users
             where u.Username == username
-            select u).FirstOrDefault();
+            select u;
+
+        return await q.FirstOrDefaultAsync();
     }
 }
