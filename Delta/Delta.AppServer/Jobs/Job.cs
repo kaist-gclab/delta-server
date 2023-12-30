@@ -12,8 +12,8 @@ public class Job
     public required Instant CreatedAt { get; set; }
     public long? AssignedProcessorNodeId { get; set; }
 
-    public virtual JobType JobType { get; set; }
     public virtual Asset? InputAsset { get; set; }
+    public virtual required JobType JobType { get; set; }
     public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
     public virtual ProcessorNode? AssignedProcessorNode { get; set; }
 }
