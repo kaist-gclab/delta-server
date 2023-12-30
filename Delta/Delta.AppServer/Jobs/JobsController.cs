@@ -42,10 +42,10 @@ public class JobsController : ControllerBase
 
     [HttpPost("executions/{jobExecutionId:long}/statuses")]
     [Command]
-    public IActionResult AddJobExecutionStatus(long jobExecutionId,
+    public async Task<IActionResult> AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
-        _jobService.AddJobExecutionStatus(jobExecutionId, addJobExecutionStatusRequest);
+        await _jobService.AddJobExecutionStatus(jobExecutionId, addJobExecutionStatusRequest);
         return Ok();
     }
 }
