@@ -21,9 +21,9 @@ public class AuthController : ControllerBase
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    public ActionResult<LoginResponse> Login([FromBody] LoginRequest loginRequest)
+    public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest loginRequest)
     {
-        var user = _userService.Login(loginRequest.Username, loginRequest.Password);
+        var user = await _userService.Login(loginRequest.Username, loginRequest.Password);
         if (user == null)
         {
             return Unauthorized();
