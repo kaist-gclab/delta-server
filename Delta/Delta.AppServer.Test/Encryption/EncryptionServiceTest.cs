@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Delta.AppServer.Encryption;
 using Delta.AppServer.Test.Infrastructure;
