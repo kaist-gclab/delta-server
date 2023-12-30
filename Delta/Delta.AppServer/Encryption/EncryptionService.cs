@@ -75,7 +75,7 @@ public class EncryptionService
             return null;
         }
 
-        using var aes = new AesGcm(GetKey(encryptionKey, _salt));
+        using var aes = new AesGcm(key, 16);
         aes.Encrypt(nonce, plainData, cipherData, tag);
         return nonce.Concat(cipherData).Concat(tag).ToArray();
     }
