@@ -65,6 +65,7 @@ public class AuthControllerTest : ControllerTest
 
         var text = await response.Content.ReadAsStringAsync();
         var obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
+        Assert.NotNull(obj);
         Assert.Single(obj);
         Assert.Equal("token", obj.Keys.First());
         var token = obj["token"];
