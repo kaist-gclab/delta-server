@@ -13,20 +13,19 @@ public class EncryptionServiceTest : ServiceTest
     public EncryptionServiceTest(ITestOutputHelper output) : base(output)
     {
     }
-    
+
     [Fact]
-    public void AddEncryptionKey()
+    public async Task AddEncryptionKey()
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
         Assert.Empty(context.EncryptionKeys);
-        service.AddEncryptionKey("A");
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A"));
         Assert.Single(context.EncryptionKeys);
-        Assert.Throws<Exception>(() => service.AddEncryptionKey(null));
-        Assert.Throws<Exception>(() => service.AddEncryptionKey(""));
-        Assert.Throws<Exception>(() => service.AddEncryptionKey("A"));
+        Assert.Null(await service.AddEncryptionKey(new CreateEncryptionKeyRequest("")));
+        Assert.Null(await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A")));
         Assert.Single(context.EncryptionKeys);
-        service.AddEncryptionKey("B");
+        Assert.NotNull(await service.AddEncryptionKey(new CreateEncryptionKeyRequest("B")));
         Assert.Equal(2, context.EncryptionKeys.Count());
     }
 
