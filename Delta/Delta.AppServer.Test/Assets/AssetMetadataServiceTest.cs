@@ -14,7 +14,6 @@ public class AssetMetadataServiceTest : ServiceTest
     {
     }
 
-    /*
     [Fact]
     public void UpdateAssetTag()
     {
@@ -38,7 +37,6 @@ public class AssetMetadataServiceTest : ServiceTest
         Assert.Equal("2", service.UpdateAssetTag(asset, "key", "2").Value);
         Assert.Single(context.AssetTags);
     }
-    */
 
     [Fact]
     public async Task FindByAssetTag()
