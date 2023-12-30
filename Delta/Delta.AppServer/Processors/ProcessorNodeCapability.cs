@@ -6,20 +6,6 @@ namespace Delta.AppServer.Processors;
 
 public class ProcessorNodeCapability
 {
-    public ProcessorNodeCapability(
-        string mediaType, ProcessorNode processorNode, JobType jobType, AssetType? assetType)
-    {
-        MediaType = mediaType;
-        _processorNode = processorNode;
-        _jobType = jobType;
-        _assetType = assetType;
-    }
-
-    protected ProcessorNodeCapability(string mediaType)
-    {
-        MediaType = mediaType;
-    }
-
     public long Id { get; set; }
     public string MediaType { get; set; }
 
