@@ -11,7 +11,7 @@ public class ObjectStorageConfig
     {
         _configuration = configuration;
     }
-    public bool Https => bool.Parse(_configuration["ObjectStorage:Https"]);
+
 
     public string Endpoint => _configuration["ObjectStorage:Endpoint"] ??
                               throw new InvalidOperationException();
@@ -24,4 +24,7 @@ public class ObjectStorageConfig
 
     public string Bucket => _configuration["ObjectStorage:Bucket"] ??
                             throw new InvalidOperationException();
+
+    public bool Https => bool.Parse(_configuration["ObjectStorage:Https"] ??
+                                    throw new InvalidOperationException());
 }
