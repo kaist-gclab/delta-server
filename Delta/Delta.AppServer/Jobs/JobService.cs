@@ -162,8 +162,8 @@ public class JobService
         return false;
     }
 
-    public IEnumerable<Job> GetJobs()
+    public async Task<IEnumerable<Job>> GetJobs()
     {
-        return _context.Jobs.ToList();
+        return await _context.Jobs.ToListAsync();
     }
 }
