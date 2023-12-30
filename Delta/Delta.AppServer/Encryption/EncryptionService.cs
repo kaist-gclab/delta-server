@@ -39,9 +39,9 @@ public class EncryptionService
             return null;
         }
 
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrWhiteSpace(name))
         {
-            throw new Exception();
+            return null;
         }
 
         var value = Guid.NewGuid().ToString();
