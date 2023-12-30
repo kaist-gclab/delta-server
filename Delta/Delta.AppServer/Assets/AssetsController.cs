@@ -27,11 +27,6 @@ public class AssetsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Asset>> CreateAsset(CreateAssetRequest createAssetRequest)
     {
-        if (createAssetRequest.CreateAssetTagRequest == null)
-        {
-            return BadRequest();
-        }
-
         try
         {
             var asset = await _assetService.AddAsset(createAssetRequest);
