@@ -23,9 +23,15 @@ public class JobsController : ControllerBase
     }
 
     [HttpPost("schedule")]
-    public JobScheduleResponse Schedule(JobScheduleRequest jobScheduleRequest)
+    public async Task<ActionResult<JobScheduleResponse>> Schedule(JobScheduleRequest jobScheduleRequest)
     {
-        return _jobService.ScheduleNextJob(jobScheduleRequest);
+        var response = await _jobService.ScheduleNextJob(jobScheduleRequest);
+        if (response == null)
+        {
+            return NoContent();
+        }
+
+        return Ok(response);
     }
 
     [HttpPost]
