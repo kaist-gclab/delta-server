@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine as builder
 WORKDIR /app
 
 COPY *.sln .
