@@ -19,11 +19,13 @@ public class AssetMetadataService
     public Asset? GetAsset(long id) => _context.Assets.Find(id);
     public IQueryable<AssetType> GetAssetTypes() => _context.AssetTypes;
 
-    public AssetType? GetAssetType(string key)
+    public async Task<AssetType?> GetAssetType(string key)
     {
-        return (from t in _context.AssetTypes
+        var q = from t in _context.AssetTypes
             where t.Key == key
-            select t).FirstOrDefault();
+            select t;
+
+        return await q.FirstOrDefaultAsync();
     }
 
     public IEnumerable<Asset> FindByAssetTag(string? key, string? value)
