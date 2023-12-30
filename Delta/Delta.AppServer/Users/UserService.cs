@@ -55,10 +55,9 @@ public class UserService
         };
         user.ChangePassword(password);
 
-        user = _context.Add(user).Entity;
-        _context.SaveChanges();
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
         await trx.CommitAsync();
-        return user;
     }
 
     public void ChangePassword(string username, string newPassword)
