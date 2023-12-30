@@ -4,6 +4,6 @@ namespace Delta.AppServer.Settings;
 
 public class Setting
 {
-    [Key] public string Key { get; set; }
     public string Value { get; set; }
+    [Key] public required string Key { get; set; }
 }
