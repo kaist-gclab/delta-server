@@ -10,7 +10,7 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
 {
     private readonly ObjectStorageConfig _objectStorageConfig;
     private readonly IObjectStorageKeyConverter _objectStorageKeyConverter;
-    private readonly MinioClient _client;
+    private readonly IMinioClient _client;
 
     public S3CompatibleObjectStorageService(ObjectStorageConfig objectStorageConfig,
         IObjectStorageKeyConverter objectStorageKeyConverter)
