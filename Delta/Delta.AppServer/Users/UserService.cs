@@ -77,7 +77,7 @@ public class UserService
         return user.Username == _authConfig.AdminUsername ? "Admin" : "User";
     }
 
-    private User? GetUserByUsername(string username)
+    private async Task<User?> GetUserByUsername(string username)
     {
         if (username == _authConfig.AdminUsername)
         {
