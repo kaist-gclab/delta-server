@@ -22,10 +22,10 @@ public class ProcessorNodesController : ControllerBase
     }
 
     [HttpPost("register")]
-    public ActionResult<ProcessorNode> RegisterProcessorNode(
+    public async Task<ActionResult<ProcessorNode>> RegisterProcessorNode(
         RegisterProcessorNodeRequest registerProcessorNodeRequest)
     {
-        var node = _processorService.RegisterProcessorNode(registerProcessorNodeRequest);
+        var node = await _processorService.RegisterProcessorNode(registerProcessorNodeRequest);
         if (node == null)
         {
             return BadRequest();
