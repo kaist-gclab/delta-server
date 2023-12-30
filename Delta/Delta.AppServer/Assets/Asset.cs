@@ -12,7 +12,6 @@ public class Asset
     public long? EncryptionKeyId { get; set; }
     public string MediaType { get; set; }
     public string StoreKey { get; set; }
-    public long? ParentJobExecutionId { get; set; }
     public Instant CreatedAt { get; set; }
 
     public virtual AssetType AssetType { get; set; }
