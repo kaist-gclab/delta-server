@@ -44,7 +44,7 @@ public class EncryptionServiceTest : ServiceTest
         var service = new EncryptionService(context);
         await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A"));
         var a = service.GetEncryptionKeys().First();
-        var data = Encoding.UTF8.GetBytes("Delta_KqKsqvE4_테스트_WZLUI2m0_데이터");
+        var data = "Delta_KqKsqvE4_테스트_WZLUI2m0_데이터"u8.ToArray();
         Assert.Null(service.Encrypt(a, data));
         a.Enabled = true;
         var encrypted = service.Encrypt(a, data);
