@@ -122,10 +122,10 @@ public class JobService
         }
     }
 
-    public void AddJobExecutionStatus(long jobExecutionId,
+    public async Task AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
-        var jobExecution = _context.JobExecutions.Find(jobExecutionId);
+        var jobExecution = await _context.JobExecutions.FindAsync(jobExecutionId);
         if (jobExecution == null)
         {
             throw new Exception();
@@ -133,7 +133,7 @@ public class JobService
 
         jobExecution.AddStatus(_clock.GetCurrentInstant(),
             addJobExecutionStatusRequest.Status);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     private static bool ValidateCompatibility(Job job, IEnumerable<ProcessorNodeCapability> capabilities)
