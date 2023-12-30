@@ -73,6 +73,26 @@ public class JobService
             select j;
 
 
+        var job = GetFirstJob();
+        if (job == null)
+        {
+            return null;
+        }
+
+        var jobExecution = new JobExecution
+        {
+            ProcessorNode = processorNode,
+            Job = job
+        };
+
+        var now = _clock.GetCurrentInstant();
+        jobExecution.AddStatus(now, PredefinedJobExecutionStatuses.Assigned);
+        processorNode.AddNodeStatus(now, PredefinedProcessorNodeStatuses.Busy);
+
+        _context.SaveChanges();
+        trx.Commit();
+        return new JobScheduleResponse(jobExecution);
+
         Job GetFirstJob()
         {
             foreach (var j in availableJobs)
@@ -95,26 +115,6 @@ public class JobService
 
             return null;
         }
-
-        var job = GetFirstJob();
-        if (job == null)
-        {
-            return null;
-        }
-
-        var jobExecution = new JobExecution
-        {
-            ProcessorNode = processorNode,
-            Job = job
-        };
-
-        var now = _clock.GetCurrentInstant();
-        jobExecution.AddStatus(now, PredefinedJobExecutionStatuses.Assigned);
-        processorNode.AddNodeStatus(now, PredefinedProcessorNodeStatuses.Busy);
-
-        _context.SaveChanges();
-        trx.Commit();
-        return new JobScheduleResponse(jobExecution);
     }
 
     public void AddJobExecutionStatus(long jobExecutionId,
