@@ -28,36 +28,42 @@ public class AssetMetadataService
         return await q.FirstOrDefaultAsync();
     }
 
-    public IEnumerable<Asset> FindByAssetTag(string? key, string? value)
+    public async Task<IEnumerable<Asset>> FindByAssetTag(string? key, string? value)
     {
         if (key == null && value == null)
         {
-            throw new ArgumentNullException();
+            return new List<Asset>();
         }
 
         if (key == null)
         {
-            return (from a in _context.Assets
+            var valueQuery = from a in _context.Assets
                 where (from t in a.AssetTags
                     where t.Value == value
                     select t).Any()
-                select a).ToList();
+                select a;
+
+            return await valueQuery.ToListAsync();
         }
 
         if (value == null)
         {
-            return (from a in _context.Assets
+            var keyQuery = from a in _context.Assets
                 where (from t in a.AssetTags
                     where t.Key == key
                     select t).Any()
-                select a).ToList();
+                select a;
+
+            return await keyQuery.ToListAsync();
         }
 
-        return (from a in _context.Assets
+        var keyValueQuery = from a in _context.Assets
             where (from t in a.AssetTags
                 where t.Key == key && t.Value == value
                 select t).Any()
-            select a).ToList();
+            select a;
+
+        return await keyValueQuery.ToListAsync();
     }
 
     public AssetType AddAssetType(string key, string name)
