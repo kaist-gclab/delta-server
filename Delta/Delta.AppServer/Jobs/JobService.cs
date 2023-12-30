@@ -50,7 +50,7 @@ public class JobService
 
     public async Task<JobScheduleResponse> ScheduleNextJob(JobScheduleRequest jobScheduleRequest)
     {
-        using var trx = _context.Database.BeginTransaction();
+        await using var trx = await _context.Database.BeginTransactionAsync();
 
         var processorNode = _context.ProcessorNodes.Find(jobScheduleRequest.ProcessorNodeId);
         if (processorNode == null)
