@@ -55,8 +55,11 @@ public class S3CompatibleObjectStorageService : IObjectStorageService
         }
 
         var stream = new MemoryStream(content);
-        await _client.PutObjectAsync(_objectStorageConfig.Bucket,
-            _objectStorageKeyConverter.GetKey(key), stream, stream.Length);
+        await _client.PutObjectAsync(new PutObjectArgs()
+            .WithBucket(_objectStorageConfig.Bucket)
+            .WithObject(_objectStorageKeyConverter.GetKey(key))
+            .WithStreamData(stream)
+            .WithObjectSize(stream.Length));
     }
 
     public async Task<byte[]> Read(string key)
