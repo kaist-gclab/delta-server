@@ -33,7 +33,7 @@ public class ServiceProvider<T> where T : class
         _webApplicationFactory = webApplicationFactory;
     }
 
-    public TService Get<TService>()
+    public TService Get<TService>() where TService : notnull
     {
         _webApplicationFactory.CreateClient().Dispose();
         return _webApplicationFactory.Server.Host.Services.CreateScope().ServiceProvider
