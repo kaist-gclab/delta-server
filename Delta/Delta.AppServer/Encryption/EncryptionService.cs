@@ -51,10 +51,11 @@ public class EncryptionService
             Value = value,
             Enabled = false
         };
-        encryptionKey = _context.Add(encryptionKey).Entity;
+        await _context.AddAsync(encryptionKey);
         await _context.SaveChangesAsync();
         await trx.CommitAsync();
-        return encryptionKey;
+
+        var keyView = new EncryptionKeyView(encryptionKey.Id, encryptionKey.Name, encryptionKey.Enabled);
     }
 
     public IQueryable<EncryptionKey> GetEncryptionKeys() => _context.EncryptionKeys;
