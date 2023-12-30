@@ -55,7 +55,7 @@ public class JobService
         var processorNode = await _context.ProcessorNodes.FindAsync(jobScheduleRequest.ProcessorNodeId);
         if (processorNode == null)
         {
-            throw new Exception();
+            return null;
         }
 
         var availableJobs = from j in _context.Jobs
