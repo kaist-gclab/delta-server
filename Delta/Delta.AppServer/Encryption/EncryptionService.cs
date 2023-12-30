@@ -69,6 +69,12 @@ public class EncryptionService
         RandomNumberGenerator.Fill(nonce);
         var cipherData = new byte[plainData.Length];
         var tag = new byte[AesGcm.TagByteSizes.MaxSize];
+        var key = GetKey(encryptionKey, _salt);
+        if (key == null)
+        {
+            return null;
+        }
+
         using var aes = new AesGcm(GetKey(encryptionKey, _salt));
         aes.Encrypt(nonce, plainData, cipherData, tag);
         return nonce.Concat(cipherData).Concat(tag).ToArray();
