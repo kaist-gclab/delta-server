@@ -27,12 +27,20 @@ public class Asset
         var tag = (from t in AssetTags
             where t.Key == key
             select t).FirstOrDefault();
+
         if (tag == null)
         {
-            tag = new AssetTag { Key = key };
+            tag = new AssetTag
+            {
+                Key = key,
+                Value = value,
+                Asset = this
+            };
             AssetTags.Add(tag);
         }
-
-        tag.Value = value;
+        else
+        {
+            tag.Value = value;
+        }
     }
 }
