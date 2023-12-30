@@ -9,7 +9,7 @@ public class MemoryObjectStorageServiceTest
     [Fact]
     public async void Write()
     {
-        IObjectStorageService service = new MemoryObjectStorageService();
+        var service = new MemoryObjectStorageService();
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.Write("", new byte[] { }));
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.Write("", new byte[] {1}));
         await service.Write("a", new byte[] { });
@@ -19,7 +19,7 @@ public class MemoryObjectStorageServiceTest
     [Fact]
     public async void Read()
     {
-        IObjectStorageService service = new MemoryObjectStorageService();
+        var service = new MemoryObjectStorageService();
         await service.Write("a", new byte[] { });
         Assert.Empty(await service.Read("a"));
         await service.Write("a", new byte[] {1});
