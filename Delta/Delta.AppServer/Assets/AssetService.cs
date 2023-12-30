@@ -34,8 +34,8 @@ public class AssetService
 
         var asset = new Asset
         {
-            StoreKey = createAssetRequest.StoreKey, //
             AssetType = assetType,
+            StoreKey = createAssetRequest.StoreKey,
             EncryptionKeyId = createAssetRequest.EncryptionKeyId,
             ParentJobExecution = parentJobExecution,
             MediaType = createAssetRequest.MediaType,
