@@ -94,16 +94,13 @@ public class EncryptionService
         return plainText;
     }
 
-    public EncryptionKey GetEncryptionKey(string name)
+    public async Task<EncryptionKey?> GetEncryptionKey(string name)
     {
-        if (name == null)
-        {
-            return null;
-        }
-
-        return (from e in _context.EncryptionKeys
+        var q = from e in _context.EncryptionKeys
             where e.Name == name
-            select e).FirstOrDefault();
+            select e;
+
+        return await q.FirstOrDefaultAsync();
     }
 
     private static byte[] GetKey(EncryptionKey key, byte[] salt)
