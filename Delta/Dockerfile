@@ -14,5 +14,5 @@ RUN dotnet publish --self-contained --configuration Release --runtime linux-musl
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-alpine
 WORKDIR /app
 COPY --from=builder /app/Delta.AppServer/out .
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["./Delta.AppServer"]
