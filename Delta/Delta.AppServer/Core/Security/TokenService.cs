@@ -10,17 +10,8 @@ using Newtonsoft.Json.Serialization;
 
 namespace Delta.AppServer.Core.Security;
 
-public class TokenService
+public class TokenService(IConfiguration configuration, UserService userService)
 {
-    private readonly IConfiguration _configuration;
-    private readonly UserService _userService;
-
-    public TokenService(IConfiguration configuration, UserService userService)
-    {
-        _configuration = configuration;
-        _userService = userService;
-    }
-
     private static string GenerateJwtId()
     {
         var randomBytes = new byte[32];
@@ -30,7 +21,7 @@ public class TokenService
 
     public string BuildToken(User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var authInfo = BuildAuthInfo(user);
@@ -44,7 +35,7 @@ public class TokenService
         };
 
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"], _configuration["Jwt:Issuer"],
+            configuration["Jwt:Issuer"], configuration["Jwt:Issuer"],
             claims, signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -52,6 +43,6 @@ public class TokenService
 
     private AuthInfo BuildAuthInfo(User user)
     {
-        return new AuthInfo(user, _userService.GetRole(user));
+        return new AuthInfo(user, userService.GetRole(user));
     }
 }
