@@ -2,17 +2,8 @@ using NodaTime;
 
 namespace Delta.AppServer.Core.Schedule;
 
-public class ScheduleHelper
+public class ScheduleHelper(IClock clock, DateTimeZone dateTimeZone)
 {
-    private readonly IClock _clock;
-    private readonly DateTimeZone _dateTimeZone;
-
-    public ScheduleHelper(IClock clock, DateTimeZone dateTimeZone)
-    {
-        _clock = clock;
-        _dateTimeZone = dateTimeZone;
-    }
-
     public Instant ComputeNext(Duration interval, LocalTime offset)
     {
         if (interval == Duration.MaxValue)
@@ -20,11 +11,11 @@ public class ScheduleHelper
             return Instant.MaxValue;
         }
 
-        var current = _clock.GetCurrentInstant();
+        var current = clock.GetCurrentInstant();
         current += Duration.FromSeconds(1);
 
-        var next = current.InZone(_dateTimeZone).Date.At(offset)
-            .InZoneLeniently(_dateTimeZone).ToInstant();
+        var next = current.InZone(dateTimeZone).Date.At(offset)
+            .InZoneLeniently(dateTimeZone).ToInstant();
 
         for (;;)
         {
