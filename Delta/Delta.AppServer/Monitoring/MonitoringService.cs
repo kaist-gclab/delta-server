@@ -8,17 +8,9 @@ using NodaTime;
 
 namespace Delta.AppServer.Monitoring;
 
-public class MonitoringService
+public class MonitoringService(IClock clock, MonitoringConfig monitoringConfig)
 {
     private static readonly List<MonitoringServiceEvent> InMemoryStore = new();
-    private readonly MonitoringConfig _monitoringConfig;
-    private readonly IClock _clock;
-
-    public MonitoringService(IClock clock, MonitoringConfig monitoringConfig)
-    {
-        _clock = clock;
-        _monitoringConfig = monitoringConfig;
-    }
 
     public void AddProcessorNodeEvent(string content)
     {
@@ -26,28 +18,28 @@ public class MonitoringService
 
     public async Task AddObjectStorageEvent(ObjectStorageEvent objectStorageEvent)
     {
-        using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
+        using var client = InfluxDBClientFactory.Create(monitoringConfig.Endpoint, monitoringConfig.Token);
         var write = client.GetWriteApiAsync();
         await write.WriteMeasurementAsync(
             objectStorageEvent, WritePrecision.Ns,
-            _monitoringConfig.Bucket, _monitoringConfig.Organization);
+            monitoringConfig.Bucket, monitoringConfig.Organization);
     }
 
     public async Task<List<FluxTable>> GetObjectStorageEvents()
     {
-        using var client = InfluxDBClientFactory.Create(_monitoringConfig.Endpoint, _monitoringConfig.Token);
+        using var client = InfluxDBClientFactory.Create(monitoringConfig.Endpoint, monitoringConfig.Token);
         var query = client.GetQueryApi();
         return await query.QueryAsync(
-            "from(bucket: \"" + _monitoringConfig.Bucket + "\")" +
+            "from(bucket: \"" + monitoringConfig.Bucket + "\")" +
             "|> range(start: -1d)" +
-            "|> aggregateWindow(every: 15m, fn: mean)", _monitoringConfig.Organization);
+            "|> aggregateWindow(every: 15m, fn: mean)", monitoringConfig.Organization);
     }
 
     public void AddEvent(Instant eventTimestamp, string content)
     {
         lock (typeof(MonitoringService))
         {
-            InMemoryStore.Add(new MonitoringServiceEvent(eventTimestamp, _clock.GetCurrentInstant(), content));
+            InMemoryStore.Add(new MonitoringServiceEvent(eventTimestamp, clock.GetCurrentInstant(), content));
         }
     }
 
