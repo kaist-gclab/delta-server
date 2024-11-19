@@ -17,9 +17,9 @@ public class AssetTypesController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<AssetType> GetAssetTypes()
+    public async Task<IEnumerable<AssetTypeView>> GetAssetTypes()
     {
-        return _assetMetadataService.GetAssetTypes();
+        return await _assetMetadataService.GetAssetTypeViews();
     }
 
     [HttpPost]
