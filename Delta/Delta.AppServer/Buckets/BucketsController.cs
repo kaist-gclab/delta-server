@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CodeGen.Analysis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Buckets;
@@ -12,5 +13,13 @@ public class BucketsController(BucketService bucketService) : ControllerBase
     public async Task<IEnumerable<BucketView>> GetBuckets()
     {
         return await bucketService.GetBuckets();
+    }
+    
+    [HttpPost]
+    [Command]
+    public async Task<ActionResult> Create([FromBody] CreateBucketRequest createBucketRequest)
+    {
+        await bucketService.AddBucket(createBucketRequest);
+        return Ok();
     }
 }
