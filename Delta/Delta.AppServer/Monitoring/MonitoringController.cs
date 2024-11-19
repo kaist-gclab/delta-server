@@ -5,18 +5,25 @@ namespace Delta.AppServer.Monitoring;
 
 [ApiController]
 [Route(Delta.ApiRoot + "monitoring")]
-public class MonitoringController
+public class MonitoringController(MonitoringService monitoringService)
 {
-    private readonly MonitoringService _monitoringService;
+    private readonly MonitoringService _monitoringService = monitoringService;
 
-    public MonitoringController(MonitoringService monitoringService)
+    [HttpGet("object-storage")]
+    public IEnumerable<ObjectStorageEvent> GetObjectStorageEvents()
     {
-        _monitoringService = monitoringService;
+        return new List<ObjectStorageEvent>();
     }
 
-    [HttpGet]
-    public IEnumerable<MonitoringServiceEvent> GetStats()
+    [HttpGet("processor-node")]
+    public IEnumerable<ProcessorNodeEvent> GetProcessorNodeEvents()
     {
-        return _monitoringService.GetEvents().TakeLast(20).ToList();
+        return new List<ProcessorNodeEvent>();
+    }
+
+    [HttpGet("job")]
+    public IEnumerable<JobEvent> GetJobEvents()
+    {
+        return new List<JobEvent>();
     }
 }
