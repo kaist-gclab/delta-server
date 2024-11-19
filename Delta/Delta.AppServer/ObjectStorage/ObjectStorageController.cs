@@ -6,20 +6,13 @@ namespace Delta.AppServer.ObjectStorage;
 
 [ApiController]
 [Route(Delta.ApiRoot + "object-storage")]
-public class ObjectStorageController : ControllerBase
+public class ObjectStorageController(IObjectStorageService objectStorageService) : ControllerBase
 {
-    private readonly IObjectStorageService _objectStorageService;
-
-    public ObjectStorageController(IObjectStorageService objectStorageService)
-    {
-        _objectStorageService = objectStorageService;
-    }
-
     [HttpGet("upload-url")]
     public async Task<UploadTicket> GetUploadUrl()
     {
         var storeKey = Guid.NewGuid().ToString();
-        var url = await _objectStorageService.GetPresignedUploadUrl(storeKey);
+        var url = await objectStorageService.GetPresignedUploadUrl(storeKey);
         return new UploadTicket(url, storeKey);
     }
 }
