@@ -7,10 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Delta.AppServer.Encryption;
 
-public class EncryptionService
+public class EncryptionService(DeltaContext context)
 {
-    private readonly DeltaContext _context;
-
     private readonly byte[] _salt =
     {
         0x30, 0x04, 0xa3, 0x66, 0x44, 0x6f, 0x7d, 0xd2,
@@ -23,18 +21,13 @@ public class EncryptionService
         0xa4, 0xa1, 0x5a, 0xec, 0x70, 0x9d, 0x14, 0x0e
     };
 
-    public EncryptionService(DeltaContext context)
-    {
-        _context = context;
-    }
-
     public async Task<CreateEncryptionKeyResponse?> AddEncryptionKey(
         CreateEncryptionKeyRequest createEncryptionKeyRequest)
     {
         var name = createEncryptionKeyRequest.Name;
 
-        await using var trx = await _context.Database.BeginTransactionAsync();
-        if (_context.EncryptionKey.Any(k => k.Name == name))
+        await using var trx = await context.Database.BeginTransactionAsync();
+        if (context.EncryptionKey.Any(k => k.Name == name))
         {
             return null;
         }
@@ -52,8 +45,8 @@ public class EncryptionService
             Enabled = false,
             Optimized = false
         };
-        await _context.AddAsync(encryptionKey);
-        await _context.SaveChangesAsync();
+        await context.AddAsync(encryptionKey);
+        await context.SaveChangesAsync();
         await trx.CommitAsync();
 
         var keyView = new EncryptionKeyView(encryptionKey.Id, encryptionKey.Name,
@@ -61,7 +54,7 @@ public class EncryptionService
         return new CreateEncryptionKeyResponse(keyView, value);
     }
 
-    public IQueryable<EncryptionKey> GetEncryptionKeys() => _context.EncryptionKey;
+    public IQueryable<EncryptionKey> GetEncryptionKeys() => context.EncryptionKey;
 
     public byte[]? Encrypt(EncryptionKey encryptionKey, byte[] plainData)
     {
@@ -113,7 +106,7 @@ public class EncryptionService
 
     public async Task<EncryptionKey?> GetEncryptionKey(string name)
     {
-        var q = from e in _context.EncryptionKey
+        var q = from e in context.EncryptionKey
             where e.Name == name
             select e;
 
@@ -137,13 +130,13 @@ public class EncryptionService
 
     public async Task EnableKey(long encryptionKeyId)
     {
-        var key = await _context.EncryptionKey.FindAsync(encryptionKeyId);
+        var key = await context.EncryptionKey.FindAsync(encryptionKeyId);
         if (key == null)
         {
             return;
         }
 
         key.Enabled = true;
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 }
