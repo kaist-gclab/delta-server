@@ -11,7 +11,18 @@ public class BucketService(DeltaContext context, IClock clock)
     public async Task<IEnumerable<BucketView>> GetBuckets()
     {
         var q = from b in context.Bucket
-            select new BucketView();
+            let tags = from t in b.Tags
+                select new BucketTagView(t.Id, t.Key, t.Value)
+            let nameTags = from t in b.Tags
+                where t.Key == "Name"
+                select t.Value
+            select new BucketView(
+                b.Id,
+                b.EncryptionKey != null ? b.EncryptionKey.Name : null,
+                b.CreatedAt,
+                b.BucketGroup != null ? b.BucketGroup.Name : null,
+                nameTags.FirstOrDefault(),
+                tags);
         return await q.ToListAsync();
     }
 

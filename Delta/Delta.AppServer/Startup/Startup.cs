@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 using CodeGen.Web;
 using Delta.AppServer.Assets;
+using Delta.AppServer.Buckets;
 using Delta.AppServer.Core.Schedule;
 using Delta.AppServer.Core.Security;
 using Delta.AppServer.Jobs;
@@ -113,6 +114,7 @@ public class Startup
         services.AddScoped<EncryptionService>();
         services.AddScoped<IObjectStorageKeyConverter, PrefixFourObjectStorageKeyConverter>();
         services.AddScoped<MonitoringService>();
+        services.AddScoped<BucketService>();
 
         services.AddSingleton<ScheduleHelper>();
         services.AddSingleton(DateTimeZoneProviders.Tzdb[_configuration["Time:DateTimeZone"]]);
