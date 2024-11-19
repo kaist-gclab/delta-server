@@ -6,38 +6,29 @@ using NodaTime;
 
 namespace Delta.AppServer.Processors;
 
-public class ProcessorService
+public class ProcessorService(DeltaContext context, IClock clock)
 {
-    private readonly DeltaContext _context;
-    private readonly IClock _clock;
-
-    public ProcessorService(DeltaContext context, IClock clock)
-    {
-        _context = context;
-        _clock = clock;
-    }
-
-    public async Task<ProcessorNode?> GetNode(long id) => await _context.ProcessorNode.FindAsync(id);
+    public async Task<ProcessorNode?> GetNode(long id) => await context.ProcessorNode.FindAsync(id);
 
     public async Task<ProcessorNode?> RegisterProcessorNode(RegisterProcessorNodeRequest request)
     {
-        await using var trx = await _context.Database.BeginTransactionAsync();
+        await using var trx = await context.Database.BeginTransactionAsync();
 
-        var node = await (from n in _context.ProcessorNode
+        var node = await (from n in context.ProcessorNode
             where n.Key == request.Key
             select n).FirstOrDefaultAsync();
 
         if (node == null)
         {
             node = new ProcessorNode { Key = request.Key };
-            await _context.AddAsync(node);
+            await context.AddAsync(node);
         }
 
         var capabilities = new List<CreateProcessorNodeCapability>();
         foreach (var cap in request.Capabilities)
         {
             var (jobTypeId, assetTypeId, mediaType) = cap;
-            var jobType = await _context.JobType.FindAsync(jobTypeId);
+            var jobType = await context.JobType.FindAsync(jobTypeId);
             if (jobType == null)
             {
                 return null;
@@ -48,13 +39,13 @@ public class ProcessorService
 
         node.UpdateCapabilities(capabilities);
 
-        node.AddNodeStatus(_clock.GetCurrentInstant(),
+        node.AddNodeStatus(clock.GetCurrentInstant(),
             PredefinedProcessorNodeStatuses.Available);
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         await trx.CommitAsync();
         return node;
     }
 
-    public async Task<IEnumerable<ProcessorNode>> GetProcessorNodes() => await _context.ProcessorNode.ToListAsync();
+    public async Task<IEnumerable<ProcessorNode>> GetProcessorNodes() => await context.ProcessorNode.ToListAsync();
 }
