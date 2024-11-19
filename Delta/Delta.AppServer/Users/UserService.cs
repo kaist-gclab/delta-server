@@ -41,7 +41,7 @@ public class UserService
 
         await using var trx = await _context.Database.BeginTransactionAsync();
 
-        var duplicates = from u in _context.Users
+        var duplicates = from u in _context.User
             where u.Username == username
             select u;
         if (duplicates.Any())
@@ -56,7 +56,7 @@ public class UserService
         };
         user.ChangePassword(password);
 
-        await _context.Users.AddAsync(user);
+        await _context.User.AddAsync(user);
         await _context.SaveChangesAsync();
         await trx.CommitAsync();
     }
@@ -89,7 +89,7 @@ public class UserService
             };
         }
 
-        var q = from u in _context.Users
+        var q = from u in _context.User
             where u.Username == username
             select u;
 

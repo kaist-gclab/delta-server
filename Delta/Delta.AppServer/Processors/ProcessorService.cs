@@ -17,13 +17,13 @@ public class ProcessorService
         _clock = clock;
     }
 
-    public async Task<ProcessorNode?> GetNode(long id) => await _context.ProcessorNodes.FindAsync(id);
+    public async Task<ProcessorNode?> GetNode(long id) => await _context.ProcessorNode.FindAsync(id);
 
     public async Task<ProcessorNode?> RegisterProcessorNode(RegisterProcessorNodeRequest request)
     {
         await using var trx = await _context.Database.BeginTransactionAsync();
 
-        var node = await (from n in _context.ProcessorNodes
+        var node = await (from n in _context.ProcessorNode
             where n.Key == request.Key
             select n).FirstOrDefaultAsync();
 
@@ -37,8 +37,8 @@ public class ProcessorService
         foreach (var cap in request.Capabilities)
         {
             var (jobTypeId, assetTypeId, mediaType) = cap;
-            var jobType = await _context.JobTypes.FindAsync(jobTypeId);
-            var assetType = assetTypeId == null ? null : await _context.AssetTypes.FindAsync(assetTypeId);
+            var jobType = await _context.JobType.FindAsync(jobTypeId);
+            var assetType = assetTypeId == null ? null : await _context.AssetType.FindAsync(assetTypeId);
             if (jobType == null)
             {
                 return null;
@@ -57,5 +57,5 @@ public class ProcessorService
         return node;
     }
 
-    public async Task<IEnumerable<ProcessorNode>> GetProcessorNodes() => await _context.ProcessorNodes.ToListAsync();
+    public async Task<IEnumerable<ProcessorNode>> GetProcessorNodes() => await _context.ProcessorNode.ToListAsync();
 }

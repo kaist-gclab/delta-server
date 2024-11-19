@@ -33,20 +33,20 @@ public class AssetMetadataServiceTest : ServiceTest
         }).Entity;
         await context.SaveChangesAsync();
 
-        Assert.Empty(context.AssetTags);
+        Assert.Empty(context.AssetTag);
         await service.UpdateAssetTag(asset.Id, "key", "value");
-        Assert.Single(context.AssetTags);
-        var tag = context.AssetTags.First();
+        Assert.Single(context.AssetTag);
+        var tag = context.AssetTag.First();
         Assert.Equal("key", tag.Key);
         Assert.Equal("value", tag.Value);
         await service.UpdateAssetTag(asset.Id, "key", "1");
-        tag = context.AssetTags.First();
+        tag = context.AssetTag.First();
         Assert.Equal("1", tag.Value);
-        Assert.Single(context.AssetTags);
+        Assert.Single(context.AssetTag);
         await service.UpdateAssetTag(asset.Id, "key", "2");
-        tag = context.AssetTags.First();
+        tag = context.AssetTag.First();
         Assert.Equal("2", tag.Value);
-        Assert.Single(context.AssetTags);
+        Assert.Single(context.AssetTag);
     }
 
     [Fact]
@@ -84,7 +84,7 @@ public class AssetMetadataServiceTest : ServiceTest
         await service.UpdateAssetTag(assetB.Id, "e", "f");
         await service.UpdateAssetTag(assetB.Id, "z", "p");
 
-        Assert.Equal(6, context.AssetTags.Count());
+        Assert.Equal(6, context.AssetTag.Count());
         Assert.Equal(2, (await service.FindByAssetTag("a", null)).Count());
         Assert.Equal(2, (await service.FindByAssetTag("a", "b")).Count());
         Assert.Equal(2, (await service.FindByAssetTag(null, "b")).Count());

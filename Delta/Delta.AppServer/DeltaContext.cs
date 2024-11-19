@@ -16,20 +16,20 @@ public class DeltaContext : DbContext
     {
     }
 
-    public virtual DbSet<Asset> Assets => Set<Asset>();
+    public virtual DbSet<Asset> Asset => Set<Asset>();
     public virtual DbSet<Bucket> Bucket => Set<Bucket>();
-    public virtual DbSet<AssetTag> AssetTags => Set<AssetTag>();
-    public virtual DbSet<AssetType> AssetTypes => Set<AssetType>();
-    public virtual DbSet<Job> Jobs => Set<Job>();
-    public virtual DbSet<JobType> JobTypes => Set<JobType>();
-    public virtual DbSet<JobExecution> JobExecutions => Set<JobExecution>();
-    public virtual DbSet<JobExecutionStatus> JobExecutionStatuses => Set<JobExecutionStatus>();
-    public virtual DbSet<ProcessorNode> ProcessorNodes => Set<ProcessorNode>();
-    public virtual DbSet<ProcessorNodeStatus> ProcessorNodeStatuses => Set<ProcessorNodeStatus>();
-    public virtual DbSet<ProcessorNodeCapability> ProcessorNodeCapabilities => Set<ProcessorNodeCapability>();
-    public virtual DbSet<EncryptionKey> EncryptionKeys => Set<EncryptionKey>();
-    public virtual DbSet<User> Users => Set<User>();
-    public virtual DbSet<Setting> Settings => Set<Setting>();
+    public virtual DbSet<AssetTag> AssetTag => Set<AssetTag>();
+    public virtual DbSet<AssetType> AssetType => Set<AssetType>();
+    public virtual DbSet<Job> Job => Set<Job>();
+    public virtual DbSet<JobType> JobType => Set<JobType>();
+    public virtual DbSet<JobExecution> JobExecution => Set<JobExecution>();
+    public virtual DbSet<JobExecutionStatus> JobExecutionStatus => Set<JobExecutionStatus>();
+    public virtual DbSet<ProcessorNode> ProcessorNode => Set<ProcessorNode>();
+    public virtual DbSet<ProcessorNodeStatus> ProcessorNodeStatus => Set<ProcessorNodeStatus>();
+    public virtual DbSet<ProcessorNodeCapability> ProcessorNodeCapability => Set<ProcessorNodeCapability>();
+    public virtual DbSet<EncryptionKey> EncryptionKey => Set<EncryptionKey>();
+    public virtual DbSet<User> User => Set<User>();
+    public virtual DbSet<Setting> Setting => Set<Setting>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

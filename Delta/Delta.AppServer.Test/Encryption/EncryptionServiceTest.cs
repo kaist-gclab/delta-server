@@ -18,14 +18,14 @@ public class EncryptionServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        Assert.Empty(context.EncryptionKeys);
+        Assert.Empty(context.EncryptionKey);
         await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A"));
-        Assert.Single(context.EncryptionKeys);
+        Assert.Single(context.EncryptionKey);
         Assert.Null(await service.AddEncryptionKey(new CreateEncryptionKeyRequest("")));
         Assert.Null(await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A")));
-        Assert.Single(context.EncryptionKeys);
+        Assert.Single(context.EncryptionKey);
         Assert.NotNull(await service.AddEncryptionKey(new CreateEncryptionKeyRequest("B")));
-        Assert.Equal(2, context.EncryptionKeys.Count());
+        Assert.Equal(2, context.EncryptionKey.Count());
     }
 
     [Fact]

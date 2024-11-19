@@ -70,7 +70,7 @@ public class AssetService
 
     public async Task<GetAssetResponse?> GetAsset(long id)
     {
-        var asset = await _context.Assets.FindAsync(id);
+        var asset = await _context.Asset.FindAsync(id);
         if (asset == null)
         {
             return null;

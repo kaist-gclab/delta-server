@@ -34,7 +34,7 @@ public class EncryptionService
         var name = createEncryptionKeyRequest.Name;
 
         await using var trx = await _context.Database.BeginTransactionAsync();
-        if (_context.EncryptionKeys.Any(k => k.Name == name))
+        if (_context.EncryptionKey.Any(k => k.Name == name))
         {
             return null;
         }
@@ -59,7 +59,7 @@ public class EncryptionService
         return new CreateEncryptionKeyResponse(keyView, value);
     }
 
-    public IQueryable<EncryptionKey> GetEncryptionKeys() => _context.EncryptionKeys;
+    public IQueryable<EncryptionKey> GetEncryptionKeys() => _context.EncryptionKey;
 
     public byte[]? Encrypt(EncryptionKey encryptionKey, byte[] plainData)
     {
@@ -111,7 +111,7 @@ public class EncryptionService
 
     public async Task<EncryptionKey?> GetEncryptionKey(string name)
     {
-        var q = from e in _context.EncryptionKeys
+        var q = from e in _context.EncryptionKey
             where e.Name == name
             select e;
 
@@ -135,7 +135,7 @@ public class EncryptionService
 
     public async Task EnableKey(long encryptionKeyId)
     {
-        var key = await _context.EncryptionKeys.FindAsync(encryptionKeyId);
+        var key = await _context.EncryptionKey.FindAsync(encryptionKeyId);
         if (key == null)
         {
             return;

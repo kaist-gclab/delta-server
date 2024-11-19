@@ -21,7 +21,7 @@ public class JobService
 
     public async Task<IEnumerable<JobTypeView>> GetJobTypeViews()
     {
-        var q = from t in _context.JobTypes
+        var q = from t in _context.JobType
             select new JobTypeView(t.Id, t.Key, t.Name);
 
         return await q.ToListAsync();
@@ -58,7 +58,7 @@ public class JobService
     {
         await using var trx = await _context.Database.BeginTransactionAsync();
 
-        var processorNodeQuery = from n in _context.ProcessorNodes
+        var processorNodeQuery = from n in _context.ProcessorNode
                 .Include(n => n.ProcessorNodeCapabilities)
             where n.Id == jobScheduleRequest.ProcessorNodeId
             select n;
@@ -68,7 +68,7 @@ public class JobService
             return null;
         }
 
-        var availableJobs = from j in _context.Jobs
+        var availableJobs = from j in _context.Job
             let last =
                 from e in j.JobExecutions
                 let last =
@@ -130,7 +130,7 @@ public class JobService
     public async Task AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
-        var jobExecution = await _context.JobExecutions.FindAsync(jobExecutionId);
+        var jobExecution = await _context.JobExecution.FindAsync(jobExecutionId);
         if (jobExecution == null)
         {
             return;
@@ -169,6 +169,6 @@ public class JobService
 
     public async Task<IEnumerable<Job>> GetJobs()
     {
-        return await _context.Jobs.ToListAsync();
+        return await _context.Job.ToListAsync();
     }
 }
