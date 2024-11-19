@@ -22,20 +22,20 @@ public class EncryptionService(DeltaContext context)
         0xa4, 0xa1, 0x5a, 0xec, 0x70, 0x9d, 0x14, 0x0e
     };
 
-    public async Task<CreateEncryptionKeyResponse?> AddEncryptionKey(
+    public async Task AddEncryptionKey(
         CreateEncryptionKeyRequest createEncryptionKeyRequest)
     {
         var name = createEncryptionKeyRequest.Name;
 
         await using var trx = await context.Database.BeginTransactionAsync();
-        if (context.EncryptionKey.Any(k => k.Name == name))
+        if (await context.EncryptionKey.AnyAsync(k => k.Name == name))
         {
-            return null;
+            return;
         }
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            return null;
+            return;
         }
 
         var value = Guid.NewGuid().ToString();
@@ -49,17 +49,14 @@ public class EncryptionService(DeltaContext context)
         await context.AddAsync(encryptionKey);
         await context.SaveChangesAsync();
         await trx.CommitAsync();
-
-        var keyView = new EncryptionKeyView(encryptionKey.Id, encryptionKey.Name,
-            encryptionKey.Enabled, encryptionKey.Optimized);
-        return new CreateEncryptionKeyResponse(keyView, value);
     }
 
     public async Task<IEnumerable<EncryptionKeyView>> GetEncryptionKeys()
     {
         var q = from k in context.EncryptionKey
-            select new EncryptionKeyView(k.Id, k.Name, k.Enabled, k.Optimized);
-        
+            select new EncryptionKeyView(k.Id, k.Name, k.Enabled, k.Optimized,
+                k.Buckets.Count, k.Buckets.Sum(b => b.Assets.Count));
+
         return await q.ToListAsync();
     }
 
@@ -111,11 +108,12 @@ public class EncryptionService(DeltaContext context)
         return plainText;
     }
 
-    public async Task<EncryptionKey?> GetEncryptionKey(string name)
+    public async Task<EncryptionKeyView?> GetEncryptionKey(long id)
     {
-        var q = from e in context.EncryptionKey
-            where e.Name == name
-            select e;
+        var q = from k in context.EncryptionKey
+            where k.Id == id
+            select new EncryptionKeyView(k.Id, k.Name, k.Enabled, k.Optimized,
+                k.Buckets.Count, k.Buckets.Sum(b => b.Assets.Count));
 
         return await q.FirstOrDefaultAsync();
     }

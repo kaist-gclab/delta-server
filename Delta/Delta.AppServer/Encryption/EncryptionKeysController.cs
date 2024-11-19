@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using CodeGen.Analysis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Encryption;
@@ -15,16 +15,24 @@ public class EncryptionKeysController(EncryptionService encryptionService) : Con
         return await encryptionService.GetEncryptionKeys();
     }
 
-    [HttpPost]
-    public async Task<ActionResult<CreateEncryptionKeyResponse>> Create(
-        [FromBody] CreateEncryptionKeyRequest createEncryptionKeyRequest)
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<EncryptionKeyView>> GetEncryptionKey(long id)
     {
-        var response = await encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
-        if (response == null)
+        var encryptionKey = await encryptionService.GetEncryptionKey(id);
+        if (encryptionKey == null)
         {
-            return BadRequest();
+            return NotFound();
         }
 
-        return Ok(response);
+        return Ok(encryptionKey);
+    }
+
+    [HttpPost]
+    [Command]
+    public async Task<ActionResult> Create(
+        [FromBody] CreateEncryptionKeyRequest createEncryptionKeyRequest)
+    {
+        await encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
+        return Ok();
     }
 }
