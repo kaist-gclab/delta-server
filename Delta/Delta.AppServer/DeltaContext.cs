@@ -21,7 +21,7 @@ public class DeltaContext(DbContextOptions<DeltaContext> options) : DbContext(op
     public virtual DbSet<AssetTag> AssetTag => Set<AssetTag>();
     public virtual DbSet<Job> Job => Set<Job>();
     public virtual DbSet<JobType> JobType => Set<JobType>();
-    public virtual DbSet<JobExecution> JobExecution => Set<JobExecution>();
+    public virtual DbSet<JobRun> JobExecution => Set<JobRun>();
     public virtual DbSet<JobExecutionStatus> JobExecutionStatus => Set<JobExecutionStatus>();
     public virtual DbSet<ProcessorNode> ProcessorNode => Set<ProcessorNode>();
     public virtual DbSet<ProcessorNodeStatus> ProcessorNodeStatus => Set<ProcessorNodeStatus>();

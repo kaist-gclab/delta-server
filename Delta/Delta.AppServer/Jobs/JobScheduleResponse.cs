@@ -1,3 +1,3 @@
 namespace Delta.AppServer.Jobs;
 
-public record JobScheduleResponse(JobExecution JobExecution);
+public record JobScheduleResponse(JobRun JobRun);

@@ -30,7 +30,7 @@ public class ProcessorNode
         });
     }
 
-    public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
+    public virtual ICollection<JobRun> JobExecutions { get; set; } = new HashSet<JobRun>();
 
     public virtual ICollection<ProcessorNodeStatus> ProcessorNodeStatuses { get; set; } =
         new HashSet<ProcessorNodeStatus>();

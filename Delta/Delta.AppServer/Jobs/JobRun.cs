@@ -6,7 +6,7 @@ using NodaTime;
 
 namespace Delta.AppServer.Jobs;
 
-public class JobExecution
+public class JobRun
 {
     public long Id { get; set; }
 

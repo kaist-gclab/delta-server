@@ -14,6 +14,6 @@ public class Job
 
     public virtual required JobType JobType { get; set; }
     public virtual required Asset? InputAsset { get; set; }
-    public virtual ICollection<JobExecution> JobExecutions { get; set; } = new HashSet<JobExecution>();
+    public virtual ICollection<JobRun> JobExecutions { get; set; } = new HashSet<JobRun>();
     public virtual ProcessorNode? AssignedProcessorNode { get; set; }
 }

@@ -79,7 +79,7 @@ public class JobService(DeltaContext context, IClock clock)
             return null;
         }
 
-        var jobExecution = new JobExecution
+        var jobExecution = new JobRun
         {
             ProcessorNode = processorNode,
             Job = job

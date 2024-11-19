@@ -12,7 +12,7 @@ public class AssetService(DeltaContext context, IClock clock, IObjectStorageServ
     {
         var parentJobExecution = createAssetRequest.ParentJobExecutionId == null
             ? null
-            : await context.FindAsync<JobExecution>(createAssetRequest.ParentJobExecutionId);
+            : await context.FindAsync<JobRun>(createAssetRequest.ParentJobExecutionId);
         if (createAssetRequest.ParentJobExecutionId != null && parentJobExecution == null)
         {
             return;

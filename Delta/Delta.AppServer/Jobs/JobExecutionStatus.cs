@@ -9,5 +9,5 @@ public class JobExecutionStatus
     public Instant Timestamp { get; set; }
     public string? Status { get; set; }
 
-    public virtual JobExecution? JobExecution { get; set; }
+    public virtual JobRun? JobExecution { get; set; }
 }
