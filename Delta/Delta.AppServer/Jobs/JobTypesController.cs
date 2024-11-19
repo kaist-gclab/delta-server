@@ -6,18 +6,11 @@ namespace Delta.AppServer.Jobs;
 
 [ApiController]
 [Route(Delta.ApiRoot + "job-types")]
-public class JobTypesController : ControllerBase
+public class JobTypesController(JobService jobService) : ControllerBase
 {
-    private readonly JobService _jobService;
-
-    public JobTypesController(JobService jobService)
-    {
-        _jobService = jobService;
-    }
-
     [HttpGet]
     public async Task<IEnumerable<JobTypeView>> GetJobTypes()
     {
-        return await _jobService.GetJobTypeViews();
+        return await jobService.GetJobTypeViews();
     }
 }
