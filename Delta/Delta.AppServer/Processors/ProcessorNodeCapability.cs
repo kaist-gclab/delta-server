@@ -1,4 +1,3 @@
-using Delta.AppServer.Assets;
 using Delta.AppServer.Jobs;
 
 namespace Delta.AppServer.Processors;

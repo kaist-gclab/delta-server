@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Delta.AppServer.Jobs;
-using Delta.AppServer.Encryption;
 using NodaTime;
 
 namespace Delta.AppServer.Assets;
@@ -9,15 +7,8 @@ namespace Delta.AppServer.Assets;
 public class Asset
 {
     public long Id { get; set; }
-    public required string MediaType { get; set; }
     public required string StoreKey { get; set; }
     public required Instant CreatedAt { get; set; }
-
-
-    public virtual EncryptionKey? EncryptionKey { get; set; }
-
-    public virtual required JobExecution? ParentJobExecution { get; set; }
-    public virtual ICollection<Job> InputJobs { get; set; } = new HashSet<Job>();
     public virtual ICollection<AssetTag> AssetTags { get; set; } = new HashSet<AssetTag>();
 
     public void UpdateAssetTag(string key, string value)

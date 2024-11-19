@@ -142,8 +142,7 @@ public class JobService(DeltaContext context, IClock clock)
                 continue;
             }
 
-            if (job.InputAsset.MediaType != cap.MediaType ||
-                job.JobType != cap.JobType)
+            if (job.JobType != cap.JobType)
             {
                 continue;
             }

@@ -30,9 +30,6 @@ public class AssetService(DeltaContext context, IClock clock, IObjectStorageServ
         var asset = new Asset
         {
             StoreKey = createAssetRequest.StoreKey,
-            EncryptionKey = encryptionKey,
-            ParentJobExecution = parentJobExecution,
-            MediaType = createAssetRequest.MediaType,
             CreatedAt = clock.GetCurrentInstant()
         };
 
