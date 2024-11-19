@@ -27,8 +27,10 @@ public class AssetService
             return;
         }
 
-        var parentJobExecution = await _context.FindAsync<JobExecution>(createAssetRequest.ParentJobExecutionId);
-        if (parentJobExecution == null)
+        var parentJobExecution = createAssetRequest.ParentJobExecutionId == null
+            ? null
+            : await _context.FindAsync<JobExecution>(createAssetRequest.ParentJobExecutionId);
+        if (createAssetRequest.ParentJobExecutionId != null && parentJobExecution == null)
         {
             return;
         }
