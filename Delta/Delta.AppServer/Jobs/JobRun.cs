@@ -14,7 +14,7 @@ public class JobRun
     public virtual required ProcessorNode ProcessorNode { get; set; }
 
     public virtual ICollection<Asset> ResultAssets { get; set; } = new HashSet<Asset>();
-    public virtual ICollection<JobExecutionStatus> JobExecutionStatuses { get; set; } = new HashSet<JobExecutionStatus>();
+    public virtual ICollection<JobRunStatus> JobExecutionStatuses { get; set; } = new HashSet<JobRunStatus>();
 
     public void AddStatus(Instant timestamp, string status)
     {
@@ -25,7 +25,7 @@ public class JobRun
             throw new Exception();
         }
 
-        JobExecutionStatuses.Add(new JobExecutionStatus
+        JobExecutionStatuses.Add(new JobRunStatus
         {
             Timestamp = timestamp,
             Status = status

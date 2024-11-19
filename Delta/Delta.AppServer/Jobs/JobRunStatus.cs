@@ -2,7 +2,7 @@ using NodaTime;
 
 namespace Delta.AppServer.Jobs;
 
-public class JobExecutionStatus
+public class JobRunStatus
 {
     public long Id { get; set; }
     public long JobExecutionId { get; set; }

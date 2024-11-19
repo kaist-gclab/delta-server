@@ -22,7 +22,7 @@ public class DeltaContext(DbContextOptions<DeltaContext> options) : DbContext(op
     public virtual DbSet<Job> Job => Set<Job>();
     public virtual DbSet<JobType> JobType => Set<JobType>();
     public virtual DbSet<JobRun> JobRun => Set<JobRun>();
-    public virtual DbSet<JobExecutionStatus> JobExecutionStatus => Set<JobExecutionStatus>();
+    public virtual DbSet<JobRunStatus> JobExecutionStatus => Set<JobRunStatus>();
     public virtual DbSet<ProcessorNode> ProcessorNode => Set<ProcessorNode>();
     public virtual DbSet<ProcessorNodeStatus> ProcessorNodeStatus => Set<ProcessorNodeStatus>();
     public virtual DbSet<EncryptionKey> EncryptionKey => Set<EncryptionKey>();
