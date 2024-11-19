@@ -5,17 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Delta.AppServer.Assets;
 
-public class AssetMetadataService
+public class AssetMetadataService(DeltaContext context)
 {
-    private readonly DeltaContext _context;
-
-    public AssetMetadataService(DeltaContext context)
-    {
-        _context = context;
-    }
-
-    public IEnumerable<Asset> GetAssets() => _context.Asset.ToList();
-    public Asset? GetAsset(long id) => _context.Asset.Find(id);
+    public IEnumerable<Asset> GetAssets() => context.Asset.ToList();
+    public Asset? GetAsset(long id) => context.Asset.Find(id);
 
     public async Task<IEnumerable<Asset>> FindByAssetTag(string? key, string? value)
     {
@@ -26,7 +19,7 @@ public class AssetMetadataService
 
         if (key == null)
         {
-            var valueQuery = from a in _context.Asset
+            var valueQuery = from a in context.Asset
                 where (from t in a.AssetTags
                     where t.Value == value
                     select t).Any()
@@ -37,7 +30,7 @@ public class AssetMetadataService
 
         if (value == null)
         {
-            var keyQuery = from a in _context.Asset
+            var keyQuery = from a in context.Asset
                 where (from t in a.AssetTags
                     where t.Key == key
                     select t).Any()
@@ -46,7 +39,7 @@ public class AssetMetadataService
             return await keyQuery.ToListAsync();
         }
 
-        var keyValueQuery = from a in _context.Asset
+        var keyValueQuery = from a in context.Asset
             where (from t in a.AssetTags
                 where t.Key == key && t.Value == value
                 select t).Any()
@@ -57,13 +50,13 @@ public class AssetMetadataService
 
     public async Task UpdateAssetTag(long assetId, string key, string value)
     {
-        var asset = await _context.Asset.FindAsync(assetId);
+        var asset = await context.Asset.FindAsync(assetId);
         if (asset == null)
         {
             return;
         }
 
         asset.UpdateAssetTag(key, value);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 }
