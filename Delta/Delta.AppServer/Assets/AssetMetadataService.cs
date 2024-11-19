@@ -16,7 +16,14 @@ public class AssetMetadataService
 
     public IEnumerable<Asset> GetAssets() => _context.Assets.ToList();
     public Asset? GetAsset(long id) => _context.Assets.Find(id);
-    public IQueryable<AssetType> GetAssetTypes() => _context.AssetTypes;
+
+    public async Task<IEnumerable<AssetTypeView>> GetAssetTypeViews()
+    {
+        var q = from t in _context.AssetTypes
+            select new AssetTypeView(t.Id, t.Name, t.Name);
+
+        return await q.ToListAsync();
+    }
 
     public async Task<AssetType?> GetAssetType(string key)
     {
