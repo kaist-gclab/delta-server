@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Delta.AppServer.Jobs;
 
-namespace Delta.AppServer.Jobs;
+namespace Delta.AppServer.JobTypes;
 
 public class JobType
 {

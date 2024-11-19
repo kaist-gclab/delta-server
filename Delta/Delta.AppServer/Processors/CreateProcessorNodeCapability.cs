@@ -1,4 +1,4 @@
-using Delta.AppServer.Jobs;
+using Delta.AppServer.JobTypes;
 
 namespace Delta.AppServer.Processors;
 

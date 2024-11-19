@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Delta.AppServer.Assets;
+using Delta.AppServer.JobTypes;
 using Delta.AppServer.Processors;
 using NodaTime;
 

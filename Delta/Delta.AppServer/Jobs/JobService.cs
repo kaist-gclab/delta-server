@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Delta.AppServer.Assets;
+using Delta.AppServer.JobTypes;
 using Delta.AppServer.Processors;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;

@@ -4,6 +4,7 @@ using Delta.AppServer.Buckets;
 using Delta.AppServer.Jobs;
 using Delta.AppServer.Processors;
 using Delta.AppServer.Encryption;
+using Delta.AppServer.JobTypes;
 using Delta.AppServer.Settings;
 using Delta.AppServer.Users;
 using Microsoft.EntityFrameworkCore;
