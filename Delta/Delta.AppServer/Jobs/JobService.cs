@@ -8,20 +8,11 @@ using NodaTime;
 
 namespace Delta.AppServer.Jobs;
 
-public class JobService
+public class JobService(DeltaContext context, IClock clock)
 {
-    private readonly DeltaContext _context;
-    private readonly IClock _clock;
-
-    public JobService(DeltaContext context, IClock clock)
-    {
-        _context = context;
-        _clock = clock;
-    }
-
     public async Task<IEnumerable<JobTypeView>> GetJobTypeViews()
     {
-        var q = from t in _context.JobType
+        var q = from t in context.JobType
             select new JobTypeView(t.Id, t.Key, t.Name);
 
         return await q.ToListAsync();
@@ -29,13 +20,13 @@ public class JobService
 
     public async Task CreateJob(CreateJobRequest createJobRequest)
     {
-        var inputAsset = await _context.FindAsync<Asset>(createJobRequest.InputAssetId);
+        var inputAsset = await context.FindAsync<Asset>(createJobRequest.InputAssetId);
         if (inputAsset == null)
         {
             return;
         }
 
-        var jobType = await _context.FindAsync<JobType>(createJobRequest.JobTypeId);
+        var jobType = await context.FindAsync<JobType>(createJobRequest.JobTypeId);
         if (jobType == null)
         {
             return;
@@ -47,18 +38,18 @@ public class JobService
             JobType = jobType,
             JobArguments = createJobRequest.JobArguments,
             AssignedProcessorNodeId = createJobRequest.AssignedProcessorNodeId,
-            CreatedAt = _clock.GetCurrentInstant()
+            CreatedAt = clock.GetCurrentInstant()
         };
 
-        await _context.AddAsync(job);
-        await _context.SaveChangesAsync();
+        await context.AddAsync(job);
+        await context.SaveChangesAsync();
     }
 
     public async Task<JobScheduleResponse?> ScheduleNextJob(JobScheduleRequest jobScheduleRequest)
     {
-        await using var trx = await _context.Database.BeginTransactionAsync();
+        await using var trx = await context.Database.BeginTransactionAsync();
 
-        var processorNodeQuery = from n in _context.ProcessorNode
+        var processorNodeQuery = from n in context.ProcessorNode
                 .Include(n => n.ProcessorNodeCapabilities)
             where n.Id == jobScheduleRequest.ProcessorNodeId
             select n;
@@ -68,7 +59,7 @@ public class JobService
             return null;
         }
 
-        var availableJobs = from j in _context.Job
+        var availableJobs = from j in context.Job
             let last =
                 from e in j.JobExecutions
                 let last =
@@ -95,11 +86,11 @@ public class JobService
             Job = job
         };
 
-        var now = _clock.GetCurrentInstant();
+        var now = clock.GetCurrentInstant();
         jobExecution.AddStatus(now, PredefinedJobExecutionStatuses.Assigned);
         processorNode.AddNodeStatus(now, PredefinedProcessorNodeStatuses.Busy);
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         await trx.CommitAsync();
         return new JobScheduleResponse(jobExecution);
 
@@ -130,15 +121,15 @@ public class JobService
     public async Task AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
-        var jobExecution = await _context.JobExecution.FindAsync(jobExecutionId);
+        var jobExecution = await context.JobExecution.FindAsync(jobExecutionId);
         if (jobExecution == null)
         {
             return;
         }
 
-        jobExecution.AddStatus(_clock.GetCurrentInstant(),
+        jobExecution.AddStatus(clock.GetCurrentInstant(),
             addJobExecutionStatusRequest.Status);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 
     private static bool ValidateCompatibility(Job job, IEnumerable<ProcessorNodeCapability> capabilities)
@@ -163,6 +154,6 @@ public class JobService
 
     public async Task<IEnumerable<Job>> GetJobs()
     {
-        return await _context.Job.ToListAsync();
+        return await context.Job.ToListAsync();
     }
 }
