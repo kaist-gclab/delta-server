@@ -8,32 +8,22 @@ using NodaTime;
 
 namespace Delta.AppServer.Core.Schedule;
 
-public class ScopedScheduledHostedService<T> : BackgroundService
+public class ScopedScheduledHostedService<T>(
+    ILogger<ScopedScheduledHostedService<T>> logger,
+    IServiceProvider serviceProvider,
+    ScheduleHelper scheduleHelper,
+    IClock clock)
+    : BackgroundService
     where T : IScheduledTask
 {
-    private readonly ILogger<ScopedScheduledHostedService<T>> _logger;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ScheduleHelper _scheduleHelper;
-    private readonly IClock _clock;
-
-    public ScopedScheduledHostedService(ILogger<ScopedScheduledHostedService<T>> logger,
-        IServiceProvider serviceProvider, ScheduleHelper scheduleHelper,
-        IClock clock)
-    {
-        _logger = logger;
-        _serviceProvider = serviceProvider;
-        _scheduleHelper = scheduleHelper;
-        _clock = clock;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var next = Instant.MinValue;
         while (!cancellationToken.IsCancellationRequested)
         {
-            if (next <= _clock.GetCurrentInstant())
+            if (next <= clock.GetCurrentInstant())
             {
-                using var scope = _serviceProvider.CreateScope();
+                using var scope = serviceProvider.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<T>();
 
                 try
@@ -46,10 +36,10 @@ public class ScopedScheduledHostedService<T> : BackgroundService
                 catch (Exception e)
                 {
                     var typeFullName = typeof(T).FullName;
-                    _logger.LogError(e, "ExecuteAsync {TypeFullName}", typeFullName);
+                    logger.LogError(e, "ExecuteAsync {TypeFullName}", typeFullName);
                 }
 
-                next = _scheduleHelper.ComputeNext(service.Interval, service.Offset);
+                next = scheduleHelper.ComputeNext(service.Interval, service.Offset);
             }
 
             if (next == Instant.MaxValue)
@@ -58,7 +48,7 @@ public class ScopedScheduledHostedService<T> : BackgroundService
                 continue;
             }
 
-            var delay = next.Minus(_clock.GetCurrentInstant());
+            var delay = next.Minus(clock.GetCurrentInstant());
             delay = Duration.Max(delay, Duration.Zero);
 
             if (delay >= Duration.FromMinutes(10))
