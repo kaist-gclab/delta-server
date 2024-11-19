@@ -6,26 +6,19 @@ namespace Delta.AppServer.Encryption;
 
 [ApiController]
 [Route(Delta.ApiRoot + "encryption-keys")]
-public class EncryptionKeysController : ControllerBase
+public class EncryptionKeysController(EncryptionService encryptionService) : ControllerBase
 {
-    private readonly EncryptionService _encryptionService;
-
-    public EncryptionKeysController(EncryptionService encryptionService)
-    {
-        _encryptionService = encryptionService;
-    }
-
     [HttpGet]
     public IEnumerable<EncryptionKey> GetEncryptionKeys()
     {
-        return _encryptionService.GetEncryptionKeys();
+        return encryptionService.GetEncryptionKeys();
     }
 
     [HttpPost]
     public async Task<ActionResult<CreateEncryptionKeyResponse>> Create(
         [FromBody] CreateEncryptionKeyRequest createEncryptionKeyRequest)
     {
-        var response = await _encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
+        var response = await encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
         if (response == null)
         {
             return BadRequest();
