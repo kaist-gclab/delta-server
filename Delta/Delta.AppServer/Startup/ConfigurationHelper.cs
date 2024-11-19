@@ -1,14 +1,19 @@
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using NodaTime;
-using NodaTime.Serialization.JsonNet;
+using NodaTime.Serialization.SystemTextJson;
 
 namespace Delta.AppServer.Startup;
 
 public static class ConfigurationHelper
 {
-    public static void ConfigureJsonSerializerSettings(this JsonSerializerSettings settings)
+    public static void ConfigureJsonSerializerSettings(this JsonSerializerOptions options)
     {
-        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        options.PropertyNameCaseInsensitive = true;
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.NumberHandling = JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString;
+        options.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
     }
 }
