@@ -5,17 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Delta.AppServer.Users;
 
-public class UserService
+public class UserService(DeltaContext context, AuthConfig authConfig)
 {
-    private readonly DeltaContext _context;
-    private readonly AuthConfig _authConfig;
-
-    public UserService(DeltaContext context, AuthConfig authConfig)
-    {
-        _context = context;
-        _authConfig = authConfig;
-    }
-
     public async Task<User?> Login(string username, string password)
     {
         var user = await GetUserByUsername(username);
@@ -24,9 +15,9 @@ public class UserService
             return null;
         }
 
-        if (user.Username == _authConfig.AdminUsername)
+        if (user.Username == authConfig.AdminUsername)
         {
-            return password == _authConfig.AdminPassword ? user : null;
+            return password == authConfig.AdminPassword ? user : null;
         }
 
         return user.ValidatePassword(password) ? user : null;
@@ -34,14 +25,14 @@ public class UserService
 
     public async Task AddUser(string username, string password, string name)
     {
-        if (username == _authConfig.AdminUsername)
+        if (username == authConfig.AdminUsername)
         {
             return;
         }
 
-        await using var trx = await _context.Database.BeginTransactionAsync();
+        await using var trx = await context.Database.BeginTransactionAsync();
 
-        var duplicates = from u in _context.User
+        var duplicates = from u in context.User
             where u.Username == username
             select u;
         if (duplicates.Any())
@@ -56,40 +47,40 @@ public class UserService
         };
         user.ChangePassword(password);
 
-        await _context.User.AddAsync(user);
-        await _context.SaveChangesAsync();
+        await context.User.AddAsync(user);
+        await context.SaveChangesAsync();
         await trx.CommitAsync();
     }
 
     public async Task ChangePassword(string username, string newPassword)
     {
-        if (username == _authConfig.AdminUsername)
+        if (username == authConfig.AdminUsername)
         {
             return;
         }
 
         var user = await GetUserByUsername(username);
         user?.ChangePassword(newPassword);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 
     public string GetRole(User user)
     {
-        return user.Username == _authConfig.AdminUsername ? "Admin" : "User";
+        return user.Username == authConfig.AdminUsername ? "Admin" : "User";
     }
 
     private async Task<User?> GetUserByUsername(string username)
     {
-        if (username == _authConfig.AdminUsername)
+        if (username == authConfig.AdminUsername)
         {
             return new User
             {
-                Name = _authConfig.AdminUsername,
-                Username = _authConfig.AdminUsername
+                Name = authConfig.AdminUsername,
+                Username = authConfig.AdminUsername
             };
         }
 
-        var q = from u in _context.User
+        var q = from u in context.User
             where u.Username == username
             select u;
 
