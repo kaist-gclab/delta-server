@@ -16,8 +16,8 @@ public class JobTypesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<JobType>> GetJobTypes()
+    public async Task<IEnumerable<JobTypeView>> GetJobTypes()
     {
-        return await _jobService.GetJobTypes();
+        return await _jobService.GetJobTypeViews();
     }
 }

@@ -19,9 +19,12 @@ public class JobService
         _clock = clock;
     }
 
-    public async Task<IEnumerable<JobType>> GetJobTypes()
+    public async Task<IEnumerable<JobTypeView>> GetJobTypeViews()
     {
-        return await _context.JobTypes.ToListAsync();
+        var q = from t in _context.JobTypes
+            select new JobTypeView(t.Id, t.Key, t.Name);
+
+        return await q.ToListAsync();
     }
 
     public async Task CreateJob(CreateJobRequest createJobRequest)
