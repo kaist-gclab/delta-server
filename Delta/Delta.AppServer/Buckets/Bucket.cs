@@ -11,4 +11,5 @@ public class Bucket
     public required Instant CreatedAt { get; set; }
     public virtual BucketGroup? BucketGroup { get; set; }
     public virtual ICollection<BucketTag> Tags { get; set; } = new HashSet<BucketTag>();
+    public virtual ICollection<BucketAsset> Assets { get; set; } = new HashSet<BucketAsset>();
 }

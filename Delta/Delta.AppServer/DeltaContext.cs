@@ -14,6 +14,7 @@ public class DeltaContext(DbContextOptions<DeltaContext> options) : DbContext(op
 {
     public virtual DbSet<Asset> Asset => Set<Asset>();
     public virtual DbSet<Bucket> Bucket => Set<Bucket>();
+    public virtual DbSet<BucketAsset> BucketAsset => Set<BucketAsset>();
     public virtual DbSet<BucketGroup> BucketGroup => Set<BucketGroup>();
     public virtual DbSet<BucketSource> BucketSource => Set<BucketSource>();
     public virtual DbSet<BucketTag> BucketTag => Set<BucketTag>();
