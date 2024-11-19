@@ -7,36 +7,29 @@ namespace Delta.AppServer.Assets;
 
 [ApiController]
 [Route(Delta.ApiRoot + "assets")]
-public class AssetsController : ControllerBase
+public class AssetsController(
+    AssetService assetService,
+    AssetMetadataService assetMetadataService)
+    : ControllerBase
 {
-    private readonly AssetService _assetService;
-    private readonly AssetMetadataService _assetMetadataService;
-
-    public AssetsController(AssetService assetService,
-        AssetMetadataService assetMetadataService)
-    {
-        _assetService = assetService;
-        _assetMetadataService = assetMetadataService;
-    }
-
     [HttpGet]
     public IEnumerable<Asset> GetAssets()
     {
-        return _assetMetadataService.GetAssets();
+        return assetMetadataService.GetAssets();
     }
 
     [HttpPost]
     [Command]
     public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
     {
-        await _assetService.AddAsset(createAssetRequest);
+        await assetService.AddAsset(createAssetRequest);
         return Ok();
     }
 
     [HttpGet("{id:long}")]
     public async Task<ActionResult<GetAssetResponse?>> GetAsset(long id)
     {
-        var response = await _assetService.GetAsset(id);
+        var response = await assetService.GetAsset(id);
         if (response == null)
         {
             return BadRequest();
