@@ -22,10 +22,9 @@ public class EncryptionService(DeltaContext context)
         0xa4, 0xa1, 0x5a, 0xec, 0x70, 0x9d, 0x14, 0x0e
     };
 
-    public async Task AddEncryptionKey(
-        CreateEncryptionKeyRequest createEncryptionKeyRequest)
+    public async Task AddEncryptionKey(CreateEncryptionKeyRequest request)
     {
-        var name = createEncryptionKeyRequest.Name;
+        var name = request.Name;
 
         await using var trx = await context.Database.BeginTransactionAsync();
         if (await context.EncryptionKey.AnyAsync(k => k.Name == name))
@@ -43,8 +42,8 @@ public class EncryptionService(DeltaContext context)
         {
             Name = name,
             Value = value,
-            Enabled = false,
-            Optimized = false
+            Enabled = request.Enabled,
+            Optimized = request.Optimized
         };
         await context.AddAsync(encryptionKey);
         await context.SaveChangesAsync();
