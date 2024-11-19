@@ -50,7 +50,6 @@ public class JobService(DeltaContext context, IClock clock)
         await using var trx = await context.Database.BeginTransactionAsync();
 
         var processorNodeQuery = from n in context.ProcessorNode
-                .Include(n => n.ProcessorNodeCapabilities)
             where n.Id == jobScheduleRequest.ProcessorNodeId
             select n;
         var processorNode = await processorNodeQuery.FirstOrDefaultAsync();
@@ -108,7 +107,7 @@ public class JobService(DeltaContext context, IClock clock)
                     continue;
                 }
 
-                if (ValidateCompatibility(j, processorNode.ProcessorNodeCapabilities))
+                if (ValidateCompatibility(j))
                 {
                     return j;
                 }
@@ -132,23 +131,9 @@ public class JobService(DeltaContext context, IClock clock)
         await context.SaveChangesAsync();
     }
 
-    private static bool ValidateCompatibility(Job job, IEnumerable<ProcessorNodeCapability> capabilities)
+    private static bool ValidateCompatibility(Job job)
     {
-        foreach (var cap in capabilities)
-        {
-            if (job.InputAsset == null)
-            {
-                // TODO
-                continue;
-            }
-
-            if (job.JobType != cap.JobType)
-            {
-                continue;
-            }
-        }
-
-        return false;
+        return true;
     }
 
     public async Task<IEnumerable<Job>> GetJobs()

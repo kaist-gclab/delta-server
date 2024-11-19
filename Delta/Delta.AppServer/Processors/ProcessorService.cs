@@ -37,8 +37,6 @@ public class ProcessorService(DeltaContext context, IClock clock)
             capabilities.Add(new CreateProcessorNodeCapability(jobType, mediaType));
         }
 
-        node.UpdateCapabilities(capabilities);
-
         node.AddNodeStatus(clock.GetCurrentInstant(),
             PredefinedProcessorNodeStatuses.Available);
 

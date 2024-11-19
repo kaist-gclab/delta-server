@@ -13,41 +13,6 @@ public class ProcessorNode
     public required string Key { get; set; }
     public string? Name { get; set; }
 
-    public virtual ICollection<ProcessorNodeCapability> ProcessorNodeCapabilities { get; set; } =
-        new HashSet<ProcessorNodeCapability>();
-
-    public void UpdateCapabilities(IEnumerable<CreateProcessorNodeCapability> requests)
-    {
-        var removed =
-            from cap in ProcessorNodeCapabilities
-            where (from req in requests
-                where req.MediaType == cap.MediaType &&
-                      req.JobType == cap.JobType
-                select req).Any()
-            select cap;
-        foreach (var c in removed.ToList())
-        {
-            ProcessorNodeCapabilities.Remove(c);
-        }
-
-        var adding = from req in requests
-            where (from cap in ProcessorNodeCapabilities
-                where req.MediaType == cap.MediaType &&
-                      req.JobType == cap.JobType
-                select req).Any() == false
-            select req;
-
-        foreach (var (jobType, mediaType) in adding.ToList())
-        {
-            ProcessorNodeCapabilities.Add(new ProcessorNodeCapability
-            {
-                MediaType = mediaType,
-                ProcessorNode = this,
-                JobType = jobType
-            });
-        }
-    }
-
     public void AddNodeStatus(Instant timestamp, string status)
     {
         if (status != PredefinedProcessorNodeStatuses.Available &&
