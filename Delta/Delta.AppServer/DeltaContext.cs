@@ -23,7 +23,6 @@ public class DeltaContext : DbContext
     public virtual DbSet<BucketSource> BucketSource => Set<BucketSource>();
     public virtual DbSet<BucketTag> BucketTag => Set<BucketTag>();
     public virtual DbSet<AssetTag> AssetTag => Set<AssetTag>();
-    public virtual DbSet<AssetType> AssetType => Set<AssetType>();
     public virtual DbSet<Job> Job => Set<Job>();
     public virtual DbSet<JobType> JobType => Set<JobType>();
     public virtual DbSet<JobExecution> JobExecution => Set<JobExecution>();

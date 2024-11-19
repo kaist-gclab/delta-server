@@ -38,13 +38,12 @@ public class ProcessorService
         {
             var (jobTypeId, assetTypeId, mediaType) = cap;
             var jobType = await _context.JobType.FindAsync(jobTypeId);
-            var assetType = assetTypeId == null ? null : await _context.AssetType.FindAsync(assetTypeId);
             if (jobType == null)
             {
                 return null;
             }
 
-            capabilities.Add(new CreateProcessorNodeCapability(jobType, assetType, mediaType));
+            capabilities.Add(new CreateProcessorNodeCapability(jobType, mediaType));
         }
 
         node.UpdateCapabilities(capabilities);

@@ -5,7 +5,6 @@ namespace Delta.AppServer.Jobs;
 
 public class ResultAsset
 {
-    public required AssetType AssetType { get; set; }
     public required IEnumerable<AssetTag> AssetTags { get; set; }
     public required byte[] Content { get; set; }
 }

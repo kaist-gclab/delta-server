@@ -22,7 +22,6 @@ public class ProcessorNode
             from cap in ProcessorNodeCapabilities
             where (from req in requests
                 where req.MediaType == cap.MediaType &&
-                      req.AssetType == cap.AssetType &&
                       req.JobType == cap.JobType
                 select req).Any()
             select cap;
@@ -34,19 +33,17 @@ public class ProcessorNode
         var adding = from req in requests
             where (from cap in ProcessorNodeCapabilities
                 where req.MediaType == cap.MediaType &&
-                      req.AssetType == cap.AssetType &&
                       req.JobType == cap.JobType
                 select req).Any() == false
             select req;
 
-        foreach (var (jobType, assetType, mediaType) in adding.ToList())
+        foreach (var (jobType, mediaType) in adding.ToList())
         {
             ProcessorNodeCapabilities.Add(new ProcessorNodeCapability
             {
                 MediaType = mediaType,
                 ProcessorNode = this,
-                JobType = jobType,
-                AssetType = assetType
+                JobType = jobType
             });
         }
     }

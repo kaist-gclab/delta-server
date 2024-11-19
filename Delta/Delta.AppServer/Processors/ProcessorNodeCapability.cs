@@ -9,5 +9,4 @@ public class ProcessorNodeCapability
     public required string MediaType { get; set; }
     public virtual required ProcessorNode ProcessorNode { get; set; }
     public virtual required JobType JobType { get; set; }
-    public virtual required AssetType? AssetType { get; set; }
 }

@@ -18,17 +18,11 @@ public class AssetMetadataServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
-        var assetType = context.Add(new AssetType
-        {
-            Key = "k",
-            Name = "n"
-        }).Entity;
         var asset = context.Add(new Asset
         {
             MediaType = "text/plain",
             StoreKey = "a",
             CreatedAt = default,
-            AssetType = assetType,
             ParentJobExecution = null
         }).Entity;
         await context.SaveChangesAsync();
@@ -54,17 +48,11 @@ public class AssetMetadataServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new AssetMetadataService(context);
-        var assetType = context.Add(new AssetType
-        {
-            Key = "k",
-            Name = "n"
-        }).Entity;
         var assetA = context.Add(new Asset
         {
             MediaType = "text/plain",
             StoreKey = "a",
             CreatedAt = default,
-            AssetType = assetType,
             ParentJobExecution = null
         }).Entity;
         var assetB = context.Add(new Asset
@@ -72,7 +60,6 @@ public class AssetMetadataServiceTest : ServiceTest
             MediaType = "text/plain",
             StoreKey = "b",
             CreatedAt = default,
-            AssetType = assetType,
             ParentJobExecution = null
         }).Entity;
         await context.SaveChangesAsync();

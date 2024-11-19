@@ -156,12 +156,6 @@ public class JobService
             {
                 continue;
             }
-
-            if (cap.AssetType == null ||
-                cap.AssetType == job.InputAsset.AssetType)
-            {
-                return true;
-            }
         }
 
         return false;

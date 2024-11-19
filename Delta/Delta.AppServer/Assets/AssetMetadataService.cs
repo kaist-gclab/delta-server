@@ -17,23 +17,6 @@ public class AssetMetadataService
     public IEnumerable<Asset> GetAssets() => _context.Asset.ToList();
     public Asset? GetAsset(long id) => _context.Asset.Find(id);
 
-    public async Task<IEnumerable<AssetTypeView>> GetAssetTypeViews()
-    {
-        var q = from t in _context.AssetType
-            select new AssetTypeView(t.Id, t.Name, t.Name);
-
-        return await q.ToListAsync();
-    }
-
-    public async Task<AssetType?> GetAssetType(string key)
-    {
-        var q = from t in _context.AssetType
-            where t.Key == key
-            select t;
-
-        return await q.FirstOrDefaultAsync();
-    }
-
     public async Task<IEnumerable<Asset>> FindByAssetTag(string? key, string? value)
     {
         if (key == null && value == null)
@@ -70,34 +53,6 @@ public class AssetMetadataService
             select a;
 
         return await keyValueQuery.ToListAsync();
-    }
-
-    public async Task AddAssetType(string key, string name)
-    {
-        if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(name))
-        {
-            return;
-        }
-
-        await using var trx = await _context.Database.BeginTransactionAsync();
-        var q = from t in _context.AssetType
-            where t.Key == key
-            select t;
-
-        if (q.Any())
-        {
-            return;
-        }
-
-        var assetType = new AssetType
-        {
-            Key = key,
-            Name = name
-        };
-
-        await _context.AddAsync(assetType);
-        await _context.SaveChangesAsync();
-        await trx.CommitAsync();
     }
 
     public async Task UpdateAssetTag(long assetId, string key, string value)
