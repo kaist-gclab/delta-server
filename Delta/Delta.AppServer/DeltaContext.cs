@@ -31,6 +31,13 @@ public class DeltaContext(DbContextOptions<DeltaContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        foreach (var key in modelBuilder.Model.GetEntityTypes()
+                     .SelectMany(e => e.GetForeignKeys())
+                     .Where(fk => !fk.IsOwnership))
+        {
+            key.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             entityType.SetTableName(entityType.DisplayName().ToUnderscoreCase());
