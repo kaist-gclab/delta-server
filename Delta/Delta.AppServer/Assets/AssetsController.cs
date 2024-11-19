@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CodeGen.Analysis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delta.AppServer.Assets;
@@ -25,6 +26,7 @@ public class AssetsController : ControllerBase
     }
 
     [HttpPost]
+    [Command]
     public async Task<IActionResult> CreateAsset(CreateAssetRequest createAssetRequest)
     {
         await _assetService.AddAsset(createAssetRequest);
