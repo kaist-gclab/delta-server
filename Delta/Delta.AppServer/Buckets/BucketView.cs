@@ -8,5 +8,6 @@ public record BucketView(
     string? EncryptionKeyName,
     Instant CreatedAt,
     string? BucketGroupName,
-    IEnumerable<BucketTagView> Tags
+    IEnumerable<BucketTagView> Tags,
+    IEnumerable<BucketSummary> InputBucketSummaries
 );

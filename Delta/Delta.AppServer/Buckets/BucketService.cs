@@ -116,17 +116,46 @@ public class BucketService(DeltaContext context, IClock clock)
 
     public async Task<BucketView?> GetBucket(long id)
     {
-        var q = from b in context.Bucket
+        var bucket = (from b in context.Bucket
             where b.Id == id
             let tags = from t in b.Tags
                 select new BucketTagView(t.Id, t.Key, t.Value)
-            select new BucketView(
+            select new
+            {
+                b.Id,
+                EncryptionKeyName = b.EncryptionKey != null ? b.EncryptionKey.Name : null,
+                b.CreatedAt,
+                BucketGroupName = b.BucketGroup != null ? b.BucketGroup.Name : null,
+                Tags = tags
+            }).FirstOrDefault();
+
+        if (bucket == null)
+        {
+            return null;
+        }
+
+        var inputBuckets = from bs in context.BucketSource
+            where bs.OutputBucket.Id == bucket.Id
+            let b = bs.InputBucket
+            let tags = from t in b.Tags
+                select new BucketTagView(t.Id, t.Key, t.Value)
+            let nameTags = from t in b.Tags
+                where t.Key == "Name"
+                select t.Value
+            select new BucketSummary(
                 b.Id,
                 b.EncryptionKey != null ? b.EncryptionKey.Name : null,
                 b.CreatedAt,
                 b.BucketGroup != null ? b.BucketGroup.Name : null,
-                tags);
+                nameTags.FirstOrDefault(),
+                tags.Count());
 
-        return await q.FirstOrDefaultAsync();
+        return new BucketView(
+            bucket.Id,
+            bucket.EncryptionKeyName,
+            bucket.CreatedAt,
+            bucket.BucketGroupName,
+            bucket.Tags,
+            inputBuckets);
     }
 }
