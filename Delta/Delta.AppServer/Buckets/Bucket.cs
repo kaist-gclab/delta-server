@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Delta.AppServer.Encryption;
 using NodaTime;
 
@@ -9,4 +10,5 @@ public class Bucket
     public virtual required EncryptionKey? EncryptionKey { get; set; }
     public required Instant CreatedAt { get; set; }
     public virtual BucketGroup? BucketGroup { get; set; }
+    public virtual ICollection<BucketTag> Tags { get; set; } = new HashSet<BucketTag>();
 }
