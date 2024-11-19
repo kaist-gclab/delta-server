@@ -10,13 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Delta.AppServer;
 
-public class DeltaContext : DbContext
+public class DeltaContext(DbContextOptions<DeltaContext> options) : DbContext(options)
 {
-    public DeltaContext(DbContextOptions<DeltaContext> options)
-        : base(options)
-    {
-    }
-
     public virtual DbSet<Asset> Asset => Set<Asset>();
     public virtual DbSet<Bucket> Bucket => Set<Bucket>();
     public virtual DbSet<BucketGroup> BucketGroup => Set<BucketGroup>();
