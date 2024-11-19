@@ -31,4 +31,11 @@ public class BucketsController(BucketService bucketService) : ControllerBase
         return Ok();
     }
     
+    [HttpPut("{id:long}")]
+    [Command]
+    public async Task<ActionResult> Update(long id, [FromBody] UpdateBucketRequest updateBucketRequest)
+    {
+        await bucketService.UpdateBucket(id, updateBucketRequest);
+        return Ok();
+    }
 }

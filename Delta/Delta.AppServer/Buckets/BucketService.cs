@@ -69,4 +69,46 @@ public class BucketService(DeltaContext context, IClock clock)
         context.Remove(bucket);
         await context.SaveChangesAsync();
     }
+
+    public async Task UpdateBucket(long id, UpdateBucketRequest updateBucketRequest)
+    {
+        var bucket = await context.Bucket.FindAsync(id);
+        if (bucket == null)
+        {
+            return;
+        }
+
+        var tags = bucket.Tags.ToList();
+        
+        // 새로운 태그를 추가하거나 기존 태그를 업데이트합니다.
+        foreach (var tag in updateBucketRequest.Tags)
+        {
+            var t = tags.FirstOrDefault(t => t.Key == tag.Key);
+            if (t == null)
+            {
+                t = new BucketTag
+                {
+                    Bucket = bucket,
+                    Key = tag.Key,
+                    Value = tag.Value,
+                };
+                await context.AddAsync(t);
+            }
+            else
+            {
+                t.Value = tag.Value;
+            }
+        }
+
+        // 기존 태그를 삭제합니다.
+        foreach (var tag in tags)
+        {
+            if (updateBucketRequest.Tags.All(t => t.Key != tag.Key))
+            {
+                context.Remove(tag);
+            }
+        }
+
+        await context.SaveChangesAsync();
+    }
 }
