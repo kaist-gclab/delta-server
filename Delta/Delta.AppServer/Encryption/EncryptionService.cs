@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -54,7 +55,13 @@ public class EncryptionService(DeltaContext context)
         return new CreateEncryptionKeyResponse(keyView, value);
     }
 
-    public IQueryable<EncryptionKey> GetEncryptionKeys() => context.EncryptionKey;
+    public async Task<IEnumerable<EncryptionKeyView>> GetEncryptionKeys()
+    {
+        var q = from k in context.EncryptionKey
+            select new EncryptionKeyView(k.Id, k.Name, k.Enabled, k.Optimized);
+        
+        return await q.ToListAsync();
+    }
 
     public byte[]? Encrypt(EncryptionKey encryptionKey, byte[] plainData)
     {

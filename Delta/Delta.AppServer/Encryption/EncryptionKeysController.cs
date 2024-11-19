@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ namespace Delta.AppServer.Encryption;
 public class EncryptionKeysController(EncryptionService encryptionService) : ControllerBase
 {
     [HttpGet]
-    public IEnumerable<EncryptionKey> GetEncryptionKeys()
+    public async Task<IEnumerable<EncryptionKeyView>> GetEncryptionKeys()
     {
-        return encryptionService.GetEncryptionKeys();
+        return await encryptionService.GetEncryptionKeys();
     }
 
     [HttpPost]
