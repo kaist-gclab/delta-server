@@ -120,7 +120,7 @@ public class JobService(DeltaContext context, IClock clock)
     public async Task AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
-        var jobExecution = await context.JobExecution.FindAsync(jobExecutionId);
+        var jobExecution = await context.JobRun.FindAsync(jobExecutionId);
         if (jobExecution == null)
         {
             return;
