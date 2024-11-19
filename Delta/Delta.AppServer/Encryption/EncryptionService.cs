@@ -49,13 +49,15 @@ public class EncryptionService
         {
             Name = name,
             Value = value,
-            Enabled = false
+            Enabled = false,
+            Optimized = false
         };
         await _context.AddAsync(encryptionKey);
         await _context.SaveChangesAsync();
         await trx.CommitAsync();
 
-        var keyView = new EncryptionKeyView(encryptionKey.Id, encryptionKey.Name, encryptionKey.Enabled);
+        var keyView = new EncryptionKeyView(encryptionKey.Id, encryptionKey.Name,
+            encryptionKey.Enabled, encryptionKey.Optimized);
         return new CreateEncryptionKeyResponse(keyView, value);
     }
 
