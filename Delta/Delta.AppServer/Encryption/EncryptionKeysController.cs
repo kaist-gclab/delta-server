@@ -35,4 +35,12 @@ public class EncryptionKeysController(EncryptionService encryptionService) : Con
         await encryptionService.AddEncryptionKey(createEncryptionKeyRequest);
         return Ok();
     }
+    
+    [HttpDelete("{id:long}")]
+    [Command]
+    public async Task<ActionResult> Delete(long id)
+    {
+        await encryptionService.DeleteEncryptionKey(id);
+        return Ok();
+    }
 }

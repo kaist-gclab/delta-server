@@ -144,4 +144,16 @@ public class EncryptionService(DeltaContext context)
         key.Enabled = true;
         await context.SaveChangesAsync();
     }
+
+    public async Task DeleteEncryptionKey(long id)
+    {
+        var key = await context.EncryptionKey.FindAsync(id);
+        if (key == null)
+        {
+            return;
+        }
+        
+        context.Remove(key);
+        await context.SaveChangesAsync();
+    }
 }
