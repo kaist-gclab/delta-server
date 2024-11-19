@@ -6,24 +6,13 @@ using NodaTime;
 
 namespace Delta.AppServer.Assets;
 
-public class AssetService
+public class AssetService(DeltaContext context, IClock clock, IObjectStorageService objectStorageService)
 {
-    private readonly DeltaContext _context;
-    private readonly IClock _clock;
-    private readonly IObjectStorageService _objectStorageService;
-
-    public AssetService(DeltaContext context, IClock clock, IObjectStorageService objectStorageService)
-    {
-        _context = context;
-        _clock = clock;
-        _objectStorageService = objectStorageService;
-    }
-
     public async Task AddAsset(CreateAssetRequest createAssetRequest)
     {
         var parentJobExecution = createAssetRequest.ParentJobExecutionId == null
             ? null
-            : await _context.FindAsync<JobExecution>(createAssetRequest.ParentJobExecutionId);
+            : await context.FindAsync<JobExecution>(createAssetRequest.ParentJobExecutionId);
         if (createAssetRequest.ParentJobExecutionId != null && parentJobExecution == null)
         {
             return;
@@ -31,7 +20,7 @@ public class AssetService
 
         var encryptionKey = createAssetRequest.EncryptionKeyId == null
             ? null
-            : await _context.FindAsync<EncryptionKey>(createAssetRequest.EncryptionKeyId);
+            : await context.FindAsync<EncryptionKey>(createAssetRequest.EncryptionKeyId);
 
         if (createAssetRequest.EncryptionKeyId != null && encryptionKey == null)
         {
@@ -44,7 +33,7 @@ public class AssetService
             EncryptionKey = encryptionKey,
             ParentJobExecution = parentJobExecution,
             MediaType = createAssetRequest.MediaType,
-            CreatedAt = _clock.GetCurrentInstant()
+            CreatedAt = clock.GetCurrentInstant()
         };
 
         foreach (var (key, value) in createAssetRequest.CreateAssetTagRequest)
@@ -52,18 +41,18 @@ public class AssetService
             asset.UpdateAssetTag(key, value);
         }
 
-        await _context.AddAsync(asset);
-        await _context.SaveChangesAsync();
+        await context.AddAsync(asset);
+        await context.SaveChangesAsync();
     }
 
     private async Task<string> GetPresignedDownloadUrl(Asset asset)
     {
-        return await _objectStorageService.GetPresignedDownloadUrl(asset.StoreKey);
+        return await objectStorageService.GetPresignedDownloadUrl(asset.StoreKey);
     }
 
     public async Task<GetAssetResponse?> GetAsset(long id)
     {
-        var asset = await _context.Asset.FindAsync(id);
+        var asset = await context.Asset.FindAsync(id);
         if (asset == null)
         {
             return null;
