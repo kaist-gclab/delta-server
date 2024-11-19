@@ -151,8 +151,22 @@ public class EncryptionService(DeltaContext context)
         {
             return;
         }
-        
+
         context.Remove(key);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task UpdateEncryptionKey(long id, UpdateEncryptionKeyRequest updateEncryptionKeyRequest)
+    {
+        var key = await context.EncryptionKey.FindAsync(id);
+        if (key == null)
+        {
+            return;
+        }
+
+        key.Name = updateEncryptionKeyRequest.Name;
+        key.Enabled = updateEncryptionKeyRequest.Enabled;
+        key.Optimized = updateEncryptionKeyRequest.Optimized;
         await context.SaveChangesAsync();
     }
 }

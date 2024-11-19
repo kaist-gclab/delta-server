@@ -43,4 +43,12 @@ public class EncryptionKeysController(EncryptionService encryptionService) : Con
         await encryptionService.DeleteEncryptionKey(id);
         return Ok();
     }
+    
+    [HttpPut("{id:long}")]
+    [Command]
+    public async Task<ActionResult> Update(long id, [FromBody] UpdateEncryptionKeyRequest updateEncryptionKeyRequest)
+    {
+        await encryptionService.UpdateEncryptionKey(id, updateEncryptionKeyRequest);
+        return Ok();
+    }
 }
