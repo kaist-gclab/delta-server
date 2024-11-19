@@ -8,7 +8,7 @@ namespace Delta.AppServer.Buckets;
 
 public class BucketService(DeltaContext context, IClock clock)
 {
-    public async Task<IEnumerable<BucketView>> GetBuckets()
+    public async Task<IEnumerable<BucketSummary>> GetBuckets()
     {
         var q = from b in context.Bucket
             let tags = from t in b.Tags
@@ -16,13 +16,13 @@ public class BucketService(DeltaContext context, IClock clock)
             let nameTags = from t in b.Tags
                 where t.Key == "Name"
                 select t.Value
-            select new BucketView(
+            select new BucketSummary(
                 b.Id,
                 b.EncryptionKey != null ? b.EncryptionKey.Name : null,
                 b.CreatedAt,
                 b.BucketGroup != null ? b.BucketGroup.Name : null,
                 nameTags.FirstOrDefault(),
-                tags);
+                tags.Count());
         return await q.ToListAsync();
     }
 
@@ -79,11 +79,12 @@ public class BucketService(DeltaContext context, IClock clock)
         }
 
         var tags = bucket.Tags.ToList();
-        
+
         // 새로운 태그를 추가하거나 기존 태그를 업데이트합니다.
         foreach (var tag in updateBucketRequest.Tags)
         {
-            var t = tags.FirstOrDefault(t => t.Key == tag.Key);
+            var t = tags.FirstOrDefault(t =>
+                t.Bucket == bucket && t.Key == tag.Key);
             if (t == null)
             {
                 t = new BucketTag
@@ -110,5 +111,21 @@ public class BucketService(DeltaContext context, IClock clock)
         }
 
         await context.SaveChangesAsync();
+    }
+
+    public async Task<BucketView?> GetBucket(long id)
+    {
+        var q = from b in context.Bucket
+            where b.Id == id
+            let tags = from t in b.Tags
+                select new BucketTagView(t.Id, t.Key, t.Value)
+            select new BucketView(
+                b.Id,
+                b.EncryptionKey != null ? b.EncryptionKey.Name : null,
+                b.CreatedAt,
+                b.BucketGroup != null ? b.BucketGroup.Name : null,
+                tags);
+
+        return await q.FirstOrDefaultAsync();
     }
 }

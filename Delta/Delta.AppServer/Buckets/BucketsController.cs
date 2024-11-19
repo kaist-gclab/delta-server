@@ -10,11 +10,23 @@ namespace Delta.AppServer.Buckets;
 public class BucketsController(BucketService bucketService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<BucketView>> GetBuckets()
+    public async Task<IEnumerable<BucketSummary>> GetBuckets()
     {
         return await bucketService.GetBuckets();
     }
-    
+
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<BucketView>> GetBucket(long id)
+    {
+        var bucket = await bucketService.GetBucket(id);
+        if (bucket == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(bucket);
+    }
+
     [HttpPost]
     [Command]
     public async Task<ActionResult> Create([FromBody] CreateBucketRequest createBucketRequest)
@@ -22,7 +34,7 @@ public class BucketsController(BucketService bucketService) : ControllerBase
         await bucketService.AddBucket(createBucketRequest);
         return Ok();
     }
-    
+
     [HttpDelete("{id:long}")]
     [Command]
     public async Task<ActionResult> Delete(long id)
@@ -30,7 +42,7 @@ public class BucketsController(BucketService bucketService) : ControllerBase
         await bucketService.DeleteBucket(id);
         return Ok();
     }
-    
+
     [HttpPut("{id:long}")]
     [Command]
     public async Task<ActionResult> Update(long id, [FromBody] UpdateBucketRequest updateBucketRequest)
