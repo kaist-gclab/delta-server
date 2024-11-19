@@ -28,8 +28,10 @@ public class BucketService(DeltaContext context, IClock clock)
 
     public async Task AddBucket(CreateBucketRequest request)
     {
-        var enc = await context.EncryptionKey.FindAsync(request.EncryptionKeyId);
-        if (enc == null)
+        var enc = (from e in context.EncryptionKey
+            where e.Name == request.EncryptionKeyName
+            select e).FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(request.EncryptionKeyName) && enc == null)
         {
             return;
         }

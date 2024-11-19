@@ -1,3 +1,3 @@
 namespace Delta.AppServer.Buckets;
 
-public record CreateBucketRequest(long EncryptionKeyId, string Name);
+public record CreateBucketRequest(string EncryptionKeyName, string Name);
