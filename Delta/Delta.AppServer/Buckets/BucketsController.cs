@@ -22,4 +22,13 @@ public class BucketsController(BucketService bucketService) : ControllerBase
         await bucketService.AddBucket(createBucketRequest);
         return Ok();
     }
+    
+    [HttpDelete("{id:long}")]
+    [Command]
+    public async Task<ActionResult> Delete(long id)
+    {
+        await bucketService.DeleteBucket(id);
+        return Ok();
+    }
+    
 }

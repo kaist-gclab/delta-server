@@ -57,4 +57,16 @@ public class BucketService(DeltaContext context, IClock clock)
 
         await context.SaveChangesAsync();
     }
+
+    public async Task DeleteBucket(long id)
+    {
+        var bucket = await context.Bucket.FindAsync(id);
+        if (bucket == null)
+        {
+            return;
+        }
+
+        context.Remove(bucket);
+        await context.SaveChangesAsync();
+    }
 }
