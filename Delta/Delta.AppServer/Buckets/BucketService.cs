@@ -41,6 +41,7 @@ public class BucketService(DeltaContext context, IClock clock)
         {
             EncryptionKey = enc,
             CreatedAt = now,
+            CreatedByJobRun = null
         };
         await context.AddAsync(bucket);
 
