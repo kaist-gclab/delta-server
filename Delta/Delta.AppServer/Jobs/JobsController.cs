@@ -7,25 +7,18 @@ namespace Delta.AppServer.Jobs;
 
 [ApiController]
 [Route(Delta.ApiRoot + "jobs")]
-public class JobsController : ControllerBase
+public class JobsController(JobService jobService) : ControllerBase
 {
-    private readonly JobService _jobService;
-
-    public JobsController(JobService jobService)
-    {
-        _jobService = jobService;
-    }
-
     [HttpGet]
     public async Task<IEnumerable<Job>> GetJobs()
     {
-        return await _jobService.GetJobs();
+        return await jobService.GetJobs();
     }
 
     [HttpPost("schedule")]
     public async Task<ActionResult<JobScheduleResponse>> Schedule(JobScheduleRequest jobScheduleRequest)
     {
-        var response = await _jobService.ScheduleNextJob(jobScheduleRequest);
+        var response = await jobService.ScheduleNextJob(jobScheduleRequest);
         if (response == null)
         {
             return NoContent();
@@ -37,7 +30,7 @@ public class JobsController : ControllerBase
     [HttpPost]
     public ActionResult<Job> CreateJob(CreateJobRequest createJobRequest)
     {
-        return Ok(_jobService.CreateJob(createJobRequest));
+        return Ok(jobService.CreateJob(createJobRequest));
     }
 
     [HttpPost("executions/{jobExecutionId:long}/statuses")]
@@ -45,7 +38,7 @@ public class JobsController : ControllerBase
     public async Task<IActionResult> AddJobExecutionStatus(long jobExecutionId,
         AddJobExecutionStatusRequest addJobExecutionStatusRequest)
     {
-        await _jobService.AddJobExecutionStatus(jobExecutionId, addJobExecutionStatusRequest);
+        await jobService.AddJobExecutionStatus(jobExecutionId, addJobExecutionStatusRequest);
         return Ok();
     }
 }
