@@ -17,6 +17,7 @@ public class DeltaContext : DbContext
     }
 
     public virtual DbSet<Asset> Assets => Set<Asset>();
+    public virtual DbSet<Bucket> Bucket => Set<Bucket>();
     public virtual DbSet<AssetTag> AssetTags => Set<AssetTag>();
     public virtual DbSet<AssetType> AssetTypes => Set<AssetType>();
     public virtual DbSet<Job> Jobs => Set<Job>();
