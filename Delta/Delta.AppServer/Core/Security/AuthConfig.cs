@@ -3,18 +3,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Delta.AppServer.Core.Security;
 
-public class AuthConfig
+public class AuthConfig(IConfiguration configuration)
 {
-    private readonly IConfiguration _configuration;
-
-    public AuthConfig(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
-    public string AdminUsername => _configuration["Auth:AdminUsername"] ??
+    public string AdminUsername => configuration["Auth:AdminUsername"] ??
                                    throw new InvalidOperationException();
 
-    public string AdminPassword => _configuration["Auth:AdminPassword"] ??
+    public string AdminPassword => configuration["Auth:AdminPassword"] ??
                                    throw new InvalidOperationException();
 }
