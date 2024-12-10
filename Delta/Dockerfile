@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine as builder
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine as builder
 WORKDIR /app
 
 COPY *.sln .
@@ -11,7 +11,7 @@ COPY . .
 WORKDIR /app/Delta.AppServer
 RUN dotnet publish --self-contained --configuration Release --runtime linux-musl-x64 -o out --no-restore
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-alpine
+FROM --platform=amd64 mcr.microsoft.com/dotnet/runtime-deps:9.0-alpine
 WORKDIR /app
 COPY --from=builder /app/Delta.AppServer/out .
 EXPOSE 8080
