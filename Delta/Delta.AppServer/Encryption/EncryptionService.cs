@@ -24,6 +24,11 @@ public class EncryptionService(DeltaContext context)
 
     public async Task AddEncryptionKey(CreateEncryptionKeyRequest request)
     {
+        if (request.KeyLength != 256)
+        {
+            return;
+        }
+
         var name = request.Name;
 
         await using var trx = await context.Database.BeginTransactionAsync();

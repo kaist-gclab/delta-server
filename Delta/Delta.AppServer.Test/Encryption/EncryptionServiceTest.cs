@@ -7,10 +7,24 @@ using Xunit.Abstractions;
 
 namespace Delta.AppServer.Test.Encryption;
 
-public class EncryptionServiceTest : ServiceTest
+public class EncryptionServiceTest(ITestOutputHelper output) : ServiceTest(output)
 {
-    public EncryptionServiceTest(ITestOutputHelper output) : base(output)
+    [Fact]
+    public async Task BadKeyLength()
     {
+        var context = CreateDbContext();
+        var service = new EncryptionService(context);
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 0));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 127));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 128));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 255));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 257));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 1));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 512));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 1024));
+        Assert.Empty(context.EncryptionKey);
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 256));
+        Assert.Single(context.EncryptionKey);
     }
 
     [Fact]
@@ -19,21 +33,21 @@ public class EncryptionServiceTest : ServiceTest
         var context = CreateDbContext();
         var service = new EncryptionService(context);
         Assert.Empty(context.EncryptionKey);
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 256));
         Assert.Single(context.EncryptionKey);
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("", false, false));
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("", false, false, 256));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 256));
         Assert.Single(context.EncryptionKey);
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("B", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("B", false, false, 256));
         Assert.Equal(2, context.EncryptionKey.Count());
     }
 
     [Fact]
-    public void GetEncryptionKeys()
+    public async Task GetEncryptionKeys()
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        service.GetEncryptionKeys();
+        await service.GetEncryptionKeys();
     }
 
     [Fact]
@@ -41,7 +55,7 @@ public class EncryptionServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("A", false, false, 256));
         var a = context.EncryptionKey.First();
         var data = "Delta_KqKsqvE4_테스트_WZLUI2m0_데이터"u8.ToArray();
         Assert.Null(service.Encrypt(a, data));
@@ -71,9 +85,9 @@ public class EncryptionServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("a", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("a", false, false, 256));
         var a = context.EncryptionKey.OrderBy(e => e.Id).Last();
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("b", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("b", false, false, 256));
         var b = context.EncryptionKey.OrderBy(e => e.Id).Last();
         var p = await service.GetEncryptionKey(1);
         var q = await service.GetEncryptionKey(2);
@@ -89,7 +103,7 @@ public class EncryptionServiceTest : ServiceTest
     {
         var context = CreateDbContext();
         var service = new EncryptionService(context);
-        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("a", false, false));
+        await service.AddEncryptionKey(new CreateEncryptionKeyRequest("a", false, false, 256));
         Assert.False(context.EncryptionKey.First().Enabled);
         var a = await service.GetEncryptionKey(context.EncryptionKey.First().Id);
         Assert.NotNull(a);
